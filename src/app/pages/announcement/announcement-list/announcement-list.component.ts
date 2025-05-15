@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AnnouncementCardComponent } from "../announcement-card/announcement-card.component";
+import { AnnouncementCardComponent } from '../announcement-card/announcement-card.component';
+
 
 @Component({
   selector: 'app-announcement-list',
