@@ -1,11 +1,10 @@
 <!-- Conteneur principal centré -->
 <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
   <div class="w-full max-w-md overflow-hidden rounded-lg shadow-lg bg-white">
-    <!-- Header avec couleur orange -->
+    <!-- Header -->
     <div class="bg-[#ff9000] p-6 text-center text-white">
       <div class="flex justify-center mb-4">
         <div class="bg-white/20 p-3 rounded-full">
-          <!-- Icône de livre -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-8 w-8"
@@ -26,52 +25,123 @@
       <p class="mt-2">Connectez-vous pour accéder à votre compte</p>
     </div>
 
-    <!-- Formulaire de connexion -->
+    <!-- Alertes -->
+    <div
+      *ngIf="successMessage"
+      class="flex items-start justify-between p-4 mb-4 text-green-800 rounded-lg bg-green-50"
+      role="alert"
+    >
+      <div class="flex items-center">
+        <svg
+          class="shrink-0 w-4 h-4 mt-0.5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M16.707 5.293a1 1 0 0 0-1.414 0L9 11.586 6.707 9.293a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.414 0l7-7a1 1 0 0 0 0-1.414Z"
+          />
+        </svg>
+        <div class="ms-3 text-sm font-medium">{{ successMessage }}</div>
+      </div>
+      <button
+        type="button"
+        class="ms-4 text-green-800 hover:text-green-900"
+        (click)="successMessage = ''"
+        aria-label="Fermer"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 0 1 1.414 0L10 8.586l4.293-4.293a1 1 0 1 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 0 1 0-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div
+      *ngIf="errorMessage"
+      class="flex items-start justify-between p-4 mb-4 text-red-800 rounded-lg bg-red-50"
+      role="alert"
+    >
+      <div class="flex items-center">
+        <svg
+          class="shrink-0 w-4 h-4 mt-0.5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+          />
+        </svg>
+        <div class="ms-3 text-sm font-medium">{{ errorMessage }}</div>
+      </div>
+      <button
+        type="button"
+        class="ms-4 text-red-800 hover:text-red-900"
+        (click)="errorMessage = ''"
+        aria-label="Fermer"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 0 1 1.414 0L10 8.586l4.293-4.293a1 1 0 1 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 0 1 0-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Formulaire -->
     <div class="p-6">
-      <form>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="space-y-4">
           <!-- Email -->
           <div class="space-y-2">
-            <label for="email" class="text-sm font-medium block"> Email </label>
+            <label for="email" class="text-sm font-medium block">Email</label>
             <input
               id="email"
-              placeholder="nom@exemple.fr"
               type="email"
+              placeholder="nom@exemple.fr"
+              formControlName="email"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff9000] focus:border-[#ff9000]"
             />
+          </div>
+          <div
+            *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')"
+            class="text-red-500 text-sm"
+          >
+            L'email est requis.
           </div>
 
           <!-- Mot de passe -->
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <label for="password" class="text-sm font-medium">
-                Mot de passe
-              </label>
-              <a href="#" class="text-sm text-[#ff9000] hover:text-[#e68200]">
-                Mot de passe oublié?
-              </a>
+              <label for="password" class="text-sm font-medium"
+              >Mot de passe</label
+              >
+              <!-- @TODO : creer la route reset-password -->
+              <a
+                [routerLink]="['/reset-password']"
+                class="text-sm text-[#ff9000] hover:text-[#e68200]"
+              >Mot de passe oublié?</a
+              >
             </div>
             <input
               id="password"
               type="password"
-              value="••••••••"
+              formControlName="password"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff9000] focus:border-[#ff9000]"
             />
           </div>
-
-          <!-- Se souvenir de moi -->
-          <div class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="remember"
-              class="h-4 w-4 text-[#ff9000] border-gray-300 rounded focus:ring-[#ff9000]"
-            />
-            <label for="remember" class="text-sm font-medium">
-              Se souvenir de moi
-            </label>
+          <div
+            *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')"
+            class="text-red-500 text-sm"
+          >
+            Le mot de passe est requis.
           </div>
 
-          <!-- Bouton de connexion -->
+          <!-- Submit -->
           <button
             type="submit"
             class="w-full bg-[#ff9000] hover:bg-[#e68200] text-white py-2 px-4 rounded-md transition-colors"
@@ -91,10 +161,13 @@
         </div>
       </div>
 
-      <!-- Lien d'inscription -->
+      <!-- Lien inscription -->
       <div class="mt-6 text-center text-sm">
         <span class="text-gray-600">Vous n'avez pas de compte? </span>
-        <a href="#" class="text-[#ff9000] hover:text-[#e68200] font-medium">
+        <!-- @TODO : creer la route register -->
+        <a [routerLink]="['/register']"
+          class="text-[#ff9000] hover:text-[#e68200] font-medium"
+        >
           S'inscrire
         </a>
       </div>
