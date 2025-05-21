@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AuthLoginData, AuthLoginResponse} from '../../models/auth/auth';
+import {environment} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import {AuthLoginData, AuthLoginResponse} from '../../models/auth/auth';
 export class AuthService {
 
   //@TODO : Supprimer la variable url et creer un fichier d'environnement
-  private url = "http://localhost:8000/api/";
+  private url = environment.apiUrl;
 
   constructor(private http : HttpClient) { }
 
