@@ -12,3 +12,12 @@ export interface AuthLoginResponse{
   email_verified_at: string | null;
   token: string;
 }
+
+//REGISTER DATA MODEL
+export interface AuthRegisterData{
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  role: string;
+}
