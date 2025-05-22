@@ -12,5 +12,10 @@ export const routes: Routes = [
   {
     path : 'login',
     loadComponent:() => import('../app/pages/auth/login/login.component').then((m) => m.LoginComponent),
-  }
+  },
+  {
+    path : 'verify-email/:id/:hash',
+    loadComponent : ()=>
+      import('./pages/auth/verify-email/verify-email.component').then((m)=> m.VerifyEmailComponent)
+  },
 ];
