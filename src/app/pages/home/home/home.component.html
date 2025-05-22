@@ -1,0 +1,168 @@
+<app-header></app-header>
+<div
+  id="default-carousel"
+  class="relative h-500 md:h-150 flex-1/2"
+  data-carousel="slide" 
+>
+  <!-- Carousel wrapper -->
+  <div class="relative h-100 overflow-hidden rounded-lg md:h-150">
+    <!-- Item 1 -->
+    <div class="duration-700 ease-in-out h-full w-full" data-carousel-item>
+      <img
+        src="https://images.pexels.com/photos/289737/pexels-photo-289737.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+        alt="..."
+      />
+      <div
+        class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center text-white px-4"
+      >
+        <h2 class="text-4xl font-bold mb-4">
+          Economisez sur vos achats de la rentrée
+        </h2>
+        <p class="mb-6 max-w-xl">
+          Trouvez des fournitures à prix réduit et réalisez des Économies
+          substantielles.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6"
+        >
+          <button
+            class="border bg-amber-600 border-amber-50 rounded-lg px-6 py-2 sm:py-3 sm:px-8 text-sm sm:text-base font-semibold hover:bg-orange-400 transition duration-300"
+          >
+            Rejoindre la communauté
+          </button>
+          <button
+            class="border border-amber-50 rounded-lg px-6 py-2 sm:py-3 sm:px-8 text-sm sm:text-base font-semibold hover:bg-orange-400 transition duration-300"
+          >
+            Parcourir les annonces
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Item 2 -->
+    <div class="duration-700 ease-in-out h-full w-full" data-carousel-item>
+      <img
+        src="https://images.pexels.com/photos/207665/pexels-photo-207665.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+        alt="..."
+      />
+      <div
+        class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center text-white px-4"
+      >
+        <h2 class="text-4xl font-bold mb-4">
+          Réduisez votre impact envornemental
+        </h2>
+        <p class="mb-6 max-w-xl">
+          Chaque fourniture réutilisée contribue àreduire les déchets et à
+          préserver notre planéte.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6"
+        >
+          <button
+            class="border bg-amber-600 border-amber-50 rounded-lg px-6 py-2 sm:py-3 sm:px-8 text-sm sm:text-base font-semibold hover:bg-orange-400 transition duration-300"
+          >
+            Rejoindre la communauté
+          </button>
+          <button
+            class="border border-amber-50 rounded-lg px-6 py-2 sm:py-3 sm:px-8 text-sm sm:text-base font-semibold hover:bg-orange-400 transition duration-300"
+          >
+            Parcourir les annonces
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Item 3 -->
+    <div class="duration-700 ease-in-out" data-carousel-item>
+      <img
+        src="https://images.pexels.com/photos/7718707/pexels-photo-7718707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+        alt="..."
+      />
+      <div
+        class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center text-white px-4"
+      >
+        <h2 class="text-4xl font-bold mb-4">
+          Echangez, vendez ou donnez vos fournitures scolaires
+        </h2>
+        <p class="mb-6 max-w-xl">
+          Participez à une économie circulaire et écologique en donnant une
+          seconde chance à vos fournitures scolaires.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6"
+        >
+          <button
+            class="border bg-amber-600 border-amber-50 rounded-lg px-6 py-2 sm:py-3 sm:px-8 text-sm sm:text-base font-semibold hover:bg-orange-400 transition duration-300"
+          >
+            Rejoindre la communauté
+          </button>
+          <button
+            class="border border-amber-50 rounded-lg px-6 py-2 sm:py-3 sm:px-8 text-sm sm:text-base font-semibold hover:bg-orange-400 transition duration-300"
+          >
+            Parcourir les annonces
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Slider indicators -->
+  <div
+    class="absolute z-30 flex -translate-x-1/2 bottom-3 left-1/2 space-x-3 rtl:space-x-reverse"
+  >
+    <button
+      type="button"
+      class="w-3 h-3 rounded-full"
+      aria-current="true"
+      aria-label="Slide 1"
+      data-carousel-slide-to="0"
+    ></button>
+    <button
+      type="button"
+      class="w-3 h-3 rounded-full"
+      aria-current="false"
+      aria-label="Slide 2"
+      data-carousel-slide-to="1"
+    ></button>
+    <button
+      type="button"
+      class="w-3 h-3 rounded-full"
+      aria-current="false"
+      aria-label="Slide 3"
+      data-carousel-slide-to="2"
+    ></button>
+    <button
+      type="button"
+      class="w-3 h-3 rounded-full"
+      aria-current="false"
+      aria-label="Slide 4"
+      data-carousel-slide-to="3"
+    ></button>
+  </div>
+</div>
+    <app-announcement-list></app-announcement-list>
+  <div class="bg-orange-500 mt-10 h-70 p-12 text-white">
+    <div class="flex justify-center gap-8 mt-6 flex-wrap">
+      <h1 class="text-3xl">Trouvez ce dont vous avez besoin pour la rentrée</h1>
+    </div>
+    <div class="flex justify-center gap-8 mt-6 flex-wrap">
+      <p>
+        Des milliers de fournitures scolaires vous attendent. Économisez de
+        l'argent et préservez la planète en même temps.
+      </p>
+    </div>
+    <div class="flex justify-center gap-8 mt-6 flex-wrap">
+      <button
+        class="border border-white text-white font-semibold px-10 py-2 rounded hover:bg-gray-200 transition duration-700"
+      >
+        Voir plus
+      </button>
+      <button
+        class="border border-white text-white font-semibold px-10 py-2 rounded hover:bg-white hover:text-black transition duration-700"
+      >
+        En savoir plus
+      </button>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
