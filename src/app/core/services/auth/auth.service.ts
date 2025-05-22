@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AuthLoginData, AuthLoginResponse} from '../../models/auth/auth';
+import {AuthLoginData, AuthLoginResponse, AuthRegisterData} from '../../models/auth/auth';
 import {environment} from '../../../../environments/environment';
 
 @Injectable({
@@ -9,7 +9,6 @@ import {environment} from '../../../../environments/environment';
 })
 export class AuthService {
 
-  //@TODO : Supprimer la variable url et creer un fichier d'environnement
   private url = environment.apiUrl;
 
   constructor(private http : HttpClient) { }
@@ -21,5 +20,13 @@ export class AuthService {
    */
   login(data: AuthLoginData): Observable<AuthLoginResponse> {
     return this.http.post<AuthLoginResponse>(this.url + 'login', data);
+  }
+
+  /**
+   * Envoie des données d'inscription à l'API pour créer un nouvel utilisateur.
+   * @param data Les informations d’inscription (nom, email, mot de passe, etc.)
+   */
+  register(data: AuthRegisterData) {
+    return this.http.post(this.url + 'register', data);
   }
 }
