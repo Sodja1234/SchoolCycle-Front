@@ -21,3 +21,14 @@ export interface AuthRegisterData{
   password_confirmation: string;
   role: string;
 }
+
+
+//FORGOTPASSWORD DATA MODEL
+export interface AuthForgotPasswordData {
+  email: string;
+}
+
+//FORGOTPASSWORD RESPONSE MODEL
+export interface AuthForgotPasswordResponse {
+  status : string;
+}

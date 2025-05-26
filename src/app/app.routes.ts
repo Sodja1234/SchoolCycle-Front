@@ -18,4 +18,13 @@ export const routes: Routes = [
     loadComponent : ()=>
       import('./pages/auth/verify-email/verify-email.component').then((m)=> m.VerifyEmailComponent)
   },
+  
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+    import('./pages/auth/reset-password/reset-password.component').then(
+      (m) => m.ResetPasswordComponent
+    ),
+  }
+
 ];
