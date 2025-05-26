@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AuthForgotPasswordData, AuthForgotPasswordResponse, AuthLoginData, AuthLoginResponse, AuthRegisterData} from '../../models/auth/auth';
+import {AuthForgotPasswordData, AuthForgotPasswordResponse, AuthLoginData, AuthLoginResponse, AuthPasswordResetData, AuthRegisterData} from '../../models/auth/auth';
 import {environment} from '../../../../environments/environment';
 
 @Injectable({
@@ -39,5 +39,14 @@ export class AuthService {
     return this.http.post<AuthForgotPasswordResponse>(this.url + 'forgot-password', data);
   }
 
-  
+  /**
+   * Recupère l'email dans l'url swordResponse.
+   * @param data L'information pour le changement de mot de passe (email)
+   * @returns Observable<AuthForgotPasswordResponse> contenant le status de la requette.
+   */
+  resetPassword(data : AuthPasswordResetData){
+    return this.http.post(this.url + 'reset-password' , data );
+  }
+
+
 }

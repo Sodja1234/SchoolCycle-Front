@@ -32,3 +32,12 @@ export interface AuthForgotPasswordData {
 export interface AuthForgotPasswordResponse {
   status : string;
 }
+
+
+//RESETPASSWORD DATA MODEL
+export interface AuthPasswordResetData {
+  token: string;
+  email: string;
+  password : string;
+  password_confirmation: string;
+}
