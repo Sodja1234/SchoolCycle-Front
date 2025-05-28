@@ -1,0 +1,96 @@
+<header class="w-full bg-white sticky top-0 z-20 top-0 start-0 shadow px-4 sm:px-6 flex items-center justify-center">
+  <div class="w-full sm:w-[90%] lg:w-[75%]  py-2 flex items-center justify-between">
+    <!-- Le logo -->
+    <div class="flex items-center gap-2 text-[#FF9000] font-semibold text-lg">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+      </svg>
+      <span>SchoolCycle</span>
+    </div>
+
+    <!-- Bouton hamburger pour mobile -->
+    <button class="sm:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF9000]"
+            (click)="toggleMenu()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+
+    <!-- Menu pour ecran de grande taille -->
+    <div class="hidden sm:flex items-center gap-6 text-gray-600">
+      <a href="" title="Accueil" class="p-2 rounded hover:bg-[#FF9000]/10 transition">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M229.06-189.06h133.06v-248.82h235.76v248.82h133.06v-376.49L480-753.72 229.06-565.5v376.44ZM153.3-113.3v-490.13L480-848.53l326.86 245.08v490.15H525.07v-251.77h-90.14v251.77H153.3ZM480-471.68Z"/>
+        </svg>
+      </a>
+
+      <a href="" title="" class="p-2 rounded hover:bg-[#FF9000]/10 transition">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M480.03-355.91q51.56 0 87.89-36.31 36.33-36.32 36.33-87.81 0-51.56-36.36-87.89t-87.92-36.33q-51.56 0-87.81 36.36t-36.25 87.92q0 51.56 36.31 87.81 36.32 36.25 87.81 36.25ZM480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM204.54-442.12H35.46v-75.76h169.08v75.76Zm720 0H755.46v-75.76h169.08v75.76ZM442.12-755.46v-169.08h75.76v169.08h-75.76Zm0 720v-169.08h75.76v169.08h-75.76ZM259.76-648.64 153.29-752.01l53.8-55.7 102.86 105.9-50.19 53.17Zm493.81 495.68L649.05-259.35l51.62-52.36 106.04 103.57-53.14 55.18ZM648.29-700.67l103.72-106.04 55.7 53.14-105.23 104.19-54.19-51.29ZM152.96-207.09l105.72-104.53 53.03 52.29-103.57 106.04-55.18-53.8ZM480-480Z"/>
+        </svg>
+      </a>
+
+      <a href="" title="Messagerie" class="p-2 rounded hover:bg-[#FF9000]/10 transition">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M73.3-73.3v-737.64q0-31.06 22.38-53.49 22.38-22.43 53.38-22.43h661.88q31.06 0 53.49 22.43 22.43 22.43 22.43 53.49v501.88q0 31-22.43 53.38Q842-233.3 810.94-233.3H233.3l-160 160Zm131.34-235.76h606.3v-501.88H149.06v561.21l55.58-59.33Zm-55.58 0v-501.88 501.88Z"/>
+        </svg>
+      </a>
+
+      <a href="" title="Mon" class="p-2 rounded hover:bg-[#FF9000]/10 transition">
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M479.97-484.09q-68.98 0-114.49-45.51-45.51-45.51-45.51-114.49 0-68.98 45.51-114.48t114.49-45.5q68.98 0 114.6 45.5 45.62 45.5 45.62 114.48T594.57-529.6q-45.62 45.51-114.6 45.51ZM153.3-149.88v-107.14q0-38.44 19.53-67.56 19.52-29.11 50.89-44.29 65.89-30.57 129.01-45.9 63.12-15.32 127.23-15.32 64.56 0 127.32 15.62 62.76 15.62 128.28 45.65 32.28 15.05 51.79 44.08 19.51 29.03 19.51 67.68v107.18H153.3Zm75.76-75.75h501.88v-30.38q0-14.16-8.16-26.68-8.17-12.52-20.5-18.77-59.56-28.87-112.58-40.79-53.03-11.93-109.78-11.93-56.27 0-110.28 11.93-54.02 11.92-112.51 40.77-12.41 6.25-20.24 18.78-7.83 12.52-7.83 26.69v30.38Zm250.9-334.22q36 0 60.16-24.13 24.16-24.12 24.16-60.13 0-36.08-24.13-60.14-24.12-24.07-60.11-24.07-36 0-60.16 24.09-24.16 24.08-24.16 60.03 0 36.05 24.13 60.2 24.12 24.15 60.11 24.15Zm.04-84.27Zm0 418.49Z"/>
+        </svg>
+      </a>
+
+
+      <!-- Les boutons -->
+
+      <a [routerLink]="['login']" class="text-gray-800 font-medium border border-gray-200 hover:bg-[#FF9000]/10 rounded-lg text-sm px-5 py-2.5">
+        Connexion
+      </a>
+
+
+      <a [routerLink]="['register']" class="text-white bg-[#FF9000] hover:bg-orange-400 font-medium rounded-lg text-sm px-5 py-2.5">
+        Inscription
+      </a>
+    </div>
+  </div>
+
+  <!-- Menu mobile -->
+  <div class="sm:hidden w-full bg-white shadow-lg absolute top-14 left-0 z-100 transition-all duration-300 ease-in-out"
+       [class.hidden]="!isMenuOpen">
+    <div  class="flex flex-col p-4 space-y-4">
+      <!-- Icônes mobile -->
+      <a href="" (click)="closeMenu()" class="flex items-center gap-3 p-2 rounded hover:bg-[#FF9000]/10 transition">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M229.06-189.06h133.06v-248.82h235.76v248.82h133.06v-376.49L480-753.72 229.06-565.5v376.44ZM153.3-113.3v-490.13L480-848.53l326.86 245.08v490.15H525.07v-251.77h-90.14v251.77H153.3ZM480-471.68Z"/>
+        </svg>
+        <span>Accueil</span>
+      </a>
+
+      <a href="" (click)="closeMenu()" class="flex items-center gap-3 p-2 rounded hover:bg-[#FF9000]/10 transition">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M73.3-73.3v-737.64q0-31.06 22.38-53.49 22.38-22.43 53.38-22.43h661.88q31.06 0 53.49 22.43 22.43 22.43 22.43 53.49v501.88q0 31-22.43 53.38Q842-233.3 810.94-233.3H233.3l-160 160Zm131.34-235.76h606.3v-501.88H149.06v561.21l55.58-59.33Zm-55.58 0v-501.88 501.88Z"/>
+        </svg>
+        <span>Message</span>
+      </a>
+
+      <a href="" (click)="closeMenu()" class="flex items-center gap-3 p-2 rounded hover:bg-[#FF9000]/10 transition">
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M479.97-484.09q-68.98 0-114.49-45.51-45.51-45.51-45.51-114.49 0-68.98 45.51-114.48t114.49-45.5q68.98 0 114.6 45.5 45.62 45.5 45.62 114.48T594.57-529.6q-45.62 45.51-114.6 45.51ZM153.3-149.88v-107.14q0-38.44 19.53-67.56 19.52-29.11 50.89-44.29 65.89-30.57 129.01-45.9 63.12-15.32 127.23-15.32 64.56 0 127.32 15.62 62.76 15.62 128.28 45.65 32.28 15.05 51.79 44.08 19.51 29.03 19.51 67.68v107.18H153.3Zm75.76-75.75h501.88v-30.38q0-14.16-8.16-26.68-8.17-12.52-20.5-18.77-59.56-28.87-112.58-40.79-53.03-11.93-109.78-11.93-56.27 0-110.28 11.93-54.02 11.92-112.51 40.77-12.41 6.25-20.24 18.78-7.83 12.52-7.83 26.69v30.38Zm250.9-334.22q36 0 60.16-24.13 24.16-24.12 24.16-60.13 0-36.08-24.13-60.14-24.12-24.07-60.11-24.07-36 0-60.16 24.09-24.16 24.08-24.16 60.03 0 36.05 24.13 60.2 24.12 24.15 60.11 24.15Zm.04-84.27Zm0 418.49Z"/>
+        </svg>
+        <span>Mon Profil</span>
+      </a>
+
+      <!-- Boutons mobile -->
+      <div class="flex flex-col space-y-2 mt-4">
+        <a [routerLink]="['login']" (click)="closeMenu()" class="text-gray-800 font-medium border border-gray-200 hover:bg-[#FF9000]/10 rounded-lg text-sm px-5 py-2.5 text-center">
+          Connexion
+        </a>
+        <a [routerLink]="['register']" (click)="closeMenu()" class="text-white bg-[#FF9000] hover:bg-[#FF9000]/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+          Inscription
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
