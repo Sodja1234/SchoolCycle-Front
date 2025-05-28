@@ -18,4 +18,9 @@ export class AnnouncementService {
     return announcements;
   }
 
+  getAnnoucement(id: number) :Observable<{ data: Announcement }> {
+    const announcement = this.http.get<{ data: Announcement }>(this.url + 'announcements/' + id);
+    return announcement;
+  }
+
 }
