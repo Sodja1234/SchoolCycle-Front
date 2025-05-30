@@ -33,5 +33,9 @@ export const routes: Routes = [
         (m) => m.NewPasswordComponent
       ),
   },
+  {
+    path:'profils',
+    loadComponent: () => import('../app/pages/profile/profils/profils.component').then((m) => m.ProfilsComponent),
+  }
 
 ];
