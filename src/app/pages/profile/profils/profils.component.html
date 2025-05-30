@@ -1,0 +1,36 @@
+<div class="flex flex-row flex-wrap my-10 w-full sm:w-[90%] lg:w-[75%]   mx-auto ">
+  <!-- Composant A (gauche en haut) -->
+  <div class="bg-orange-100  rounded shadow row-span-1">
+    <app-user-profile></app-user-profile>
+  </div>
+
+  <!-- Composant B (droite en haut) -->
+  <div class=" w-[70%] ml-3  rounded shadow row-span-1 px-5">
+
+    <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
+      <mat-tab label="Annonces">
+        <ng-template matTabContent>
+          <app-announcement-profile></app-announcement-profile>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Favoris">
+        <ng-template matTabContent>
+          Favoris Content
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Avis">
+        <ng-template matTabContent>
+          Avis Content
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+    <!-- <app-announcement></app-announcement> -->
+  </div>
+
+  <!-- Composant C (sous A, donc sur 2e ligne à gauche) -->
+  <div class="  rounded shadow col-span-1 mt-5">
+    <app-action-rapide></app-action-rapide>
+  </div>
+</div>
