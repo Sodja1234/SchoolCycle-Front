@@ -1,5 +1,6 @@
 import { User } from "../user";
 import { Category } from "./category";
+import { Photo } from "./photo";
 
 export interface Announcement {
     id : number;
@@ -12,9 +13,9 @@ export interface Announcement {
     exchange_location_address: string;
     exchange_location_lng : string;
     exchange_location_lat : string;
-    category : Category[];
-    photos : string[];
-    created_by : User[];
+    category : Category;
+    photos : Photo[];
+    created_by : User;
     created_at : string;
     updated_at : string;
 }
