@@ -1,15 +1,12 @@
-<h3 class="text-3xl text-center mb-2 font-bold">Annonces Recentes</h3>
-<p class="text-xl text-gray-500 text-center mb-20">Découvrez les derniers fournitures disponibles sur notre plateforme </p>
+<div class="max-w-6xl mx-auto px-4">
+  <h3 class="text-3xl text-center mb-2 font-bold">Annonces Recentes</h3>
+  <p class="text-xl text-gray-500 text-center mb-20">
+    Découvrez les derniers fournitures disponibles sur notre plateforme
+  </p>
+  <div class="  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl  mb-16">
+    @for(announce of announcements; track announce.id){
+    <app-announcement-card [announcement]="announce"> </app-announcement-card>
 
-<div class="flex justify-center max-w-4xl  mx-auto gap-4 ">
-    <app-announcement-card></app-announcement-card>
-    <app-announcement-card></app-announcement-card>
-    <app-announcement-card></app-announcement-card>
-    <app-announcement-card></app-announcement-card>
-</div> <br> <br> <br>
-<div class="flex justify-center max-w-4xl mx-auto gap-4  ">
-    <app-announcement-card></app-announcement-card>
-    <app-announcement-card></app-announcement-card>
-    <app-announcement-card></app-announcement-card>
-    <app-announcement-card></app-announcement-card>
+    }
+  </div>
 </div>
