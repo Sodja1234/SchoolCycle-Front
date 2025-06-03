@@ -1,18 +1,29 @@
-<div class="p-4 space-y-4 bg-white">
-  <!-- Message reçu -->
-  <div class="flex items-start">
-    <div class="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg max-w-xs">
-      Bonjour, est-ce que le livre est toujours disponible ?
+<div class="p-4 space-y-4 bg-white" *ngIf="chat && userId">
+  <div *ngFor="let message of chat.messages">
+    <!-- Message reçu (aligné à droite) -->
+    <div *ngIf="message.sender.id === userId" class="flex justify-end items-start">
+      <span class="text-xs text-gray-400 mr-2 self-end">{{ message.created_at }}</span>
+      <div class="bg-[#ff9000]/10 text-gray-900 px-4 py-2 rounded-lg max-w-xs">
+        {{ message.content }}
+      </div>
     </div>
-    <span class="text-xs text-gray-400 ml-2 self-end">10:30</span>
+    <!-- Message envoyé -->
+    <div *ngIf="message.sender.id !== userId" class="flex items-start">
+      <div class="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg max-w-xs">
+        {{ message.content }}
+      </div>
+      <span class="text-xs text-gray-400 ml-2 self-end">{{ message.created_at }}</span>
+    </div>
   </div>
-  <!-- Message envoyé -->
-  <div class="flex justify-end items-start">
-    <span class="text-xs text-gray-400 mr-2 self-end">10:32</span>
-    <div class="bg-[#ff9000]/10 text-gray-900 px-4 py-2 rounded-lg max-w-xs">
-      Oui, toujours disponible.
+
+  <!-- Affichage des messages non envoyés -->
+  <div *ngFor="let msg of pendingMessages">
+    <div class="flex justify-end items-center space-x-2">
+      <div class="bg-red-100 text-red-700 px-4 py-2 rounded-lg max-w-xs border border-red-400">
+        {{ msg.content }}
+        <span *ngIf="msg.error" class="text-xs text-red-500 ml-2">Non envoyé</span>
+      </div>
+      <button *ngIf="msg.error" (click)="retryPendingMessages(msg)" class="text-xs text-blue-500 underline">Réessayer</button>
     </div>
   </div>
 </div>
-
-
