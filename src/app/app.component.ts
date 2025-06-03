@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { initFlowbite } from 'flowbite';
-import { HeaderComponent } from './pages/shared/header/header.component';
-import { FooterComponent } from './pages/shared/footer/footer.component';
+
 import { AnnouncementListComponent } from "./pages/announcement/announcement-list/announcement-list.component";
+import { ProfilsComponent } from './pages/profile/profils/profils.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, AnnouncementListComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, AnnouncementListComponent,ProfilsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
