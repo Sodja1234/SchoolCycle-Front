@@ -1,24 +1,56 @@
+import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   imports: [RouterLink],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  // proprieté pour gérer l'état du menu
   isMenuOpen = false;
+  constructor(private router : Router){}
 
-  // méthode pour basculer l'état du menu pour l'afficher ou le masquer
-  // sur les ecrans de petite taille
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  // méthode pour fermer le menu lorsqu'un lien est cliqué
-  closeMenu() {
-   this.isMenuOpen = false;
+  isConnected: boolean = false;
+  name!: string;
+  email!: string;
+  token!: string;
+  role! : string;
+
+
+  ngOnInit() {
+    this.isConnectedMethode();
   }
+
+  isConnectedMethode() {
+    const token = localStorage.getItem('token');
+    const name = localStorage.getItem('name');
+    const email = localStorage.getItem('email');
+
+    if (token && name && email) {
+      this.isConnected = true;
+      this.token = token;
+      this.name = name;
+      this.email = email;
+    }
+  }
+
+  logOut() {
+    console.log('Déconnexion...');
+    localStorage.clear();
+    this.isConnected = false;
+    this.token = '';
+    this.name = '';
+    this.email = '';
+  
+    this.router.navigateByUrl('').then(() => {
+      location.reload(); 
+    });
+  }
+  
 }
