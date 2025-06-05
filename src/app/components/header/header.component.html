@@ -1,7 +1,7 @@
 <header
   class="w-full bg-white shadow px-4 sm:px-6 flex items-center justify-center sticky top-0 bg-white z-10 bg-opacity-900"
 >
-  <div class="w-[75%] py-2 flex items-center justify-between">
+  <div class="w-full sm:w-[90%] lg:w-[75%] py-2 flex items-center justify-between">
     <!-- Le logo -->
     <div class="flex items-center gap-2 text-[#FF9000] font-semibold text-lg">
       <svg
@@ -63,7 +63,7 @@
       </a>
 
       <a
-        href=""
+        [routerLink]="['profils']"
         title="{{ name }}"
         class="p-2 rounded hover:bg-[#FF9000]/10 transition"
       >
@@ -153,7 +153,7 @@
 
   <!-- Menu mobile -->
   <div
-    class="sm:hidden w-full bg-white shadow-lg absolute top-16 left-0 z-50 transition-all duration-300 ease-in-out"
+    class="sm:hidden w-full bg-white shadow-lg absolute top-14 left-0 z-50 transition-all duration-300 ease-in-out"
     [class.hidden]="!isMenuOpen"
   >
     @if (!isConnected == false) {
