@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { AnnouncementService } from '../../core/services/announcement/announcement.service';
 import { Announcement } from '../../core/models/announcement/announcement';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-announcement-card',
-  imports: [RouterModule ],
+  imports: [RouterModule,CommonModule ],
   templateUrl: './announcement-card.component.html',
   styleUrl: './announcement-card.component.css',
 })
