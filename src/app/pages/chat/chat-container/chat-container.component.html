@@ -16,24 +16,24 @@
     </div>
 
     <!-- Liste des conversations -->
-    <app-chat-list></app-chat-list>
+    <app-chat-list [userId]="userId!" (chatSelected)="onChatSelected($event)"></app-chat-list>
   </div>
 
   <!-- Zone principale de chat -->
   <div class="flex flex-col flex-1 w-full">
 
     <!-- En-tête du chat -->
-    <app-chat-header class="border-b border-gray-200/70 dark:border-gray-700/40 bg-white dark:bg-gray-800 shadow-sm">
+    <app-chat-header [userId]="userId!" [chat]="selectedchat" class="border-b border-gray-200/70 dark:border-gray-700/40 bg-white dark:bg-gray-800 shadow-sm">
     </app-chat-header>
 
     <!-- Messages -->
     <div class="flex-1 overflow-y-auto px-4 py-20 bg-white dark:bg-gray-900">
-      <app-chat-message></app-chat-message>
+      <app-chat-message [pendingMessages]="pendingMessages" (retry)="retryPendingMessages($event)" [chat]="selectedchat"></app-chat-message>
     </div>
 
     <!-- Input du message -->
     <div class="border-t border-gray-200/70 dark:border-gray-700/40 bg-white dark:bg-gray-800 p-3 py-5">
-      <app-chat-input class="w-full"></app-chat-input>
+      <app-chat-input class="w-full" [conversation]="selectedchat?.id" (messageSent)="refreshMessage()" (pendingMessagesChange)="onPendingMessagesChange($event)"></app-chat-input>
     </div>
   </div>
 </div>
