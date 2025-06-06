@@ -40,6 +40,10 @@ export const routes: Routes = [
   {
     path:'user-setting',
     loadComponent:() => import('../app/pages/profile/user-setting/user-setting.component').then((m) => m.UserSettingComponent),
+  },
+  {
+    path:'create-announcement',
+    loadComponent:() => import('../app/pages/announcement/announcement-create/announcement-create.component').then((m) => m.AnnouncementCreateComponent),
   }
 
 ];
