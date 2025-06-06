@@ -40,6 +40,14 @@ export const routes: Routes = [
   {
     path:'user-setting',
     loadComponent:() => import('../app/pages/profile/user-setting/user-setting.component').then((m) => m.UserSettingComponent),
+  },
+
+  {
+    path: 'chat',
+    loadComponent: () =>
+      import('../app/pages/chat/chat-container/chat-container.component').then(
+        (m) => m.ChatContainerComponent
+      )
   }
 
 ];
