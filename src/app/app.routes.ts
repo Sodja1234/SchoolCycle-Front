@@ -44,6 +44,10 @@ export const routes: Routes = [
   {
     path:'create-announcement',
     loadComponent:() => import('../app/pages/announcement/announcement-create/announcement-create.component').then((m) => m.AnnouncementCreateComponent),
+  },
+  {
+    path:'single-announcement/:id',
+    loadComponent:() => import('../app/pages/announcement/announcement-single/announcement-single.component').then((m) => m.AnnouncementSingleComponent),
   }
 
 ];
