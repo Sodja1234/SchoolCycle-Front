@@ -1,15 +1,15 @@
-<div class="flex items-center justify-between border-b border-gray-200/70 dark:border-gray-700/40 px-4 py-3 bg-white dark:bg-gray-800 shadow-sm">
+<div **ngIf="chat" class="flex items-center justify-between border-b border-gray-200/70 dark:border-gray-700/40 px-4 py-3 bg-white dark:bg-gray-800 shadow-sm">
   <!-- Partie gauche avec avatar et informations de profil -->
   <div class="flex items-center gap-3">
     <!-- Avatar -->
     <div class="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-lg font-semibold text-gray-600 dark:text-gray-300">
-      AM
+      {{getInitials(getOtherParticipantName())}}
     </div>
     
     <!-- Informations de profil -->
     <div>
-      <div class="font-semibold text-gray-800 dark:text-gray-200">Adonai MUKE</div>
-      <div class="text-sm text-gray-500 dark:text-gray-400">Re: Livre de mathématiques 6ème</div>
+      <div class="font-semibold text-gray-800 dark:text-gray-200">{{getOtherParticipantName()}}</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400">Re: {{chat?.posted_by?.title}}</div>
     </div>
   </div>
   
