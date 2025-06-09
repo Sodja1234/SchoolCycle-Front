@@ -3,5 +3,7 @@
 // @TODO : changer l'adresse de l'API quand on sera en prod
 export const environment = {
   production : false,
-  apiUrl : 'http://localhost:8000/api/'
+  apiUrl : 'http://localhost:8000/api/',
+  storageUrl : 'http://localhost:8000/storage/'
+
 }

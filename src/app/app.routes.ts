@@ -40,7 +40,8 @@ export const routes: Routes = [
   {
     path:'user-setting',
     loadComponent:() => import('../app/pages/profile/user-setting/user-setting.component').then((m) => m.UserSettingComponent),
-  },
+  }
+  ,
 
   {
     path: 'chat',
@@ -48,6 +49,15 @@ export const routes: Routes = [
       import('../app/pages/chat/chat-container/chat-container.component').then(
         (m) => m.ChatContainerComponent
       )
+  }
+  ,
+  {
+    path:'create-announcement',
+    loadComponent:() => import('../app/pages/announcement/announcement-create/announcement-create.component').then((m) => m.AnnouncementCreateComponent),
+  },
+  {
+    path:'single-announcement/:id',
+    loadComponent:() => import('../app/pages/announcement/announcement-single/announcement-single.component').then((m) => m.AnnouncementSingleComponent),
   }
 
 ];
