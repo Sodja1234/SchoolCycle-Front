@@ -1,4 +1,4 @@
-<form>
+<form (ngSubmit)="sendMessage()">
   <label for="chat" class="sr-only">Votre message</label>
   <div class="flex items-center px-3 py-2 rounded-lg bg-white border border-gray-300">
     <!-- Zone de texte -->
@@ -7,6 +7,9 @@
       rows="1"
       class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-[#ff9000] focus:border-[#ff9000]"
       placeholder="Écrivez votre message..."
+      [(ngModel)]="messageContent"
+      name="messageContent"
+      required
     ></textarea>
 
     <!-- Bouton envoi -->
