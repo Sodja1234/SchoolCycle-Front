@@ -58,6 +58,10 @@ export const routes: Routes = [
   {
     path:'single-announcement/:id',
     loadComponent:() => import('../app/pages/announcement/announcement-single/announcement-single.component').then((m) => m.AnnouncementSingleComponent),
+  },
+  {
+    path:'announcement-gallery',
+    loadComponent:()=>import('../app/pages/announcement/announcement-gallery/announcement-gallery.component').then((m)=>m.AnnouncementGalleryComponent)
   }
 
 ];
