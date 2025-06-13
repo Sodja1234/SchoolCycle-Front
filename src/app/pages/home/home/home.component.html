@@ -1,7 +1,7 @@
 <app-header></app-header>
 <div
   id="default-carousel"
-  class="relative w-full z-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]"
+  class=" relative w-full z-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]"
   data-carousel="slide"
 >
   <!-- Carousel -->
@@ -29,7 +29,7 @@
             class="border border-amber-50 rounded-lg px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm md:text-base font-semibold hover:bg-orange-400 transition duration-300"
           >
             <a
-              href=""
+              [routerLink]="['/announcement-gallery']"
               class="rounded-lg px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm md:text-base"
               >Parcourir les annonces</a
             >
@@ -244,22 +244,15 @@
 <app-announcement-list></app-announcement-list>
 
 <!-- Section CTA -->
-<div class="bg-orange-500 py-8 sm:py-12 px-4 sm:px-6 text-white">
-  <div class="max-w-6xl mx-auto text-center">
-    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-      Trouvez ce dont vous avez besoin pour la rentrée
-    </h1>
-    <p class="mb-6 max-w-2xl mx-auto text-sm sm:text-base">
-      Des milliers de fournitures scolaires vous attendent. Économisez de
-      l'argent et préservez la planète en même temps.
-    </p>
+<div class="mb-16" >
+  
     <div class="flex flex-col sm:flex-row justify-center gap-4">
       <a [routerLink]="['/announcement-gallery']"
-        class="border border-white text-white font-semibold px-6 py-2 sm:px-8 sm:py-3 rounded hover:bg-gray-200 hover:text-black transition duration-300 text-sm sm:text-base cursor-pointer"
+        class="bg-orange-500 border border-white text-white font-semibold px-6 py-2 sm:px-8 sm:py-3 rounded hover:bg-gray-200 hover:text-black transition duration-300 text-sm sm:text-base cursor-pointer"
       >
         Voir plus
     </a>
     </div>
-  </div>
+  
 </div>
 <app-footer></app-footer>

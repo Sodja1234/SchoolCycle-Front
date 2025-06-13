@@ -1,62 +1,77 @@
 <app-header></app-header>
 <div class="max-w-6xl mx-auto px-4">
 
-    <!-- search style  -->
-    <form class="max-w-lg mx-auto mt-[30px] mb-16">
-        <div class="flex">
-            <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
-                Email</label>
-            <button id="dropdown-button" data-dropdown-toggle="dropdown"
-                class="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 "
-                type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m1 1 4 4 4-4" />
-                </svg></button>
-            <div id="dropdown"
-                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-                    <li>
-                        <button type="button"
-                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mockups</button>
-                    </li>
-                    <li>
-                        <button type="button"
-                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Templates</button>
-                    </li>
-                    <li>
-                        <button type="button"
-                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Design</button>
-                    </li>
-                    <li>
-                        <button type="button"
-                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logos</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="relative w-full">
-                <input type="search" id="search-dropdown"
-                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
-                    placeholder="Livre de francais, Compas, Stylo, Agrafeuse..." required />
-                <button type="submit"
-                    class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-[#FF9000] rounded-e-lg border border-blue-700  focus:ring-4 focus:outline-none ">
-                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                    </svg>
-                    <span class="sr-only">Search</span>
-                </button>
-            </div>
-        </div>
-    </form>
-    <!--  announcement -->
-    <div class="w-full  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8   mb-16">
-        @for(announce of announcements; track announce.id){
-        <app-announcement-card [announcement]="announce"> </app-announcement-card>
-
-        }
+  <!-- search style  -->
+  <form (ngSubmit)="onSearchSubmit($event)" class="max-w-lg mx-auto mt-[30px]  ">
+    <div class="flex">
+      <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
+        Email</label>
+      <button id="dropdown-button" data-dropdown-toggle="dropdown"
+        class="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 "
+        type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="m1 1 4 4 4-4" />
+        </svg></button>
+      <div id="dropdown"
+        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
+        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
+          <li>
+            <button type="button"
+              class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mockups</button>
+          </li>
+          <li>
+            <button type="button"
+              class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Templates</button>
+          </li>
+          <li>
+            <button type="button"
+              class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Design</button>
+          </li>
+          <li>
+            <button type="button"
+              class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logos</button>
+          </li>
+        </ul>
+      </div>
+      <div class="relative w-full">
+        <input (ngModelChange)="onSearchChange($event)" [(ngModel)]="searchTerm" name="search" type="search"
+          id="search-dropdown"
+          class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+          placeholder="Livre de francais, Compas, Stylo, Agrafeuse..." required />
+        <button type="submit"
+          class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-[#FF9000] rounded-e-lg border border-blue-700  focus:ring-4 focus:outline-none ">
+          <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
+          <span class="sr-only">Search</span>
+        </button>
+      </div>
     </div>
+  </form>
+
+  <!--  suggestion -->
+  <div class="relative" >
+    <ul *ngIf="suggestions.length > 0" class="shadow-xl mb-10 max-w-lg mx-auto"> 
+      <li *ngFor="let item of suggestions" class="p-2 cursor-pointer hover:bg-gray-100"
+        (click)="onSelectSuggestion(item)">
+        {{ item.title }}
+      </li>
+    </ul>
+  </div>
+
+  <!--  announcement -->
+  <div class="w-full  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8  mt-6 z-40 mb-16">
+    @for(announce of announcements; track announce.id){
+    <app-announcement-card [announcement]="announce"> </app-announcement-card>
+}
+  </div>
+
+  <!--  condition si aucune annonces n'est trouvé -->
+  <div *ngIf="announcements.length === 0" class="text-center text-gray-500 my-8">
+    😔 Aucune annonce ne correspond à votre recherche.
+  </div>
 </div>
 
 <!-- pagination style -->
@@ -66,13 +81,10 @@
   <nav aria-label="Page navigation">
     <ul class="flex items-center -space-x-px h-8 text-sm">
 
-        <!-- Boucle sur chaque lien de pagination -->
+      <!-- Boucle sur chaque lien de pagination -->
       <li *ngFor="let link of paginationMeta.links">
-         <!-- on desactive s'il y a pas d'url -->
-        <button
-        
-          [disabled]="!link.url"
-          (click)="onPageChange(link.url)"
+        <!-- on desactive s'il y a pas d'url -->
+        <button [disabled]="!link.url" (click)="onPageChange(link.url)"
           class="flex items-center justify-center px-3 h-8 leading-tight border transition-colors duration-200"
           [ngClass]="{
             'rounded-s-lg': link.label.includes('Previous'),
@@ -80,21 +92,25 @@
             'text-white bg-[#FF8C00] border-[#FF8C00] hover:bg-[#FF9D1A] hover:border-[#FF9D1A]': link.active,
             'text-gray-600 bg-white border-gray-200 hover:bg-orange-50 hover:text-[#FF8C00]': !link.active,
             'cursor-not-allowed opacity-50': !link.url
-          }"
-        >
+          }">
           <span class="sr-only" *ngIf="link.label.includes('Previous')">Précédent</span>
           <span class="sr-only" *ngIf="link.label.includes('Next')">Suivant</span>
 
-        <!-- On affiche le numero de la page  -->
-          <svg *ngIf="link.label.includes('Previous')" class="w-2.5 h-2.5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+          <!-- On affiche le numero de la page  -->
+          <svg *ngIf="link.label.includes('Previous')" class="w-2.5 h-2.5 rtl:rotate-180"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 1 1 5l4 4" />
           </svg>
 
-        <!-- On affiche le numero de la page  -->
-          <svg *ngIf="link.label.includes('Next')" class="w-2.5 h-2.5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+          <!-- On affiche le numero de la page  -->
+          <svg *ngIf="link.label.includes('Next')" class="w-2.5 h-2.5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 9 4-4-4-4" />
           </svg>
-          <span [innerHTML]="link.label" *ngIf="!link.label.includes('Previous') && !link.label.includes('Next')"></span>
+          <span [innerHTML]="link.label"
+            *ngIf="!link.label.includes('Previous') && !link.label.includes('Next')"></span>
         </button>
       </li>
 
