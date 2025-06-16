@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AnnouncementCardComponent } from '../../announcement/announcement-card/announcement-card.component';
 import { AnnouncementListComponent } from '../../announcement/announcement-list/announcement-list.component';
 import { initFlowbite } from 'flowbite';
 import { RouterLink } from '@angular/router';
