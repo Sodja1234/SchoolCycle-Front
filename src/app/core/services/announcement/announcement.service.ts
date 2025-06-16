@@ -24,7 +24,6 @@ export class AnnouncementService {
 
   //methode pour recuperer les annonces avec pagination,rechearch si possible et filtre
   getAnnouncements(
-
     page: number = 1, // Le numéro de la page à récupérer, par défaut 1
 
     search?: string, // Terme de recherche global (titre ou description)
@@ -32,13 +31,11 @@ export class AnnouncementService {
     operation_type?: string[], // Filtre : type d'opération
 
     price?: number[] // Filtre : liste de prix à inclure
-
   ): Observable<PaginatedAnnouncements> {
-
-     // objet HttpParams pour construire une  URL dynamique de la requête
+    // objet HttpParams pour construire une  URL dynamique de la requête
     let params = new HttpParams().set('page', page.toString());
 
-     // Si un terme est rechercher, on l’ajoute aux paramètres
+    // Si un terme est rechercher, on l’ajoute aux paramètres
     if (search) {
       params = params.set('search', search);
     }
@@ -48,12 +45,12 @@ export class AnnouncementService {
       params = params.set('operation_type', operation_type.join(','));
     }
 
-     // Si un ou plusieurs prix sont fournis on ajoute 
+    // Si un ou plusieurs prix sont fournis on ajoute
     if (price && price.length > 0) {
       params = params.set('price', price.join(','));
     }
 
-     // On retourne une requête HTTP GET vers l’API avec les paramètres construits
+    // On retourne une requête HTTP GET vers l’API avec les paramètres construits
     return this.http.get<PaginatedAnnouncements>(this.url + 'announcements', {
       params,
     });
@@ -74,5 +71,12 @@ export class AnnouncementService {
   createAnnouncement(data: FormData) {
     const headers = this.authToken();
     return this.http.post(this.url + 'announcements', data, { headers });
+  }
+
+  //methode pour recupere les annonces similaires
+  getSimilarAnnouncements(id: number): Observable<{ data: Announcement[] }> {
+    return this.http.get<{ data: Announcement[] }>(
+      this.url + 'announcements/' + id + '/similar'
+    );
   }
 }
