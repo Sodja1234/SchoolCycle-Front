@@ -3,10 +3,18 @@
   <p class="text-xl text-gray-500 text-center ">
     Découvrez les derniers fournitures disponibles sur notre plateforme
   </p>
-  <div class="w-full  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10  mb-16">
+  @if (announcements.length == 0) {
+ <p>
+    Aucune annonce disponible
+  </p>
+  }@else {
+ <div class="w-full  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10  mb-16">
     @for(announce of announcements; track announce.id){
     <app-announcement-card [announcement]="announce"> </app-announcement-card>
 
     }
   </div>
+  }
+ 
+ 
 </div>

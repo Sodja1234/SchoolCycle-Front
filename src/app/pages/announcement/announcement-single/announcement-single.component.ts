@@ -30,7 +30,7 @@ export class AnnouncementSingleComponent {
     this.route.params.subscribe(params => {
       this.articleId = +params['id'];
       this.getSingleAnnouncement();
-      //this.getSimilarAnnouncement();
+      this.getSimilarAnnouncement();
     });
   }
 
@@ -53,6 +53,20 @@ export class AnnouncementSingleComponent {
         console.error("Erreur lors du chargement de l'annonce :", err);
       },
     });
+  }
+
+  
+  //function pour recuperr les articles similaires
+  getSimilarAnnouncement() {
+    this.annoncementService.getSimilarAnnouncements(this.articleId).subscribe(
+      (res) => {
+        this.similarAnnouncements = res.data;
+        console.log('annonces similaires', this.similarAnnouncements);
+      },
+      (error) => {
+        console.error('Erreur de récupération des annonces similaires', error);
+      }
+    );
   }
 
   //function pour recuperr changer la photo principale de l'annonce
