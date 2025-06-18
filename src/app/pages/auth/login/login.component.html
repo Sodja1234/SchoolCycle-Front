@@ -144,6 +144,7 @@
           <!-- Submit -->
           <button
             type="submit"
+            [disabled]="loading"
             class="w-full bg-[#ff9000] hover:bg-[#e68200] text-white py-2 px-4 rounded-md transition-colors"
           >
            <span *ngIf="loading">Connexion...</span>
