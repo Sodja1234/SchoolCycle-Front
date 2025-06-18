@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import {guestGuard} from './guards/guest.guard';
+import {authGuard} from './guards/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,7 @@ export const routes: Routes = [
   },
   {
     path: 'profils',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('../app/pages/profile/profils/profils.component').then(
         (m) => m.ProfilsComponent
@@ -52,6 +54,7 @@ export const routes: Routes = [
   },
   {
     path: 'user-setting',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('../app/pages/profile/user-setting/user-setting.component').then(
         (m) => m.UserSettingComponent
@@ -59,6 +62,7 @@ export const routes: Routes = [
   },
   {
     path: 'chat',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('../app/pages/chat/chat-container/chat-container.component').then(
         (m) => m.ChatContainerComponent
@@ -66,6 +70,7 @@ export const routes: Routes = [
   },
   {
     path: 'create-announcement',
+    canActivate: [authGuard],
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-create/announcement-create.component'
@@ -73,6 +78,7 @@ export const routes: Routes = [
   },
   {
     path: 'edit-announcement/:id',
+    canActivate: [authGuard],
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-edit/announcement-edit.component'
