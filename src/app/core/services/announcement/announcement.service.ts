@@ -79,6 +79,12 @@ export class AnnouncementService {
     return this.http.put(`${this.url}announcements/${id}`, data, { headers })
   }
 
+  //methode pour supprimer une annonce
+  deleteAnnouncement(id:number){
+    const  headers = this.authToken()
+    return this.http.delete(`${this.url}announcements/${id}`,{ headers })
+  }
+
   //methode pour recupere les annonces similaires
   getSimilarAnnouncements(id: number): Observable<{ data: Announcement[] }> {
     return this.http.get<{ data: Announcement[] }>(
