@@ -4,6 +4,7 @@ import { initFlowbite } from 'flowbite';
 import { RouterLink } from '@angular/router';
 import { FooterComponent } from "../../../components/footer/footer.component";
 import { HeaderComponent } from "../../../components/header/header.component";
+import {UserLocalService} from '../../../core/services/userlocal/userlocal.service';
 @Component({
   selector: 'app-home',
   imports: [AnnouncementListComponent, RouterLink, FooterComponent, HeaderComponent],
@@ -11,30 +12,29 @@ import { HeaderComponent } from "../../../components/header/header.component";
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  constructor(private userlocalService : UserLocalService ) {
+  }
   isConnected: boolean = false;
-  name!: string;
-  email!: string;
+  name!: string | undefined;
+  email!: string | undefined;
   token!: string;
-  role! : string;
 
- ngOnInit(): void {
-  this.isConnectedMethode();
-    initFlowbite();
-    console.log('INIT')
+
+  ngOnInit() {
+    this.userConnected();
   }
 
-  isConnectedMethode() {
-    const token = localStorage.getItem('token');
-    const name = localStorage.getItem('name');
-    const email = localStorage.getItem('email');
-    const role  = localStorage.getItem('role');
-
-    if (token && name && email) {
+  userConnected(){
+    const user = this.userlocalService.getToken();
+    this.name = user?.name;
+    this.email = user?.email;
+    const token = user?.token;
+    if (token){
       this.isConnected = true;
-      this.token = token;
-      this.name = name;
-      this.email = email;
+    }else {
+      this.isConnected = false;
     }
   }
+
 }
 

@@ -1,6 +1,7 @@
 import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import {UserLocalService} from '../../core/services/userlocal/userlocal.service';
 
 @Component({
   selector: 'app-header',
@@ -10,47 +11,41 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class HeaderComponent {
   isMenuOpen = false;
-  constructor(private router : Router){}
+  constructor(private router : Router, private userLocalService : UserLocalService){}
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
   isConnected: boolean = false;
-  name!: string;
-  email!: string;
+  name!: string | undefined;
+  email!: string | undefined;
   token!: string;
-  role! : string;
 
 
   ngOnInit() {
-    this.isConnectedMethode();
+    this.userConnected();
   }
 
-  isConnectedMethode() {
-    const token = localStorage.getItem('token');
-    const name = localStorage.getItem('name');
-    const email = localStorage.getItem('email');
-
-    if (token && name && email) {
+  userConnected(){
+    const user = this.userLocalService.getToken();
+    this.name = user?.name;
+    this.email = user?.email;
+    const token = user?.token;
+    if (token){
       this.isConnected = true;
-      this.token = token;
-      this.name = name;
-      this.email = email;
+    }else {
+      this.isConnected = false;
     }
   }
 
-  logOut() {
-    console.log('Déconnexion...');
+  logOut(){
+    console.log('Clique que sur le button')
     localStorage.clear();
-    this.isConnected = false;
-    this.token = '';
-    this.name = '';
-    this.email = '';
-  
-    this.router.navigateByUrl('').then(() => {
-      location.reload(); 
+    this.isConnected = false ;
+    this.router.navigate(['/']).then(()=>{
+      location.reload();
     });
   }
-  
+
 }
