@@ -73,6 +73,12 @@ export class AnnouncementService {
     return this.http.post(this.url + 'announcements', data, { headers });
   }
 
+  //methode pour modifier une annonces
+  updateAnnouncement(id:number,data:any){
+    const headers = this.authToken()
+    return this.http.put(`${this.url}announcements/${id}`, data, { headers })
+  }
+
   //methode pour recupere les annonces similaires
   getSimilarAnnouncements(id: number): Observable<{ data: Announcement[] }> {
     return this.http.get<{ data: Announcement[] }>(
