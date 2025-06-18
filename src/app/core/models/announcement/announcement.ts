@@ -18,5 +18,8 @@ export interface Announcement {
     created_by : User;
     created_at : string;
     updated_at : string;
+    //utilisable pour la comparaison dans le single-component
+    created_at_raw:string;
+    updated_at_raw:string
 }
 
