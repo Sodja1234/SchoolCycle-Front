@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {guestGuard} from './guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -7,31 +8,36 @@ export const routes: Routes = [
   },
   {
     path : 'register',
+    title : 'Inscription - School Cycle',
+    canActivate: [guestGuard],
     loadComponent:() => import('../app/pages/auth/register/register.component').then((m) => m.RegisterComponent),
   },
   {
     path : 'login',
+    title : 'Connexion - School Cycle',
+    canActivate: [guestGuard],
     loadComponent:() => import('../app/pages/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path : 'verify-email/:id/:hash',
-    loadComponent : ()=>
+    canActivate: [guestGuard],
+    title : 'Vérification - School Cycle',
+    loadComponent : () =>
       import('./pages/auth/verify-email/verify-email.component').then((m)=> m.VerifyEmailComponent)
   },
-  
   {
     path: 'forgot-password',
+    title : 'Mot de passe oublié - School Cycle',
+    canActivate: [guestGuard],
     loadComponent: () =>
-    import('./pages/auth/reset-password/reset-password.component').then(
-      (m) => m.ResetPasswordComponent
-    ),
+      import('./pages/auth/reset-password/reset-password.component').then((m) => m.ResetPasswordComponent),
   },
   {
     path: 'password-reset/:token',
+    title : 'Nouveau mot de passe - School Cycle',
+    canActivate: [guestGuard],
     loadComponent: () =>
-      import('../app/pages/auth/new-password/new-password.component').then(
-        (m) => m.NewPasswordComponent
-      ),
+      import('../app/pages/auth/new-password/new-password.component').then((m) => m.NewPasswordComponent),
   },
   {
     path:'profils',
