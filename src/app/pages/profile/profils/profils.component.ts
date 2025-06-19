@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { AnnouncementProfileComponent } from '../announcement-profile/announcement-profile.component';
-import { ActionRapideComponent } from '../action-rapide/action-rapide.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { FooterComponent } from '../../../components/footer/footer.component';
+import { HeaderComponent } from '../../../components/header/header.component';
 @Component({
   selector: 'app-profils',
   imports: [UserProfileComponent,
     AnnouncementProfileComponent,
-    ActionRapideComponent,
+    FooterComponent,HeaderComponent,
   MatTabsModule,
 ],
   templateUrl: './profils.component.html',
@@ -23,7 +24,7 @@ export class ProfilsComponent {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.selectedTab = params['tab'] || 'announcement';
-      this.tabIndex = this.getTabIndex(this.selectedTab) 
+      this.tabIndex = this.getTabIndex(this.selectedTab)
     });
   }
 
