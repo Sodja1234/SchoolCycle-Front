@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Announcement } from '../../../core/models/announcement/announcement';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterLink } from '@angular/router';
 import { AnnouncementService } from '../../../core/services/announcement/announcement.service';
 import { environment } from '../../../../environments/environment';
 import { HeaderComponent } from '../../../components/header/header.component';
@@ -16,7 +16,8 @@ import { CommonModule } from '@angular/common';
 export class AnnouncementSingleComponent {
   constructor(
     private annoncementService: AnnouncementService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
   storageUrl = environment.storageUrl;
   currentImage: string = '';
@@ -25,6 +26,8 @@ export class AnnouncementSingleComponent {
   articleId: number = -1;
   announcementData!: Announcement;
   currentUserId: number = -1;
+  isModalOpen = false;
+  isDeleteModalOpen = false;
 
   ngOnInit() {
     // Récupère l'ID de l'utilisateur connecté une seule fois
@@ -36,6 +39,28 @@ export class AnnouncementSingleComponent {
       this.getSingleAnnouncement();
       this.getSimilarAnnouncement();
     });
+  }
+
+  //ouvrir le modal qui a confimer ou non la suppressiion
+  openDeleteModal() {
+    this.isDeleteModalOpen = true;
+  }
+  //ferme le modal 
+  closeDeleteModal() {
+    this.isDeleteModalOpen = false;
+  }
+  //confirme la suppression
+  confirmDelete() {
+    this.deleteAnnouncement();
+    this.closeDeleteModal();
+  }
+  toggleModal() {
+    this.isModalOpen = !this.isModalOpen;
+  }
+
+  //ferme le modal
+  closeModal() {
+    this.isModalOpen = false;
   }
 
   //function pour recuperr l'annonce en detail
@@ -76,6 +101,21 @@ export class AnnouncementSingleComponent {
     );
   }
 
+  //function pour supprimer une annonce
+  deleteAnnouncement() {
+    this.articleId = Number(this.route.snapshot.paramMap.get('id'));
+    this.annoncementService.deleteAnnouncement(this.articleId).subscribe({
+      next: (res) => {
+        console.log('Announcement delete avec success');
+        this.router.navigate(['/announcement-gallery']);
+      },
+
+      error: (err) => {
+        console.log('Une erreur est survenue', err);
+      },
+    });
+  }
+
   //function pour recuperr changer la photo principale de l'annonce
   changeMainImage(url: string) {
     this.currentImage = url;
@@ -87,6 +127,7 @@ export class AnnouncementSingleComponent {
     return this.announcement?.created_by?.id === userId;
   }
 
+  //verifie si une annonce a eté modifier ou non
   get isModified(): boolean {
     if (
       !this.announcement?.created_at_raw ||
