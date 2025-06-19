@@ -28,7 +28,6 @@ export class UserLocalService {
 
     return new HttpHeaders({
       Accept: 'application/json',
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${user?.token}`,
     });
   }
