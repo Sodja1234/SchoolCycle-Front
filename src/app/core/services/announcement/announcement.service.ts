@@ -5,22 +5,15 @@ import { Observable } from 'rxjs';
 import { Announcement } from '../../models/announcement/announcement';
 import { Category } from '../../models/announcement/category';
 import { PaginatedAnnouncements } from '../../models/announcement/pagination';
+import { UserLocalService } from '../userlocal/userlocal.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnnouncementService {
   private url = environment.apiUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userLocalService:UserLocalService ) {}
 
-  //function pour recuperer le token de l'utilisateur connecté
-  authToken() {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return headers;
-  }
 
   //methode pour recuperer les annonces avec pagination,rechearch si possible et filtre
   getAnnouncements(
@@ -69,19 +62,19 @@ export class AnnouncementService {
 
   //methode pour ajouter une annonce
   createAnnouncement(data: FormData) {
-    const headers = this.authToken();
+    const headers = this.userLocalService.getAuthHeaders();
     return this.http.post(this.url + 'announcements', data, { headers });
   }
 
   //methode pour modifier une annonces
   updateAnnouncement(id:number,data:any){
-    const headers = this.authToken()
+    const headers = this.userLocalService.getAuthHeaders()
     return this.http.put(`${this.url}announcements/${id}`, data, { headers })
   }
 
   //methode pour supprimer une annonce
   deleteAnnouncement(id:number){
-    const  headers = this.authToken()
+    const  headers = this.userLocalService.getAuthHeaders();
     return this.http.delete(`${this.url}announcements/${id}`,{ headers })
   }
 
@@ -90,5 +83,9 @@ export class AnnouncementService {
     return this.http.get<{ data: Announcement[] }>(
       this.url + 'announcements/' + id + '/similar'
     );
+  }
+  getAnnouncementUser():Observable<{data:Announcement[]}>{
+    const headers =this.userLocalService.getAuthHeaders();
+    return this.http.get<{data:Announcement[]}>(this.url + 'get_creator_announcement',{headers});
   }
 }
