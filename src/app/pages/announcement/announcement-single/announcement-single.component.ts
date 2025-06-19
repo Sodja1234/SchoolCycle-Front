@@ -6,8 +6,6 @@ import { environment } from '../../../../environments/environment';
 import { HeaderComponent } from '../../../components/header/header.component';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { CommonModule } from '@angular/common';
-import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
 
 @Component({
   selector: 'app-announcement-single',
