@@ -9,7 +9,7 @@
   <div class=" w-[70%] ml-3  rounded shadow row-span-1 px-5">
 
     <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
-      <mat-tab label="Annonces">
+      <mat-tab label="Annonces" class=>
         <ng-template matTabContent>
           <app-announcement-profile></app-announcement-profile>
         </ng-template>
@@ -20,14 +20,7 @@
           Favoris Content
         </ng-template>
       </mat-tab>
-
-      <mat-tab label="Avis">
-        <ng-template matTabContent>
-          Avis Content
-        </ng-template>
-      </mat-tab>
     </mat-tab-group>
-    <!-- <app-announcement></app-announcement> -->
   </div>
 
 
