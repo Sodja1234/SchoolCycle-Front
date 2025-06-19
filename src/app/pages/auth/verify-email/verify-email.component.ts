@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http'; // 
+import { HttpClient, HttpParams } from '@angular/common/http'; //
 import { NgIf } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 
@@ -14,7 +14,7 @@ export class VerifyEmailComponent implements OnInit {
   loading = true;
   successMessage = '';
   errorMessage = '';
-  verified = false; 
+  verified = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +23,10 @@ export class VerifyEmailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.verifyEmmail()
+  }
+
+  verifyEmmail(){
     const id = this.route.snapshot.paramMap.get('id');
     const hash = this.route.snapshot.paramMap.get('hash');
 

@@ -10,14 +10,15 @@ import {
 } from '@angular/forms';
 
 import { Router, RouterLink } from '@angular/router'; // Pour la navigation
-import { NgIf } from '@angular/common'; // Pour afficher ou cacher des blocs HTML conditionnellement
+import {NgClass, NgIf} from '@angular/common'; // Pour afficher ou cacher des blocs HTML conditionnellement
 import { AuthService } from '../../../core/services/auth/auth.service';
+import {AuthRegisterData} from '../../../core/models/auth/auth';
 
 // Déclaration du composant Angular
 @Component({
   selector: 'app-register', // Nom utilisé dans le HTML pour appeler ce composant
   standalone: true,         // Composant autonome (sans module Angular déclaré autour)
-  imports: [ReactiveFormsModule, NgIf, RouterLink], // Modules utilisés dans le template HTML
+  imports: [ReactiveFormsModule, NgIf, RouterLink, NgClass], // Modules utilisés dans le template HTML
   templateUrl: './register.component.html', // Fichier HTML associé
   styleUrls: ['./register.component.css'],   // Fichier CSS associé
 })
@@ -41,13 +42,17 @@ export class RegisterComponent implements OnInit {
 
   // Initialisation du formulaire avec les validations
   ngOnInit(): void {
+    this.initForm();
+  }
+
+  initForm(){
+    console.log('Form Init')
     this.registerForm = this.fb.group(
       {
         name: ['', Validators.required],                      // Champ nom requis
         email: ['', [Validators.required, Validators.email]], // Champ email requis + format valide
-        password: ['', Validators.required],                  // Mot de passe requis
-        password_confirmation: ['', Validators.required],     // Confirmation requise
-        terms: [false, Validators.requiredTrue],              // Case à cocher (CGU) obligatoire
+        password: ['', [Validators.required, Validators.minLength(8)]],                 // Mot de passe requis
+        password_confirmation: ['', Validators.required],               // Case à cocher (CGU) obligatoire
       },
       { validators: this.passwordsMatchValidator }            // Validation personnalisée (mot de passe = confirmation)
     );
@@ -62,40 +67,57 @@ export class RegisterComponent implements OnInit {
 
   // Fonction appelée lors de la soumission du formulaire
   onSubmit(): void {
+    console.log('clique surle formulaire')
     // Marque le formulaire comme soumis
-    this.submitted = true; 
+    this.submitted = true;
 
-    // Réinitialise les messages     
-    this.errorMessage = '';     
+    // Réinitialise les messages
+    this.errorMessage = '';
     this.successMessage = '';
 
+    this.registerForm.markAllAsTouched();
     // Si le formulaire est invalide, on arrête l’exécution
-    if (this.registerForm.invalid) return;
+    if (this.registerForm.invalid) {
+       this.errorMessage = 'Formulaire invalide | remplissez tous les champs'
+      setTimeout(()=>{
+        this.errorMessage = ''
+      }, 2500)
+      this.submitted = false;
+      return
+    }
 
     // Récupère les données saisies
-    const formData = this.registerForm.value;
+    const data : AuthRegisterData = this.registerForm.value;
 
     // Appel au service d'enregistrement avec les données du formulaire
-    this.authService
-      .register({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        password_confirmation: formData.password_confirmation,
-        role: 'tutor', 
-      })
-      .subscribe({
+    this.authService.register(data).subscribe({
         // En cas de succès : affiche un message et réinitialise le formulaire
         next: () => {
           this.successMessage = 'Inscription réussie ! Un e-mail de confirmation a été envoyé.';
-          this.registerForm.reset();     // Vide les champs
-          this.submitted = false;        // Réinitialise l'état de soumission
-          this.ngOnInit();               // Réinitialise les validations
+          this.registerForm.reset();
+          setTimeout(()=>{
+            this.successMessage ='';
+          }, 2500)// Vide les champs
+          this.submitted = false;               // Réinitialise les validations
         },
         // En cas d’erreur : affiche un message d’erreur personnalisé ou générique
         error: (error) => {
-          this.errorMessage = error.error.message || ' Une erreur est survenue. Veuillez réessayer.';
-        },
-      });
+        // Si le backend a des erreurs de validation
+        if (error.error?.errors) {
+          const errors = error.error.errors;
+          // Combine tous les messages en une seule chaîne (ex: pour email et password)
+          this.errorMessage = Object.values(errors).flat().join(' | ');
+        } else {
+          this.errorMessage = error.error.message || 'Une erreur est survenue. Veuillez réessayer.';
+        }
+
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 3500);
+
+        this.submitted = false;
+      },
+
+    });
   }
 }
