@@ -5,22 +5,14 @@ import { Observable } from 'rxjs';
 import { Announcement } from '../../models/announcement/announcement';
 import { Category } from '../../models/announcement/category';
 import { PaginatedAnnouncements } from '../../models/announcement/pagination';
+import { UserLocalService } from '../userlocal/userlocal.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnnouncementService {
   private url = environment.apiUrl;
-  constructor(private http: HttpClient) {}
-
-  //function pour recuperer le token de l'utilisateur connecté
-  authToken() {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return headers;
-  }
+  constructor(private http: HttpClient,private userlocalService : UserLocalService) {}
 
   //methode pour recuperer les annonces avec pagination,rechearch si possible et filtre
   getAnnouncements(
@@ -69,19 +61,19 @@ export class AnnouncementService {
 
   //methode pour ajouter une annonce
   createAnnouncement(data: FormData) {
-    const headers = this.authToken();
+    const headers = this.userlocalService.getAuthHeaders();
     return this.http.post(this.url + 'announcements', data, { headers });
   }
 
   //methode pour modifier une annonces
   updateAnnouncement(id:number,data:any){
-    const headers = this.authToken()
+    const headers = this.userlocalService.getAuthHeaders();
     return this.http.put(`${this.url}announcements/${id}`, data, { headers })
   }
 
   //methode pour supprimer une annonce
   deleteAnnouncement(id:number){
-    const  headers = this.authToken()
+    const headers = this.userlocalService.getAuthHeaders();
     return this.http.delete(`${this.url}announcements/${id}`,{ headers })
   }
 
