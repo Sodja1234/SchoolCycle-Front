@@ -206,16 +206,13 @@ export class AnnouncementEditComponent {
 
     if (this.announcementForm.invalid) {
       this.isSubmited = false;
-      return;
-    }else {
-      console.log(this.announcementForm);
-
-      //on active le toast pendant 3000
       this.showToast = true;
-      this.toastMessage = 'Annonce modifié avec success !';
+      this.toastType = 'error';
+      this.toastMessage = 'Veuillez remplir correctement le formulaire';
       setTimeout(() => {
         this.showToast = false;
       }, 2000);
+      return;
     }
 
     const formData = new FormData();
@@ -234,11 +231,20 @@ export class AnnouncementEditComponent {
           console.log(this.announcementForm.value);
           this.successMessage = 'Annonce modifier avec success';
           this.isSubmited = false;
-          this.router.navigate(['/announcement-gallery']);
+          this.showToast = true;
+          this.toastType = 'success';
+          this.toastMessage = 'Annonce modifié avec success';
+          setTimeout(() => {
+            this.showToast = false;
+            this.router.navigate(['/announcement-gallery']);
+          }, 2000);
         },
         error: (err) => {
           this.errorMessage = err.error.message;
           this.isSubmited = false;
+          this.toastType = 'error';
+          this.toastMessage = 'Une erreur est survenue.';
+          this.showToast = true;
         },
       });
   }
