@@ -25,13 +25,13 @@ export class AnnouncementSingleComponent {
   similarAnnouncements: Announcement[] = [];
   articleId: number = -1;
   announcementData!: Announcement;
-  currentUserId: number = -1;
+  currentUserId!: number;
   isModalOpen = false;
   isDeleteModalOpen = false;
 
   ngOnInit() {
-    // Récupère l'ID de l'utilisateur connecté une seule fois
-    const user = JSON.parse(localStorage.getItem('user')!);
+    // Récupère l'ID de l'utilisateur connecté
+    const user = JSON.parse(localStorage.getItem('userSession')!);
     this.currentUserId = user?.id;
     //recharger la page en dunction du nouvel id
     this.route.params.subscribe((params) => {
@@ -123,8 +123,9 @@ export class AnnouncementSingleComponent {
 
   //Vérifie si le user connecté est l'auteur
   get isAuthor(): boolean {
-    const userId = +localStorage.getItem('id')!;
-    return this.announcement?.created_by?.id === userId;
+    const userId = JSON.parse(localStorage.getItem('userSession')!);
+    this.currentUserId = userId?.id;
+    return this.announcement?.created_by?.id === this.currentUserId;
   }
 
   //verifie si une annonce a eté modifier ou non

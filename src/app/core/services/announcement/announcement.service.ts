@@ -12,7 +12,7 @@ import { UserLocalService } from '../userlocal/userlocal.service';
 })
 export class AnnouncementService {
   private url = environment.apiUrl;
-  constructor(private http: HttpClient, private userLocalService:UserLocalService ) {}
+  constructor(private http: HttpClient,private userlocalService : UserLocalService) {}
 
 
   //methode pour recuperer les annonces avec pagination,rechearch si possible et filtre
@@ -62,19 +62,19 @@ export class AnnouncementService {
 
   //methode pour ajouter une annonce
   createAnnouncement(data: FormData) {
-    const headers = this.userLocalService.getAuthHeaders();
+    const headers = this.userlocalService.getAuthHeaders();
     return this.http.post(this.url + 'announcements', data, { headers });
   }
 
   //methode pour modifier une annonces
   updateAnnouncement(id:number,data:any){
-    const headers = this.userLocalService.getAuthHeaders()
+    const headers = this.userlocalService.getAuthHeaders();
     return this.http.put(`${this.url}announcements/${id}`, data, { headers })
   }
 
   //methode pour supprimer une annonce
   deleteAnnouncement(id:number){
-    const  headers = this.userLocalService.getAuthHeaders();
+    const headers = this.userlocalService.getAuthHeaders();
     return this.http.delete(`${this.url}announcements/${id}`,{ headers })
   }
 
@@ -85,7 +85,7 @@ export class AnnouncementService {
     );
   }
   getAnnouncementUser():Observable<{data:Announcement[]}>{
-    const headers =this.userLocalService.getAuthHeaders();
+    const headers = this.userlocalService.getAuthHeaders();
     return this.http.get<{data:Announcement[]}>(this.url + 'get_creator_announcement',{headers});
   }
 }
