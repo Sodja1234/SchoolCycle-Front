@@ -7,6 +7,7 @@ export interface Announcement {
     title: string;
     description: string;
     operation_type: string,
+    state:string
     price: number;
     is_completed: number;
     is_cancelled: number;
