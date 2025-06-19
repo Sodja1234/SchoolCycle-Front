@@ -13,7 +13,7 @@ export class UserLocalService {
     localStorage.setItem('userSession', JSON.stringify(response));
   }
 
-  getToken() {
+  getUser() {
     const data = localStorage.getItem(SESSION_KEY);
     if (!data) {
       return null;
@@ -24,11 +24,10 @@ export class UserLocalService {
   }
 
   getAuthHeaders(): HttpHeaders {
-    const user = this.getToken();
+    const user = this.getUser();
 
     return new HttpHeaders({
       Accept: 'application/json',
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${user?.token}`,
     });
   }

@@ -12,9 +12,9 @@ import {NgClass, NgIf} from '@angular/common';
 import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
-  selector: 'app-new-password', 
-  imports: [ReactiveFormsModule, NgIf, RouterLink, NgClass], 
-  templateUrl: './new-password.component.html', 
+  selector: 'app-new-password',
+  imports: [ReactiveFormsModule, NgIf, RouterLink, NgClass],
+  templateUrl: './new-password.component.html',
   styleUrl: './new-password.component.css'
 })
 export class NewPasswordComponent implements OnInit {
@@ -46,7 +46,7 @@ export class NewPasswordComponent implements OnInit {
         password_confirmation: ['', [Validators.required]] // Confirmation obligatoire
       },
       {
-        validator: this.passwordsMatchValidator // Validateur personnalisé : mots de passe doivent correspondre
+        validators: this.passwordsMatchValidator // Validateur personnalisé : mots de passe doivent correspondre
       }
     );
   }
@@ -55,7 +55,7 @@ export class NewPasswordComponent implements OnInit {
   passwordsMatchValidator(form: AbstractControl): ValidationErrors | null {
     const password = form.get('password')?.value;
     const confirm = form.get('password_confirmation')?.value;
-    return password === confirm ? null : { passwordsMatchValidator: true };
+    return password === confirm ? null : { passwordsMismatch: true };
   }
 
   // Récupération du token depuis les paramètres de route (`/reset-password/:token`)
@@ -97,14 +97,19 @@ export class NewPasswordComponent implements OnInit {
         // Redirection vers la page de login après 2 secondes
         setTimeout(() => {
           this.router.navigate(['login']);
-        }, 2000);
+          this.successMessage = ''
+        }, 2500);
         // Réinitialisation du formulaire
         this.resetForm.reset();
         this.isSubmited = false;
       },
       // En cas d’erreur
       error: (error) => {
-        this.errorMessage = error.error.message || 'Une erreur est survenue';
+        this.errorMessage = error.error.message || error.error.status?.toString() || 'Une erreur est survenue';
+        setTimeout(()=> {
+          this.errorMessage = ''
+        }, 2500)
+        this.isSubmited = false;
       }
     });
   }

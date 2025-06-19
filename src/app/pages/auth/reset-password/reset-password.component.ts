@@ -64,15 +64,20 @@ export class ResetPasswordComponent {
         // En cas de succès : affiche un message et réinitialise le formulaire
         next: () => {
           this.successMessage ='Un email a été envoyé, veuillez consulter votre boite mail.';
-          this.forgotPasswordForm.reset(); // Vide les champs
+          this.forgotPasswordForm.reset();
+          setTimeout(()=>{
+            this.successMessage = ''
+          }, 2500)
           this.submitted = false; // Réinitialise les validations
         },
 
         // En cas d’erreur : affiche un message d’erreur personnalisé ou générique
         error: (error) => {
-          this.errorMessage =
-            error.error.message ||
-            ' Une erreur est survenue. Veuillez réessayer.';
+          this.errorMessage = error.error.message || error.error.status?.toString() || ' Une erreur est survenue. Veuillez réessayer.';
+          setTimeout(()=>{
+            this.errorMessage = ''
+          }, 2500)
+          this.submitted = false;
         },
       });
   }

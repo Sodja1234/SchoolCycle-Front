@@ -25,7 +25,7 @@ export class HomeComponent {
   }
 
   userConnected(){
-    const user = this.userlocalService.getToken();
+    const user = this.userlocalService.getUser();
     this.name = user?.name;
     this.email = user?.email;
     const token = user?.token;
