@@ -5,7 +5,7 @@ import {UserLocalService} from '../core/services/userlocal/userlocal.service';
 export const guestGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const userLocalService = inject(UserLocalService);
-  const user = userLocalService.getToken();
+  const user = userLocalService.getUser();
   const token = user?.token;
 
   if (token) {

@@ -28,7 +28,7 @@ export class HeaderComponent {
   }
 
   userConnected(){
-    const user = this.userLocalService.getToken();
+    const user = this.userLocalService.getUser();
     this.name = user?.name;
     this.email = user?.email;
     const token = user?.token;
