@@ -146,6 +146,9 @@ export class AnnouncementCreateComponent implements OnInit {
 
   // Gère le changement de fichiers dans l’input type="file"
   onFileChange(event: any) {
+    // Nettoyer les anciennes images sélectionnées
+    this.selectedFiles = [];
+    this.previewImages = [];
     if (event.target.files && event.target.files.length > 0) {
       // Convertit la FileList en tableau
       this.selectedFiles = Array.from(event.target.files);
@@ -249,18 +252,14 @@ export class AnnouncementCreateComponent implements OnInit {
 
     // Vérifie la validité du formulaire
     if (this.createAnnoucmentForm.invalid) {
-      //le toast reste desactivé
-      this.showToast = false;
-      return;
-    } else {
-      console.log(this.createAnnoucmentForm);
-
-      //on active le toast pendant 3000
+      //on active le toast avec message d'erreur
       this.showToast = true;
-      this.toastMessage = 'Annonce créée avec succès !';
+      this.toastType = 'error';
+      this.toastMessage = 'Veuillez remplir correctement le formulaire';
       setTimeout(() => {
         this.showToast = false;
       }, 2000);
+      return;
     }
 
     // Prépare les données sous forme de FormData (pour inclure les fichiers)
@@ -288,6 +287,13 @@ export class AnnouncementCreateComponent implements OnInit {
         this.createAnnoucmentForm.reset();
         this.selectedFiles = [];
         this.previewImages = [];
+        this.showToast = true;
+        this.toastType = 'success';
+        this.toastMessage = 'Annonce creer avec success';
+        setTimeout(() => {
+          this.showToast = false;
+          this.router.navigate(['/announcement-gallery']);
+        }, 2000);
         console.log(res);
       },
       error: (err) => {
