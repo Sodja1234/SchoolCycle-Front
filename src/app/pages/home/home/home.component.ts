@@ -21,6 +21,7 @@ export class HomeComponent {
 
 
   ngOnInit() {
+      initFlowbite();
     this.userConnected();
   }
 

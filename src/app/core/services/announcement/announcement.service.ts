@@ -14,6 +14,7 @@ export class AnnouncementService {
   private url = environment.apiUrl;
   constructor(private http: HttpClient,private userlocalService : UserLocalService) {}
 
+
   //methode pour recuperer les annonces avec pagination,rechearch si possible et filtre
   getAnnouncements(
     page: number = 1, // Le numéro de la page à récupérer, par défaut 1
@@ -82,5 +83,9 @@ export class AnnouncementService {
     return this.http.get<{ data: Announcement[] }>(
       this.url + 'announcements/' + id + '/similar'
     );
+  }
+  getAnnouncementUser():Observable<{data:Announcement[]}>{
+    const headers = this.userlocalService.getAuthHeaders();
+    return this.http.get<{data:Announcement[]}>(this.url + 'get_creator_announcement',{headers});
   }
 }
