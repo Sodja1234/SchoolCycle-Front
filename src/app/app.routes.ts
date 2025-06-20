@@ -98,4 +98,22 @@ export const routes: Routes = [
         '../app/pages/announcement/announcement-gallery/announcement-gallery.component'
       ).then((m) => m.AnnouncementGalleryComponent),
   },
+  {
+    path : '404',
+    title : '404 - School Cycle',
+    loadComponent :()=> import('../app/pages/page-not-found/page-not-found.component').then((m)=> m.PageNotFoundComponent)
+  },
+
+  //pour toutes les routes vides on redigigera à l'acceuil
+  {
+    path : '',
+    pathMatch : 'full',
+    redirectTo : ''
+  },
+
+  //pour toutes routes generiques non existantes on sera rediriger à la route 404
+  {
+    path : '**',
+    redirectTo : '404'
+  },
 ];
