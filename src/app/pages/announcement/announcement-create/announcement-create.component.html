@@ -7,215 +7,161 @@
       'bg-green-500': toastType === 'success',
       'bg-red-500': toastType === 'error'
     }"
-    class="bg-green-500 text-white px-6 py-3 rounded-b shadow-md w-full max-w-md mx-auto flex justify-between items-center animate-slide-down">
+    class="text-white px-6 py-3 rounded-b shadow-md w-full max-w-md mx-auto flex justify-between items-center animate-slide-down">
     <p class="text-lg text-center font-semibold">{{ toastMessage }}</p>
-    <a [routerLink]="['']"> ❌ </a>
+    <a [routerLink]="['']">❌</a>
   </div>
 </div>
 
-<div class="max-w-4xl mx-auto shadow-xl rounded-xl mt-10">
+<div class="w-full max-w-4xl mx-auto shadow-xl rounded-xl mt-10 px-4">
   <!-- Orange Header -->
-  <div class="flex flex-col items-center justify-center bg-[#FF9000] p-10 rounded-t-xl">
-    <p class="text-white text-[20px] font-bold">Créer une nouvelle annonce</p>
-    <p class="text-white text-[10]">
-      Partager les details de vos fournitures scolaires pour vendre, échanger ou
-      donner
-    </p>
+  <div class="flex flex-col items-center justify-center bg-[#FF9000] p-8 sm:p-10 rounded-t-xl text-center">
+    <p class="text-white text-lg sm:text-xl font-bold">Créer une nouvelle annonce</p>
+    <p class="text-white text-sm">Partager les détails de vos fournitures scolaires pour vendre, échanger ou donner</p>
   </div>
 
-  <div class="max-w-4xl mb-8 mx-auto p-6 space-y-8">
+  <div class="w-full mb-8 p-4 sm:p-6 space-y-8">
     <form [formGroup]="createAnnoucmentForm" (ngSubmit)="onSubmit()">
+      
       <!-- Section 1: Type de l'annonce -->
-      <div class="space-y-4 mb-5">
+      <div class="space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
-            1
-          </div>
+          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
           <h2 class="text-xl font-semibold text-gray-900">Type de l'annonce</h2>
         </div>
         <select id="state" formControlName="operation_type"
-          class="w-full px-4 pt-5 py-5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:outline-none">
           <option value="" disabled>Sélectionner le type de l'annonce</option>
-          <option value="don">Don🎁</option>
-          <option value="exchange">Echange 💱</option>
+          <option value="don">Don 🎁</option>
+          <option value="exchange">Échange 💱</option>
           <option value="sale">Vente 🛒</option>
         </select>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         <div *ngIf="isSubmited && createAnnoucmentForm.get('operation_type')?.errors?.['required']"
-          class="text-red-500 text-sm">
-          Champ obligatoire
-        </div>
+          class="text-red-500 text-sm">Champ obligatoire</div>
       </div>
 
       <!-- Section 2: Information général -->
-      <div class="space-y-4 mb-8">
+      <div class="space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
-            2
-          </div>
-          <h2 class="text-xl font-semibold text-gray-900">
-            Information général
-          </h2>
+          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</div>
+          <h2 class="text-xl font-semibold text-gray-900">Information générale</h2>
         </div>
 
-        <div class="space-y-4 bg-white p-6 rounded-xl shadow-sm">
-          <!-- Titre -->
+        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm space-y-4">
+              <!-- Titre -->
           <div>
             <label for="title" class="block text-sm font-medium mb-1">Titre de l'annonce</label>
             <input id="title" type="text" formControlName="title" placeholder="Ex: Livre de mathématique 6ème"
-              class="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none" />
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none" />
             <div *ngIf="isSubmited && createAnnoucmentForm.get('title')?.errors?.['required']"
-              class="text-red-500 text-sm">
-              Le titre est requis
-            </div>
+              class="text-red-500 text-sm">Le titre est requis</div>
           </div>
+                  <!-- Description -->
 
-          <!-- Description -->
           <div>
-            <label for="description" class="block text-sm font-medium text-black mb-1">Description</label>
-            <textarea id="description" formControlName="description"
-              placeholder="faite une description de votre  article " rows="4"
-              class="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none resize-none"></textarea>
+            <label for="description" class="block text-sm font-medium mb-1">Description</label>
+            <textarea id="description" rows="4" formControlName="description"
+              placeholder="Faites une description de votre article"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none resize-none"></textarea>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Catégorie -->
             <div>
               <label for="category_id" class="block text-sm font-medium mb-1">Catégorie</label>
               <select id="category_id" formControlName="category_id"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
-                <option value="  " disabled>Sélectionner une catégorie</option>
-                <option *ngFor="let category of categories" [value]="category.id">
-                  {{ category.name }}
-                </option>
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none">
+                <option value="" disabled>Sélectionner une catégorie</option>
+                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
               </select>
               <div *ngIf="isSubmited && createAnnoucmentForm.get('category_id')?.errors?.['required']"
-                class="text-red-500 text-sm">
-                La categories est requise
-              </div>
+                class="text-red-500 text-sm">La catégorie est requise</div>
             </div>
-
             <!-- Prix (affiché uniquement pour 'sale') -->
-            <div *ngIf="
-                createAnnoucmentForm.get('operation_type')?.value === 'sale'
-              ">
+            <div *ngIf="createAnnoucmentForm.get('operation_type')?.value === 'sale'">
               <label for="price" class="block text-sm font-medium mb-1">Prix</label>
               <input id="price" type="number" formControlName="price" placeholder="Ex: 10000"
-                class="w-full px-4 py-2 border border-gray-300 text-gray-700 shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none" />
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none" />
             </div>
 
-            <!-- État -->
-            <div>
+              <!-- État -->
+            <div class="md:col-span-2">
               <label for="state" class="block text-sm font-medium mb-1">État</label>
               <select id="state" formControlName="state"
-                class="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
-                <option value="" disabled>
-                  -- Sélectionner l'état de votre article --
-                </option>
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none">
+                <option value="" disabled>-- Sélectionner l'état de votre article --</option>
                 <option value="new">Neuf</option>
-                <option value="like new">En bon etat</option>
+                <option value="like new">En bon état</option>
                 <option value="good">Comme neuf</option>
-                <option value="gamaged">Abimé</option>
+                <option value="gamaged">Abîmé</option>
               </select>
               <div *ngIf="isSubmited && createAnnoucmentForm.get('state')?.errors?.['required']"
-                class="text-red-500 text-sm">
-                L'etat est requis
-              </div>
+                class="text-red-500 text-sm">L'état est requis</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Section 3: Photos -->
-      <div class="space-y-4 mb-8">
+       <!-- Section 3: Photos -->
+      <div class="space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
-            3
-          </div>
+          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</div>
           <h2 class="text-xl font-semibold text-gray-900">Photos</h2>
         </div>
 
-        <!-- Photos -->
-        <div class="border-2 border-dashed p-10 flex flex-col justify-center items-center">
+        <div class="border-2 border-dashed p-6 flex flex-col justify-center items-center">
           <input id="photos" type="file" multiple (change)="onFileChange($event)" class="w-full" />
-
           <div class="flex flex-wrap gap-4 mt-4" *ngIf="previewImages.length">
             <div *ngFor="let url of previewImages; let i = index" class="relative">
-              <img [src]="url" class="w-24 h-24 object-cover rounded-lg border border-gray-300 shadow-sm"
-                alt="Preview" />
+              <img [src]="url" class="w-24 h-24 object-cover rounded-lg border shadow-sm" alt="Preview" />
               <button type="button" (click)="removeImage(i)"
-                class="absolute top-0 right-0 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-700"
-                title="Supprimer">
+                class="absolute top-0 right-0 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-700">
                 ❌
               </button>
             </div>
           </div>
-
-          <div *ngIf="isSubmited && previewImages.length === 0"
-            class="text-red-500 text-sm">
+          <div *ngIf="isSubmited && previewImages.length === 0" class="text-red-500 text-sm">
             La photo est obligatoire
           </div>
         </div>
       </div>
 
-      
       <!-- Section 4: Lieu d'échange -->
-      <div class="space-y-4 mb-8">
+      <div class="space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
-            4
-          </div>
+          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</div>
           <h2 class="text-xl font-semibold text-gray-900">Lieu d'échange</h2>
         </div>
 
-        
-
-        <div class="space-y-4 bg-white p-6 rounded-xl shadow-sm">
-          <!-- Adresse -->
+        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm space-y-4">
           <div>
-            <label for="exchangeAddress" class="block text-sm font-medium text-gray-900 mb-1">Adresse d'échange</label>
-            
-            <input id="exchangeAddress" class="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none" formControlName="exchange_location_address" (input)="onAddressInput()" placeholder="Adresse" required
-              autocomplete="off" />
-            <ul *ngIf="addressSuggestions.length">
-              <li *ngFor="let suggestion of addressSuggestions" (click)="selectAddress(suggestion)">
+            <label for="exchangeAddress" class="block text-sm font-medium mb-1">Adresse d'échange</label>
+            <input id="exchangeAddress" formControlName="exchange_location_address" (input)="onAddressInput()" placeholder="Adresse"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none" />
+            <ul *ngIf="addressSuggestions.length" class="bg-white border mt-2 rounded shadow-sm max-h-40 overflow-y-auto text-sm">
+              <li *ngFor="let suggestion of addressSuggestions" (click)="selectAddress(suggestion)" class="p-2 hover:bg-gray-100 cursor-pointer">
                 {{ suggestion.display_name }}
               </li>
             </ul>
-
-
-          </div>
-          <div *ngIf="isSubmited && createAnnoucmentForm.get('exchange_location_address')?.errors?.['required']"
-            class="text-red-500 text-sm">
-            Veuillez renseigner le lieu
+            <div *ngIf="isSubmited && createAnnoucmentForm.get('exchange_location_address')?.errors?.['required']"
+              class="text-red-500 text-sm">Veuillez renseigner le lieu</div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Latitude -->
-            <div>
-              <input id="exchangeLat" type="text" formControlName="exchange_location_lat" placeholder="Ex: 48.8566"
-                class="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"  hidden />
-            </div>
-
-            <!-- Longitude -->
-            <div>
-              <input id="exchangeLng" type="text" formControlName="exchange_location_lng" placeholder="Ex: 2.3522"
-                class="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none" hidden />
-            </div>
-          </div>
+          <input formControlName="exchange_location_lat" type="text" hidden />
+          <input formControlName="exchange_location_lng" type="text" hidden />
         </div>
-        <!--  Carte OpenStreetMap -->
-        <div id="map" style="height: 400px; margin: 1rem 0; border-radius: 8px"></div>
+
+        <div id="map" class="w-full h-[400px] mt-2 rounded-md overflow-hidden"></div>
       </div>
 
-      <!-- Boutons d'action -->
+           <!-- Boutons d'action -->
+
       <div class="pt-4 flex flex-col sm:flex-row gap-3">
         <button type="submit"
-          class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors">
+          class="w-full sm:w-auto px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-orange-500">
           Publier l'annonce
         </button>
-        <a [routerLink]="['']" type="button"
-          class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+        <a [routerLink]="['']"
+          class="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-gray-500">
           Annuler
         </a>
       </div>
