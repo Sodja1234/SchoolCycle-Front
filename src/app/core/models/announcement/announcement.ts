@@ -9,8 +9,8 @@ export interface Announcement {
     operation_type: string,
     state:string
     price: number;
-    is_completed: number;
-    is_cancelled: number;
+    is_completed: boolean;
+    is_cancelled: boolean;
     exchange_location_address: string;
     exchange_location_lng : string;
     exchange_location_lat : string;
