@@ -18,7 +18,7 @@ import {AuthRegisterData} from '../../../core/models/auth/auth';
 @Component({
   selector: 'app-register', // Nom utilisé dans le HTML pour appeler ce composant
   standalone: true,         // Composant autonome (sans module Angular déclaré autour)
-  imports: [ReactiveFormsModule, NgIf, RouterLink, NgClass], // Modules utilisés dans le template HTML
+  imports: [ReactiveFormsModule, NgIf, RouterLink], // Modules utilisés dans le template HTML
   templateUrl: './register.component.html', // Fichier HTML associé
   styleUrls: ['./register.component.css'],   // Fichier CSS associé
 })
