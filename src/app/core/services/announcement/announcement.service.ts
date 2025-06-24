@@ -15,39 +15,52 @@ export class AnnouncementService {
   constructor(private http: HttpClient,private userlocalService : UserLocalService) {}
 
 
-  //methode pour recuperer les annonces avec pagination,rechearch si possible et filtre
-  getAnnouncements(
-    page: number = 1, // Le numéro de la page à récupérer, par défaut 1
+  //methode de recuperation et filtrage des annonces
+  getAnnouncements(page: number = 1, filters: any = {}): Observable<PaginatedAnnouncements> {
+    // Définition des paramètres de base : page actuelle et nombre d’éléments par page
+    let params = new HttpParams()
+      .set('page', page)
+      .set('per_page', 12);
 
-    search?: string, // Terme de recherche global (titre ou description)
-
-    operation_type?: string[], // Filtre : type d'opération
-
-    price?: number[] // Filtre : liste de prix à inclure
-  ): Observable<PaginatedAnnouncements> {
-    // objet HttpParams pour construire une  URL dynamique de la requête
-    let params = new HttpParams().set('page', page.toString());
-
-    // Si un terme est rechercher, on l’ajoute aux paramètres
-    if (search) {
-      params = params.set('search', search);
+    // 🔍 Filtrage par mot-clé de recherche (titre ou description)
+    if (filters.search) {
+      params = params.set('search', filters.search);
     }
 
-    // Si un ou plusieurs types d'opération sont fournis on ajoute
-    if (operation_type && operation_type.length > 0) {
-      params = params.set('operation_type', operation_type.join(','));
+    // Filtrage par type d’opération (ex: sale, exchange, don)
+    if (Array.isArray(filters.operation_type) && filters.operation_type.length) {
+      params = params.set('operation_type', filters.operation_type.join(','));
     }
 
-    // Si un ou plusieurs prix sont fournis on ajoute
-    if (price && price.length > 0) {
-      params = params.set('price', price.join(','));
+    //  Filtrage par état (ex: new, like_new, used)
+    if (Array.isArray(filters.state) && filters.state.length) {
+      params = params.set('state', filters.state.join(','));
     }
 
-    // On retourne une requête HTTP GET vers l’API avec les paramètres construits
-    return this.http.get<PaginatedAnnouncements>(this.url + 'announcements', {
-      params,
-    });
+    //  Filtrage par prix minimum
+    if (filters.min_price != null) {
+      params = params.set('min_price', filters.min_price);
+    }
+
+    //  Filtrage par prix maximum
+    if (filters.max_price != null) {
+      params = params.set('max_price', filters.max_price);
+    }
+
+    // Tri par champ spécifique si présent (ex: created_at, title, etc.)
+    if (filters.sort_field) {
+      params = params.set('sort_field', filters.sort_field);
+    }
+
+    //  Direction du tri (ascendant ou descendant)
+    if (filters.sort_direction) {
+      params = params.set('sort_direction', filters.sort_direction);
+    }
+
+    // Envoi de la requête HTTP GET avec les paramètres construits
+    return this.http.get<PaginatedAnnouncements>(this.url + 'announcements', { params });
   }
+
 
   //methode pour recuperer une annonce en particulier
   getAnnoucement(id: number): Observable<Announcement> {
@@ -88,4 +101,17 @@ export class AnnouncementService {
     const headers = this.userlocalService.getAuthHeaders();
     return this.http.get<{data:Announcement[]}>(this.url + 'get_creator_announcement',{headers});
   }
+
+  // Méthode ajoutée pour signaler une annonce
+reportAnnouncement(payload: {
+  user_id: number;
+  announcement_id: number;
+  motif: string;
+  detail?: string;
+}): Observable<any> {
+  const headers = this.userlocalService.getAuthHeaders();
+  return this.http.post(`${this.url}reports`, payload, { headers });
+}
+
+
 }
