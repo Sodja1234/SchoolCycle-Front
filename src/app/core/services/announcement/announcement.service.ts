@@ -101,4 +101,17 @@ export class AnnouncementService {
     const headers = this.userlocalService.getAuthHeaders();
     return this.http.get<{data:Announcement[]}>(this.url + 'get_creator_announcement',{headers});
   }
+
+  // Méthode ajoutée pour signaler une annonce
+reportAnnouncement(payload: {
+  user_id: number;
+  announcement_id: number;
+  motif: string;
+  detail?: string;
+}): Observable<any> {
+  const headers = this.userlocalService.getAuthHeaders();
+  return this.http.post(`${this.url}reports`, payload, { headers });
+}
+
+
 }
