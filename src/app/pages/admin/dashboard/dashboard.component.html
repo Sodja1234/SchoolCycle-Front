@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau de bord</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100  font-sans">
+  <div class="flex bg-gray-100 ">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#1E293B] text-white flex flex-col">
+      <div class="p-4 flex items-center justify-between">
+        <h1 class="text-xl font-bold">SchoolCycle</h1>
+        <span class="bg-orange-500 text-white text-xs px-2 py-1 rounded">Admin</span>
+      </div>
+      <nav class="flex-1">
+        <ul class="space-y-2 px-4">
+          <li>
+            <a class="block bg-orange-500 rounded p-2">Tableau de bord</a>
+          </li>
+          <li>
+            <a class="block p-2 hover:bg-gray-700">Annonces
+              <span class="bg-orange-500 text-white rounded px-2 text-sm ml-2">0</span></a>
+          </li>
+          <li>
+            <a class="block p-2 hover:bg-gray-700">Utilisateurs</a>
+          </li>
+          <li>
+            <a class="block p-2 hover:bg-gray-700">Catégories</a>
+          </li>
+          <li>
+            <a href="#" class="block p-2 hover:bg-gray-700">Signalements
+              <span class="bg-red-500 text-white rounded px-2 text-sm ml-2">0</span></a>
+          </li>
+          <li class="pt-4 text-gray-400 uppercase text-xs">Système</li>
+          <li>
+            <a href="#" class="block p-2 hover:bg-gray-700">Paramètres</a>
+          </li>
+          <li>
+            <a href="#" class="block p-2 hover:bg-gray-700">Statistiques</a>
+          </li>
+          <li>
+            <a href="#" class="block p-2 hover:bg-gray-700">Logs système</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="p-4 border-t border-gray-600 text-sm">
+        <div class="flex items-center space-x-2">
+          <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center font-bold">
+            AD
+          </div>
+          <div>
+            <p> {{ user?.name }} </p>
+            <p class="text-gray-400"> {{ user?.email }} </p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 pr-30 pt-10 pl-30 space-y-6">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold">Tableau de bord</h2>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+          <p class="text-sm text-gray-500">Annonces actives</p>
+          <h3 class="text-2xl font-bold"> 0 </h3>
+          <p class="text-green-500 text-sm">+</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <p class="text-sm text-gray-500">Utilisateurs inscrits</p>
+          <h3 class="text-2xl font-bold"> 0</h3>
+          <p class="text-green-500 text-sm">+</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <p class="text-sm text-gray-500">Transactions réussies</p>
+          <h3 class="text-2xl font-bold">0</h3>
+          <p class="text-green-500 text-sm">+</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <p class="text-sm text-gray-500">Signalements en attente</p>
+          <h3 class="text-2xl font-bold text-red-500">0</h3>
+          <p class="text-red-500 text-sm">+</p>
+        </div>
+      </div>
+
+      <!-- Annonces récentes -->
+      <div class="bg-white p-4 rounded shadow">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="">Annonces récentes</h4>
+          <a class="text-orange-500 text-sm">Voir toutes</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-700">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="p-2">Annonce</th>
+                <th class="p-2">Vendeur</th>
+                <th class="p-2">Catégorie</th>
+                <th class="p-2">Prix</th>
+                <th class="p-2">Statut</th>
+                <th class="p-2">Date de publication</th>
+                <th class="p-2">Actions</th>
+              </tr>
+            </thead>
+            @for(announce of announcements; track announce.id){
+            <tbody>
+              <tr class="border-t">
+                <td class="p-2">
+                  {{ announce.title }} <br /><span class="text-gray-400 text-xs"># {{ announce.id }}
+                  </span>
+                </td>
+                <td class="p-2">
+                  {{ announce.created_by.name }} <br /><span class="text-gray-400 text-xs">
+                    {{ announce.created_by.email }}
+                  </span>
+                </td>
+                <td class="p-2">{{ announce.category.name }}</td>
+                <td class="p-2">
+                  {{
+                  announce.operation_type === "don"
+                  ? "Gratuit"
+                  : announce.operation_type === "exchange"
+                  ? "Echange"
+                  : announce.price + " fc "
+                  }}
+                </td>
+                <td class="p-2 text-green-600 font-semibold">
+                  {{ announce.is_completed ? 'Vendu' : 'Disponible' }}
+                </td>
+                <td class="p-2">{{ announce.created_at }}</td>
+                <td class="p-2 space-x-2">
+                  <button class="text-purple-500">✏️</button>
+                  <button class="text-red-500">🗑️</button>
+
+                </td>
+              </tr>
+            </tbody>
+            }
+          </table>
+        </div>
+      </div>
+
+      <!-- Container de pagination qui s'affiche que si des liens existent -->
+      <div class="mb-5 flex justify-center" *ngIf="paginationMeta?.links?.length">
+        <nav aria-label="Page navigation">
+          <ul class="flex items-center -space-x-px h-8 text-sm">
+            <!-- Boucle sur chaque lien de pagination -->
+            <li *ngFor="let link of paginationMeta.links">
+              <!-- on desactive s'il y a pas d'url -->
+              <button [disabled]="!link.url" (click)="onPageChange(link.url)"
+                class="flex items-center justify-center px-3 h-8 leading-tight border transition-colors duration-200"
+                [ngClass]="{
+                    'rounded-s-lg': link.label.includes('Previous'),
+                    'rounded-e-lg': link.label.includes('Next'),
+                    'text-white bg-[#FF8C00] border-[#FF8C00] hover:bg-[#FF9D1A] hover:border-[#FF9D1A]':
+                      link.active,
+                    'text-gray-600 bg-white border-gray-200 hover:bg-orange-50 hover:text-[#FF8C00]':
+                      !link.active,
+                    'cursor-not-allowed opacity-50': !link.url
+                  }">
+                <span class="sr-only" *ngIf="link.label.includes('Previous')">Précédent</span>
+                <span class="sr-only" *ngIf="link.label.includes('Next')">Suivant</span>
+
+                <!-- On affiche le numero de la page  -->
+                <svg *ngIf="link.label.includes('Previous')" class="w-2.5 h-2.5 rtl:rotate-180"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 1 1 5l4 4" />
+                </svg>
+
+                <!-- On affiche le numero de la page  -->
+                <svg *ngIf="link.label.includes('Next')" class="w-2.5 h-2.5 rtl:rotate-180"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 9 4-4-4-4" />
+                </svg>
+                <span [innerHTML]="link.label" *ngIf="
+                      !link.label.includes('Previous') &&
+                      !link.label.includes('Next')
+                    "></span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </main>
+  </div>
+
+</body>
+
+</html>
