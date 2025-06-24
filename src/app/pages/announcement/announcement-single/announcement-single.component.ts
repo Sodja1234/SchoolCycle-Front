@@ -6,10 +6,11 @@ import { environment } from '../../../../environments/environment';
 import { HeaderComponent } from '../../../components/header/header.component';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-announcement-single',
-  imports: [RouterLink, HeaderComponent, FooterComponent, CommonModule],
+  imports: [RouterLink, HeaderComponent, FooterComponent, CommonModule, FormsModule],
   templateUrl: './announcement-single.component.html',
   styleUrl: './announcement-single.component.css',
 })
@@ -28,6 +29,14 @@ export class AnnouncementSingleComponent {
   currentUserId!: number;
   isModalOpen = false;
   isDeleteModalOpen = false;
+  isReportModalOpen: boolean = false;
+
+  //  Variables pour le formulaire de signalement
+motif: string = '';
+detail: string = '';
+isReportSent: boolean = false;
+hasAlreadyReported: boolean = false;
+
 
   ngOnInit() {
     // Récupère l'ID de l'utilisateur connecté
@@ -38,6 +47,8 @@ export class AnnouncementSingleComponent {
       this.articleId = +params['id'];
       this.getSingleAnnouncement();
       this.getSimilarAnnouncement();
+      this.checkIfAlreadyReported();
+
     });
   }
 
@@ -45,10 +56,21 @@ export class AnnouncementSingleComponent {
   openDeleteModal() {
     this.isDeleteModalOpen = true;
   }
+
   //ferme le modal 
   closeDeleteModal() {
     this.isDeleteModalOpen = false;
   }
+
+  // Gestion Modal Signalement
+  openReportModal() {
+    this.isReportModalOpen = true;
+  }
+
+  closeReportModal() {
+    this.isReportModalOpen = false;
+  }
+
   //confirme la suppression
   confirmDelete() {
     this.deleteAnnouncement();
@@ -141,4 +163,45 @@ export class AnnouncementSingleComponent {
 
     return created !== updated;
   }
+
+
+  // Soumet le signalement
+submitReport() {
+  if (!this.motif.trim()) {
+    alert("Le motif est requis.");
+    return;
+  }
+
+  const payload = {
+    user_id: this.currentUserId,
+    announcement_id: this.articleId,
+    motif: this.motif,
+    detail: this.detail,
+  };
+
+  this.annoncementService.reportAnnouncement(payload).subscribe({
+    next: (res) => {
+      this.isReportSent = true;
+      const reportKey = `report_${this.articleId}_by_${this.currentUserId}`;
+      localStorage.setItem(reportKey, 'true');
+      this.hasAlreadyReported = true;
+      alert('Votre signalement a été envoyé.');
+      // Réinitialise les champs
+      this.motif = '';
+      this.detail = '';
+    },
+    error: (err) => {
+      console.error("Erreur lors de l'envoi du signalement :", err);
+      alert('Erreur lors de l\'envoi du signalement.');
+    },
+  });
+}
+
+
+  // Vérifie si l'utilisateur a déjà signalé cette annonce
+checkIfAlreadyReported() {
+  const reportKey = `report_${this.articleId}_by_${this.currentUserId}`;
+  this.hasAlreadyReported = localStorage.getItem(reportKey) === 'true';
+}
+
 }
