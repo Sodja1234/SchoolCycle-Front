@@ -13,7 +13,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-new-password',
-  imports: [ReactiveFormsModule, NgIf, RouterLink, NgClass],
+  imports: [ReactiveFormsModule, NgIf, RouterLink],
   templateUrl: './new-password.component.html',
   styleUrl: './new-password.component.css'
 })

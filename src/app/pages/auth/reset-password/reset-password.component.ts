@@ -11,7 +11,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [RouterLink, ReactiveFormsModule, NgIf, NgClass],
+  imports: [RouterLink, ReactiveFormsModule, NgIf],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
 })
