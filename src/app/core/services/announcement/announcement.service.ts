@@ -102,6 +102,10 @@ export class AnnouncementService {
     const headers = this.userlocalService.getAuthHeaders();
     return this.http.get<{data:Announcement[]}>(this.url + 'get_creator_announcement',{headers});
   }
+   getAnnouncementFavorite():Observable<{data:Announcement[]}>{
+    const headers=this.userlocalService.getAuthHeaders();
+    return this.http.get<{data:Announcement[]}>(this.url + 'my_favorites',{headers})
+  }
 
   // Méthode ajoutée pour signaler une annonce
 reportAnnouncement(payload: {
