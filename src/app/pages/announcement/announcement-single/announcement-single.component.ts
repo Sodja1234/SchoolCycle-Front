@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { AuthLoginResponse } from '../../../core/models/auth/auth';
 import { UserLocalService } from '../../../core/services/userlocal/userlocal.service';
 import { FavoriteStateService } from '../../../core/services/favorite/favorite.service';
+import L from 'leaflet';
 
 @Component({
   selector: 'app-announcement-single',
@@ -62,6 +63,8 @@ export class AnnouncementSingleComponent {
   isReportSent: boolean = false;
   hasAlreadyReported: boolean = false;
 
+  // Carte
+  map: L.Map | undefined;
 
   ngOnInit() {
     // Récupère l'ID de l'utilisateur connecté
@@ -93,7 +96,6 @@ export class AnnouncementSingleComponent {
   openReportModal() {
     this.isReportModalOpen = true;
   }
-
   closeReportModal() {
     this.isReportModalOpen = false;
   }
@@ -112,31 +114,64 @@ export class AnnouncementSingleComponent {
     this.isModalOpen = false;
   }
 
-  //function pour recuperr l'annonce en detail
+  //Geocoder appelé uniquement après récupération de l'annonce
+  geocodeAddress(address: string): void {
+    if (!address.trim()) return;
+
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.length) {
+          const lat = data[0].lat;
+          const lon = data[0].lon;
+          this.initMap(+lat, +lon);
+        } else {
+          console.error('Adresse introuvable.');
+        }
+      })
+      .catch((err) => {
+        console.error('Erreur lors de la géolocalisation :', err);
+      });
+  }
+  //initialisation de la la carte
+  initMap(lat: number, lon: number): void {
+    if (this.map) {
+      this.map.remove();
+    }
+
+    this.map = L.map('map').setView([lat, lon], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    L.marker([lat, lon]).addTo(this.map)
+      .bindPopup('Lieu de rendez-vous')
+      .openPopup();
+  }
+  //recuperation des annonces
   getSingleAnnouncement() {
-    this.articleId = Number(this.route.snapshot.paramMap.get('id'));
-
-    console.log("Id de l'annonce : ", this.articleId);
-
     this.annoncementService.getAnnoucement(this.articleId).subscribe({
       next: (res) => {
         this.announcement = res;
         this.currentUserId = +localStorage.getItem('id')!;
-        console.log('Annonce récupérée :', this.announcement);
-        console.log('ID auteur :', this.announcement.created_by);
-        console.log('ID user connecté :', this.currentUserId);
-        console.log(this.announcement.created_at_raw);
-        console.log(this.announcement.updated_at_raw);
-        // Vérifie que des photos existent, et affecte currentImage
-        if (this.announcement.photos && this.announcement.photos.length > 0) {
+        if (this.announcement.photos?.length > 0) {
           this.currentImage = this.announcement.photos[0].url;
+        }
+
+        // 🔥 Appel carte ici !
+        if (this.announcement.exchange_location_address) {
+          this.geocodeAddress(this.announcement.exchange_location_address);
         }
       },
       error: (err) => {
-        console.error("Erreur lors du chargement de l'annonce :", err);
+        console.error("Erreur chargement annonce :", err);
       },
     });
   }
+
+
   //function pour recuperr les articles similaires
   getSimilarAnnouncement() {
     this.annoncementService.getSimilarAnnouncements(this.articleId).subscribe(
@@ -149,6 +184,7 @@ export class AnnouncementSingleComponent {
       }
     );
   }
+
 
   //function pour supprimer une annonce
   deleteAnnouncement() {
@@ -165,10 +201,12 @@ export class AnnouncementSingleComponent {
     });
   }
 
+
   //function pour recuperr changer la photo principale de l'annonce
   changeMainImage(url: string) {
     this.currentImage = url;
   }
+
 
   //Vérifie si le user connecté est l'auteur
   get isAuthor(): boolean {
@@ -176,6 +214,7 @@ export class AnnouncementSingleComponent {
                 this.currentUserId = userId?.id;
     return this.announcement?.created_by?.id === this.currentUserId;
   }
+
 
   //verifie si une annonce a eté modifier ou non
   get isModified(): boolean {
@@ -190,8 +229,6 @@ export class AnnouncementSingleComponent {
 
     return created !== updated;
   }
-
-
   // Soumet le signalement
   submitReport() {
   if (!this.motif.trim()) {
@@ -223,19 +260,15 @@ export class AnnouncementSingleComponent {
     },
   });
 }
-
-
   // Vérifie si l'utilisateur a déjà signalé cette annonce
   checkIfAlreadyReported() {
   const reportKey = `report_${this.articleId}_by_${this.currentUserId}`;
   this.hasAlreadyReported = localStorage.getItem(reportKey) === 'true';
 }
-
-
   //Implementation partage
   get shareUrl(): string {
     //window.location.origin donne : http://localhost:4200 en local et https://urlEnLigne.com en production
-    return `${window.location.origin}/announcement/${this.articleId}`;
+    return `${window.location.origin}/single-announcement/${this.articleId}`;
   }
   //encodeURIComponent() transforme ces caractères spéciaux en un format compréhensible pour un navigateur.
   get encodedShareUrl(): string {
@@ -249,7 +282,7 @@ export class AnnouncementSingleComponent {
       this.successMessage = '';
     }, 2000);
   }
-
+  //function pour l'ajout en favoris
   toggleFavorite(){
     this.annoncementService.toggleFavorite(this.announcement.id).subscribe({
       next: (res: any) => {
