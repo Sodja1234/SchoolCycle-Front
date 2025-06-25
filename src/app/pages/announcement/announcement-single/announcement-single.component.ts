@@ -7,19 +7,18 @@ import { HeaderComponent } from '../../../components/header/header.component';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {AnnouncementCardComponent} from '../../../components/announcement-card/announcement-card.component';
 
 @Component({
   selector: 'app-announcement-single',
-  imports: [RouterLink, HeaderComponent, FooterComponent, CommonModule, FormsModule],
+  imports: [RouterLink, HeaderComponent, FooterComponent, CommonModule, FormsModule, AnnouncementCardComponent],
   templateUrl: './announcement-single.component.html',
   styleUrl: './announcement-single.component.css',
 })
 export class AnnouncementSingleComponent {
-  constructor(
-    private annoncementService: AnnouncementService,
-    private route: ActivatedRoute,
-    private router: Router
+  constructor(private annoncementService: AnnouncementService, private route: ActivatedRoute, private router: Router
   ) {}
+
   storageUrl = environment.storageUrl;
   currentImage: string = '';
   announcement!: Announcement;
@@ -27,15 +26,22 @@ export class AnnouncementSingleComponent {
   articleId: number = -1;
   announcementData!: Announcement;
   currentUserId!: number;
+
+
+  //modals
   isModalOpen = false;
   isDeleteModalOpen = false;
   isReportModalOpen: boolean = false;
 
+  //menu de partage
+  toggleShareMenu = false;
+  successMessage:string = ''
+
   //  Variables pour le formulaire de signalement
-motif: string = '';
-detail: string = '';
-isReportSent: boolean = false;
-hasAlreadyReported: boolean = false;
+  motif: string = '';
+  detail: string = '';
+  isReportSent: boolean = false;
+  hasAlreadyReported: boolean = false;
 
 
   ngOnInit() {
@@ -57,7 +63,7 @@ hasAlreadyReported: boolean = false;
     this.isDeleteModalOpen = true;
   }
 
-  //ferme le modal 
+  //ferme le modal
   closeDeleteModal() {
     this.isDeleteModalOpen = false;
   }
@@ -146,7 +152,7 @@ hasAlreadyReported: boolean = false;
   //Vérifie si le user connecté est l'auteur
   get isAuthor(): boolean {
     const userId = JSON.parse(localStorage.getItem('userSession')!);
-    this.currentUserId = userId?.id;
+                this.currentUserId = userId?.id;
     return this.announcement?.created_by?.id === this.currentUserId;
   }
 
@@ -166,7 +172,7 @@ hasAlreadyReported: boolean = false;
 
 
   // Soumet le signalement
-submitReport() {
+  submitReport() {
   if (!this.motif.trim()) {
     alert("Le motif est requis.");
     return;
@@ -199,9 +205,28 @@ submitReport() {
 
 
   // Vérifie si l'utilisateur a déjà signalé cette annonce
-checkIfAlreadyReported() {
+  checkIfAlreadyReported() {
   const reportKey = `report_${this.articleId}_by_${this.currentUserId}`;
   this.hasAlreadyReported = localStorage.getItem(reportKey) === 'true';
 }
+
+
+  //Implementation partage
+  get shareUrl(): string {
+    //window.location.origin donne : http://localhost:4200 en local et https://urlEnLigne.com en production
+    return `${window.location.origin}/announcement/${this.articleId}`;
+  }
+  //encodeURIComponent() transforme ces caractères spéciaux en un format compréhensible pour un navigateur.
+  get encodedShareUrl(): string {
+    return encodeURIComponent(this.shareUrl);
+  }
+  //copier le lien de partage
+  copyLink() {
+    navigator.clipboard.writeText(this.shareUrl);
+    this.successMessage = 'Lien copié avec successe';
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 2000);
+  }
 
 }
