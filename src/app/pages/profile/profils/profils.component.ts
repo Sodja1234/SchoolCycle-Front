@@ -5,12 +5,13 @@ import { AnnouncementProfileComponent } from '../announcement-profile/announceme
 import { MatTabsModule } from '@angular/material/tabs';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { HeaderComponent } from '../../../components/header/header.component';
+import { AnnouncementFavoriteComponent } from '../announcemevntuser/announcement-favorite/announcement-favorite.component';
 @Component({
   selector: 'app-profils',
   imports: [UserProfileComponent,
     AnnouncementProfileComponent,
     FooterComponent,HeaderComponent,
-  MatTabsModule,
+  MatTabsModule,AnnouncementFavoriteComponent
 ],
   templateUrl: './profils.component.html',
   styleUrl: './profils.component.css'
