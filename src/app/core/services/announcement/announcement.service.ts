@@ -125,6 +125,16 @@ reportAnnouncement(payload: {
     );
   }
 
+  // Methode pour verifier si une annonce est en favoris
+  checkFavorite(announcementId: number) {
+    const headers = this.userlocalService.getAuthHeaders();
+    return this.http.get(`${this.url}favorites/${announcementId}/check`, {headers}).pipe(
+      tap((res: any) => {
+        this.favoriteState.setFavorite(announcementId, res.is_favorite);
+      })
+    );
+  }
+
   
 
 
