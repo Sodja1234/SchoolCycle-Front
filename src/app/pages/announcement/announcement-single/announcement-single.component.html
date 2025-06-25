@@ -55,6 +55,9 @@
         />
       </div>
 
+      <!-- Carte Leaflet -->
+      <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
+
       <!-- Boutons d'action -->
       <div class="flex flex-wrap gap-4 items-start pt-4">
         <!-- Bouton de partage avec menu déroulant -->
@@ -121,6 +124,7 @@
                 </button>
               </div>
               <!-- End Toast de succès -->
+
               <!-- Icône 1 : Copier le lien -->
               <div class="flex flex-col items-center w-1/4 sm:w-20">
                 <button
@@ -257,10 +261,6 @@
           </span>
           <div class="flex justify-between text-gray-500 text-sm line-clamp-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             <!-- {{ announcement.exchange_location_address | slice : 0 : 30 }} -->
             {{ announcement.created_at.length > 30 ? "..." : "..." }}
@@ -320,7 +320,14 @@
           </div>
           <div>
             <span class="text-secondary text-sm">Etat:</span>
-            <p class="font-medium text-gray-900">{{ announcement?.state }}</p>
+            <p class="font-medium text-gray-900">
+              {{ announcement?.state === 'new' ? 'Neuf' :
+                 announcement?.state === 'good' ? 'Bon état' :
+                   announcement?.state === 'damaged' ? 'Abîmé' :
+                     announcement?.state === 'like new' ? 'Comme neuf' :
+                        'État inconnu'
+              }}
+            </p>
           </div>
         </div>
       </div>
