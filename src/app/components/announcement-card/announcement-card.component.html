@@ -1,9 +1,27 @@
+<div *ngIf="showSucessMessage" class="bg-green-100 text-green-800 p-4 font-bold rounded-lg fixed top-16 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300">
+  {{ successMessage }}
+</div>
 <div
-    class="relative w-full max-w-[360px] mx-auto bg-white shadow-md rounded-lg hover:shadow-2xl transition duration-300">
+
+    class="relative w-full max-w-[360px] mx-auto  bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
+
+     <button *ngIf="user !== null" (click)="toggleFavorite()"
+        class="absolute top-37 right-2 z-0 bg-white p-1 rounded-lg shadow hover:bg-gray-100 transition">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="#FF9000"
+            class="w-6 h-6"
+            [attr.fill]="(isFavorite$ | async) ? '#FF9000' : 'none'">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+        </svg>
+    </button>
     <a [routerLink]="['/single-announcement', announcement.id]">
+
         <img class="h-48 w-96 object-cover rounded-lg"
             [src]="'http://localhost:8000/storage/' + announcement.photos[0].url" alt="" />
-    </a>
+
     <p class="absolute top-3 right-2 text-white text-xs bg-[#FF9000] p-2 rounded-xl">
         {{
         announcement.operation_type === "don"
@@ -16,11 +34,6 @@
         }}
     </p>
 
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-        class="size-6 absolute top-65 text-[#FF9000] bg-white w-[35px] p-1 rounded-lg right-2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-    </svg>
 
     <div class="p-5">
         <a href="#">
@@ -29,12 +42,6 @@
             </h5>
         </a>
         <div class="flex">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6 text-[#6b7280]">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-            </svg>
 
             <p class="mb-3 font-normal text-[#6b7280] dark:text-gray-400 line-clamp-1">
                 {{ announcement.exchange_location_address | slice:0:30 }} {{announcement.created_at.length >30 ? '...':'...'}}
@@ -57,4 +64,5 @@
             </p>
         </div>
     </div>
+    </a>
 </div>
