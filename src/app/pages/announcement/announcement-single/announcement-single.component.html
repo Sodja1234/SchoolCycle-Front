@@ -55,192 +55,199 @@
         />
       </div>
 
+      <div class="relative w-full sm:w-auto overflow-visible">
+
       <!-- Carte Leaflet -->
-      <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
-
-      <!-- Boutons d'action -->
-      <div class="flex flex-wrap gap-4 items-start pt-4">
-        <!-- Bouton de partage avec menu déroulant -->
-        <div class="relative w-full sm:w-auto">
-          <!-- Bouton principal -->
-          <button
-            (click)="toggleShareMenu = !toggleShareMenu"
-            class="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer w-full sm:w-auto"
-          >
-            <i class="fas fa-share-alt text-gray-600"></i>
-            <span class="text-gray-700">Partager</span>
-          </button>
-
-          <!-- Menu déroulant responsive -->
-          <div
-            *ngIf="toggleShareMenu"
-            class="absolute z-10 left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-full max-w-xs sm:max-w-none sm:w-[360px]"
-          >
-            <div
-              class="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-6 sm:gap-x-6 sm:gap-y-4"
+        <div
+          id="map"
+          class="h-[400px] w-full mt-5 relative z-10"
+        ></div>
+        <!-- Boutons d'action -->
+        <div class="flex flex-wrap gap-4 items-start pt-4">
+          <!-- Bouton de partage avec menu déroulant -->
+          <div class="relative w-full sm:w-auto">
+            <!-- Bouton principal -->
+            <button
+              (click)="toggleShareMenu = !toggleShareMenu"
+              class="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer w-full sm:w-auto"
             >
-              <!-- Toast de succès -->
-              <div
-                *ngIf="successMessage"
-                class="bg-white border-l-4 border-green-500 rounded-lg shadow-lg p-4 flex items-start animate-toast-in"
+              <i class="fas fa-share-alt text-gray-600"></i>
+              <span class="text-gray-700">Partager</span>
+            </button>
+
+            <!-- Menu déroulant responsive -->
+            <div
+              *ngIf="toggleShareMenu"
+              class="absolute z-50 bottom-full mb-2 left-0 bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-full max-w-xs sm:max-w-none sm:w-[360px]"
+            >
+
+            <div
+                class="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-6 sm:gap-x-6 sm:gap-y-4"
               >
-                <div class="flex-shrink-0 text-green-500 mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-medium text-green-800">
-                    {{ successMessage }}
-                  </p>
-                </div>
-                <button
-                  (click)="successMessage = ''"
-                  class="ml-3 text-gray-400 hover:text-gray-600"
+                <!-- Toast de succès -->
+                <div
+                  *ngIf="successMessage"
+                  class="bg-white border-l-4 border-green-500 rounded-lg shadow-lg p-4 flex items-start animate-toast-in"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                  <div class="flex-shrink-0 text-green-500 mr-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-green-800">
+                      {{ successMessage }}
+                    </p>
+                  </div>
+                  <button
+                    (click)="successMessage = ''"
+                    class="ml-3 text-gray-400 hover:text-gray-600"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <!-- End Toast de succès -->
+
+                <!-- Icône 1 : Copier le lien -->
+                <div class="flex flex-col items-center w-1/4 sm:w-20">
+                  <button
+                    (click)="copyLink()"
+                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full cursor-pointer"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                       stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <!-- End Toast de succès -->
-
-              <!-- Icône 1 : Copier le lien -->
-              <div class="flex flex-col items-center w-1/4 sm:w-20">
-                <button
-                  (click)="copyLink()"
-                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full cursor-pointer"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10 14L21 3m-1 0H14a1 1 0 00-1 1v6m-4 4l-7 7m0 0h6a1 1 0 001-1v-6"
+                      />
+                    </svg>
+                  </button>
+                  <span class="text-xs sm:text-sm mt-2 text-center leading-tight"
+                  >Copier<br />le lien</span
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M10 14L21 3m-1 0H14a1 1 0 00-1 1v6m-4 4l-7 7m0 0h6a1 1 0 001-1v-6"
-                    />
-                  </svg>
-                </button>
-                <span class="text-xs sm:text-sm mt-2 text-center leading-tight"
-                >Copier<br />le lien</span
-                >
-              </div>
+                </div>
 
-              <!-- Icône 2 : Facebook -->
-              <div class="flex flex-col items-center w-1/4 sm:w-20">
-                <a
-                  [href]="
+                <!-- Icône 2 : Facebook -->
+                <div class="flex flex-col items-center w-1/4 sm:w-20">
+                  <a
+                    [href]="
                     'https://www.facebook.com/sharer/sharer.php?u=' +
                     encodedShareUrl
                   "
-                  target="_blank"
-                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
+                    target="_blank"
+                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
                   >
-                    <path
-                      d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.2 1.8.2v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3H14v7A10 10 0 0 0 22 12z"
-                    />
-                  </svg>
-                </a>
-                <span class="text-xs sm:text-sm mt-2 text-center"
-                >Facebook</span
-                >
-              </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.2 1.8.2v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3H14v7A10 10 0 0 0 22 12z"
+                      />
+                    </svg>
+                  </a>
+                  <span class="text-xs sm:text-sm mt-2 text-center"
+                  >Facebook</span
+                  >
+                </div>
 
-              <!-- Icône 3 : LinkedIn -->
-              <div class="flex flex-col items-center w-1/4 sm:w-20">
-                <a
-                  [href]="
+                <!-- Icône 3 : LinkedIn -->
+                <div class="flex flex-col items-center w-1/4 sm:w-20">
+                  <a
+                    [href]="
                     'https://www.linkedin.com/sharing/share-offsite/?url=' +
                     encodedShareUrl
                   "
-                  target="_blank"
-                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
+                    target="_blank"
+                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
                   >
-                    <path
-                      d="M19 0h-14c-2.8 0-5 2.2-5 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5v-14c0-2.8-2.2-5-5-5zM7 19h-3v-9h3v9zM5.5 8.5c-1 0-1.8-.8-1.8-1.8S4.5 5 5.5 5s1.8.8 1.8 1.8-.8 1.7-1.8 1.7zM20 19h-3v-4.5c0-1.1-.9-2-2-2s-2 .9-2 2V19h-3v-9h3v1.2c.4-.8 1.5-1.4 2.5-1.4 2 0 3.5 1.5 3.5 3.5V19z"
-                    />
-                  </svg>
-                </a>
-                <span class="text-xs sm:text-sm mt-2 text-center"
-                >LinkedIn</span
-                >
-              </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 0h-14c-2.8 0-5 2.2-5 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5v-14c0-2.8-2.2-5-5-5zM7 19h-3v-9h3v9zM5.5 8.5c-1 0-1.8-.8-1.8-1.8S4.5 5 5.5 5s1.8.8 1.8 1.8-.8 1.7-1.8 1.7zM20 19h-3v-4.5c0-1.1-.9-2-2-2s-2 .9-2 2V19h-3v-9h3v1.2c.4-.8 1.5-1.4 2.5-1.4 2 0 3.5 1.5 3.5 3.5V19z"
+                      />
+                    </svg>
+                  </a>
+                  <span class="text-xs sm:text-sm mt-2 text-center"
+                  >LinkedIn</span
+                  >
+                </div>
 
-              <!-- Icône 4 : WhatsApp -->
-              <div class="flex flex-col items-center w-1/4 sm:w-20">
-                <a
-                  [href]="
+                <!-- Icône 4 : WhatsApp -->
+                <div class="flex flex-col items-center w-1/4 sm:w-20">
+                  <a
+                    [href]="
                     'https://api.whatsapp.com/send?text=' + encodedShareUrl
                   "
-                  target="_blank"
-                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
+                    target="_blank"
+                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
                   >
-                    <path
-                      d="M12 2a10 10 0 0 0-8.727 14.9L2 22l5.293-1.378A10 10 0 1 0 12 2zm.256 15.588c-2.27-.002-4.62-1.2-6.236-3.034-1.074-1.262-1.846-2.835-1.846-4.09 0-1.253.84-2.275 2.016-2.275.332 0 .66.024.975.07.493.074.703.937.778 1.31.07.34.136.546.194.722.108.327.04.556-.123.77-.123.163-.254.306-.383.44-.167.172-.342.38-.258.63.083.243.37.805.854 1.28.616.607 1.366 1.177 2.146 1.426.263.087.48.025.666-.092.183-.116.323-.3.478-.497.154-.196.31-.41.492-.402.27.01.63.18.983.326.383.162.761.338 1.072.526.309.186.51.34.576.537.066.2.066.413.03.612-.073.422-.296.816-.65 1.106-.49.407-1.146.61-1.888.61z"
-                    />
-                  </svg>
-                </a>
-                <span class="text-xs sm:text-sm mt-2 text-center"
-                >WhatsApp</span
-                >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M12 2a10 10 0 0 0-8.727 14.9L2 22l5.293-1.378A10 10 0 1 0 12 2zm.256 15.588c-2.27-.002-4.62-1.2-6.236-3.034-1.074-1.262-1.846-2.835-1.846-4.09 0-1.253.84-2.275 2.016-2.275.332 0 .66.024.975.07.493.074.703.937.778 1.31.07.34.136.546.194.722.108.327.04.556-.123.77-.123.163-.254.306-.383.44-.167.172-.342.38-.258.63.083.243.37.805.854 1.28.616.607 1.366 1.177 2.146 1.426.263.087.48.025.666-.092.183-.116.323-.3.478-.497.154-.196.31-.41.492-.402.27.01.63.18.983.326.383.162.761.338 1.072.526.309.186.51.34.576.537.066.2.066.413.03.612-.073.422-.296.816-.65 1.106-.49.407-1.146.61-1.888.61z"
+                      />
+                    </svg>
+                  </a>
+                  <span class="text-xs sm:text-sm mt-2 text-center"
+                  >WhatsApp</span
+                  >
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Bouton de signalement -->
-        <button
-          *ngIf="!isAuthor"
-          (click)="openReportModal()"
-          class="flex items-center space-x-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg border border-red-300 w-full sm:w-auto"
-        >
-          <i class="fas fa-flag text-red-500"></i>
-          <span>Signaler</span>
-        </button>
+          <!-- Bouton de signalement -->
+          <button
+            *ngIf="!isAuthor"
+            (click)="openReportModal()"
+            class="flex items-center space-x-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg border border-red-300 w-full sm:w-auto"
+          >
+            <i class="fas fa-flag text-red-500"></i>
+            <span>Signaler</span>
+          </button>
+        </div>
       </div>
+
 
     </div>
 
