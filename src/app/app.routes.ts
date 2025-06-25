@@ -99,6 +99,13 @@ export const routes: Routes = [
       ).then((m) => m.AnnouncementGalleryComponent),
   },
   {
+    path: 'admin/dashboard',
+    loadComponent: () =>
+      import(
+        '../app/pages/admin/dashboard/dashboard.component'
+      ).then((m) => m.DashboardComponent),
+  },
+  {
     path : '404',
     title : '404 - School Cycle',
     loadComponent :()=> import('../app/pages/page-not-found/page-not-found.component').then((m)=> m.PageNotFoundComponent)
