@@ -1,18 +1,19 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Announcement } from '../../models/announcement/announcement';
 import { Category } from '../../models/announcement/category';
 import { PaginatedAnnouncements } from '../../models/announcement/pagination';
 import { UserLocalService } from '../userlocal/userlocal.service';
+import { FavoriteStateService } from '../favorite/favorite.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnnouncementService {
   private url = environment.apiUrl;
-  constructor(private http: HttpClient,private userlocalService : UserLocalService) {}
+  constructor(private http: HttpClient,private userlocalService : UserLocalService, private favoriteState : FavoriteStateService) {}
 
 
   //methode de recuperation et filtrage des annonces
@@ -112,6 +113,19 @@ reportAnnouncement(payload: {
   const headers = this.userlocalService.getAuthHeaders();
   return this.http.post(`${this.url}reports`, payload, { headers });
 }
+
+   // la methode pour ajouter ou retiré une annonce en favoris
+  toggleFavorite(announcementId: number) {
+    const headers = this.userlocalService.getAuthHeaders();
+    return this.http.post(`${this.url}favorites/${announcementId}`, {}, {headers}).pipe(
+      // Utilisation de tap pour mettre à jour l'état du favori dans le service
+      tap((res: any) => {
+        this.favoriteState.setFavorite(announcementId, res.is_favorite);
+      })
+    );
+  }
+
+  
 
 
 }
