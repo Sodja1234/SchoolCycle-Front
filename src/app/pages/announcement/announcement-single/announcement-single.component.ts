@@ -8,15 +8,26 @@ import { FooterComponent } from '../../../components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {AnnouncementCardComponent} from '../../../components/announcement-card/announcement-card.component';
+import { Observable } from 'rxjs';
+import { AuthLoginResponse } from '../../../core/models/auth/auth';
+import { UserLocalService } from '../../../core/services/userlocal/userlocal.service';
+import { FavoriteStateService } from '../../../core/services/favorite/favorite.service';
 
 @Component({
   selector: 'app-announcement-single',
   imports: [RouterLink, HeaderComponent, FooterComponent, CommonModule, FormsModule, AnnouncementCardComponent],
+
   templateUrl: './announcement-single.component.html',
   styleUrl: './announcement-single.component.css',
 })
 export class AnnouncementSingleComponent {
-  constructor(private annoncementService: AnnouncementService, private route: ActivatedRoute, private router: Router
+
+  constructor(
+    private annoncementService: AnnouncementService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private favoriteState: FavoriteStateService,
+    private userLocalService: UserLocalService
   ) {}
 
   storageUrl = environment.storageUrl;
@@ -32,6 +43,14 @@ export class AnnouncementSingleComponent {
   isModalOpen = false;
   isDeleteModalOpen = false;
   isReportModalOpen: boolean = false;
+  isFavorite$!: Observable<boolean>;
+  user : AuthLoginResponse | null = null;
+  showSuccessMessage: boolean = false;
+  messageTimeout: any;
+
+
+  // Message de succès pour l'ajout/suppression des favoris
+  successMessageFavorite: string = '';
 
   //menu de partage
   toggleShareMenu = false;
@@ -46,6 +65,7 @@ export class AnnouncementSingleComponent {
 
   ngOnInit() {
     // Récupère l'ID de l'utilisateur connecté
+    this.user = this.userLocalService.getUser();
     const user = JSON.parse(localStorage.getItem('userSession')!);
     this.currentUserId = user?.id;
     //recharger la page en dunction du nouvel id
@@ -54,7 +74,8 @@ export class AnnouncementSingleComponent {
       this.getSingleAnnouncement();
       this.getSimilarAnnouncement();
       this.checkIfAlreadyReported();
-
+      this.isFavorite$ = this.favoriteState.isFavorite(this.articleId);
+      console.log("la valeur de user : ", user);
     });
   }
 
@@ -229,4 +250,25 @@ export class AnnouncementSingleComponent {
     }, 2000);
   }
 
+  toggleFavorite(){
+    this.annoncementService.toggleFavorite(this.announcement.id).subscribe({
+      next: (res: any) => {
+        // Affiche le message de succès
+        this.successMessageFavorite = res.message;
+        this.showSuccessMessage = true;
+
+        // Cache le message après 3 secondes
+        clearTimeout(this.messageTimeout);
+        this.messageTimeout = setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('Erreur lors du toggle favorite:', err);
+      }
+    });
+
+  }
+
 }
+
