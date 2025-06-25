@@ -4,10 +4,11 @@ import { UserLocalService } from '../../../core/services/userlocal/userlocal.ser
 import { User } from '../../../core/models/user';
 import { AuthLoginResponse } from '../../../core/models/auth/auth';
 import { ActionRapideComponent } from "../action-rapide/action-rapide.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-profile',
-  imports: [RouterLink, ActionRapideComponent],
+  imports: [RouterLink, ActionRapideComponent,CommonModule],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css'
 })
