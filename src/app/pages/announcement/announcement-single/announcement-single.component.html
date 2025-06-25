@@ -1,87 +1,245 @@
 <app-header></app-header>
 
 <!-- Conteneur principal responsive -->
-<div class="w-full max-w-[1400px] mb-[50px] shadow-md rounded-lg inset-shadow-2xs mt-20 mx-auto p-4 md:p-6 px-4">
+<div
+  class="w-[90%] sm:w-[70%] max-w-7xl mx-auto p-6 space-y-8 rounded-2xl shadow-lg mt-4"
+>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
     <!-- Colonne gauche - Galerie d'images -->
     <div class="space-y-4">
-      <div class="relative bg-gray-100 rounded-lg aspect-square flex items-center justify-center">
-        <!-- Bouton favori -->
-        <button class="absolute bg-white top-4 right-4 h-6 w-6 text-gray-500">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+
+      <div class="relative bg-gray-100 rounded-lg aspect-square flex items-center justify-center overflow-hidden">
+
+        <!-- Bouton favoris -->
+        <button
+          class="absolute top-3 left-3 bg-white text-[#FF9000] p-1 rounded-lg shadow cursor-pointer z-10"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
+            />
           </svg>
         </button>
 
         <!-- Image principale -->
-        <div class="text-gray-300">
-          <img class="h-full w-full object-cover" [src]="storageUrl + currentImage" alt="" />
-        </div>
+        <img
+          class="w-full h-full object-cover"
+          [src]="storageUrl + currentImage"
+          alt="Image principale"
+        />
 
-        <!-- Flèches -->
-        <button class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md">
-          <span class="sr-only">Précédent</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-        <button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md">
-          <span class="sr-only">Suivant</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
       </div>
 
       <!-- Miniatures -->
-      <div class="flex space-x-2 overflow-x-auto">
-        @for(photo of announcement.photos; track announcement.photos){
-        <div class="w-16 h-16 bg-gray-100 rounded border-2 border-orange-500 flex-shrink-0 flex items-center justify-center">
-          <span class="text-gray-300">
-            <img [src]="storageUrl + photo.url" alt="miniature" (click)="changeMainImage(photo.url)" />
-          </span>
+      <div class="flex flex-wrap gap-2">
+        <img
+          *ngFor="let photo of announcement.photos"
+          [src]="storageUrl + photo.url"
+          alt="miniature"
+          (click)="changeMainImage(photo.url)"
+          class="w-20 h-20 object-cover cursor-pointer border rounded-2xl border-gray-300 hover:border-[#FF9000]"
+        />
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="flex flex-wrap gap-4 items-start pt-4">
+        <!-- Bouton de partage avec menu déroulant -->
+        <div class="relative w-full sm:w-auto">
+          <!-- Bouton principal -->
+          <button
+            (click)="toggleShareMenu = !toggleShareMenu"
+            class="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer w-full sm:w-auto"
+          >
+            <i class="fas fa-share-alt text-gray-600"></i>
+            <span class="text-gray-700">Partager</span>
+          </button>
+
+          <!-- Menu déroulant responsive -->
+          <div
+            *ngIf="toggleShareMenu"
+            class="absolute z-10 left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-full max-w-xs sm:max-w-none sm:w-[360px]"
+          >
+            <div
+              class="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-6 sm:gap-x-6 sm:gap-y-4"
+            >
+              <!-- Toast de succès -->
+              <div
+                *ngIf="successMessage"
+                class="bg-white border-l-4 border-green-500 rounded-lg shadow-lg p-4 flex items-start animate-toast-in"
+              >
+                <div class="flex-shrink-0 text-green-500 mr-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-green-800">
+                    {{ successMessage }}
+                  </p>
+                </div>
+                <button
+                  (click)="successMessage = ''"
+                  class="ml-3 text-gray-400 hover:text-gray-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <!-- End Toast de succès -->
+              <!-- Icône 1 : Copier le lien -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <button
+                  (click)="copyLink()"
+                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10 14L21 3m-1 0H14a1 1 0 00-1 1v6m-4 4l-7 7m0 0h6a1 1 0 001-1v-6"
+                    />
+                  </svg>
+                </button>
+                <span class="text-xs sm:text-sm mt-2 text-center leading-tight"
+                >Copier<br />le lien</span
+                >
+              </div>
+
+              <!-- Icône 2 : Facebook -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <a
+                  [href]="
+                    'https://www.facebook.com/sharer/sharer.php?u=' +
+                    encodedShareUrl
+                  "
+                  target="_blank"
+                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.2 1.8.2v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3H14v7A10 10 0 0 0 22 12z"
+                    />
+                  </svg>
+                </a>
+                <span class="text-xs sm:text-sm mt-2 text-center"
+                >Facebook</span
+                >
+              </div>
+
+              <!-- Icône 3 : LinkedIn -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <a
+                  [href]="
+                    'https://www.linkedin.com/sharing/share-offsite/?url=' +
+                    encodedShareUrl
+                  "
+                  target="_blank"
+                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M19 0h-14c-2.8 0-5 2.2-5 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5v-14c0-2.8-2.2-5-5-5zM7 19h-3v-9h3v9zM5.5 8.5c-1 0-1.8-.8-1.8-1.8S4.5 5 5.5 5s1.8.8 1.8 1.8-.8 1.7-1.8 1.7zM20 19h-3v-4.5c0-1.1-.9-2-2-2s-2 .9-2 2V19h-3v-9h3v1.2c.4-.8 1.5-1.4 2.5-1.4 2 0 3.5 1.5 3.5 3.5V19z"
+                    />
+                  </svg>
+                </a>
+                <span class="text-xs sm:text-sm mt-2 text-center"
+                >LinkedIn</span
+                >
+              </div>
+
+              <!-- Icône 4 : WhatsApp -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <a
+                  [href]="
+                    'https://api.whatsapp.com/send?text=' + encodedShareUrl
+                  "
+                  target="_blank"
+                  class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2a10 10 0 0 0-8.727 14.9L2 22l5.293-1.378A10 10 0 1 0 12 2zm.256 15.588c-2.27-.002-4.62-1.2-6.236-3.034-1.074-1.262-1.846-2.835-1.846-4.09 0-1.253.84-2.275 2.016-2.275.332 0 .66.024.975.07.493.074.703.937.778 1.31.07.34.136.546.194.722.108.327.04.556-.123.77-.123.163-.254.306-.383.44-.167.172-.342.38-.258.63.083.243.37.805.854 1.28.616.607 1.366 1.177 2.146 1.426.263.087.48.025.666-.092.183-.116.323-.3.478-.497.154-.196.31-.41.492-.402.27.01.63.18.983.326.383.162.761.338 1.072.526.309.186.51.34.576.537.066.2.066.413.03.612-.073.422-.296.816-.65 1.106-.49.407-1.146.61-1.888.61z"
+                    />
+                  </svg>
+                </a>
+                <span class="text-xs sm:text-sm mt-2 text-center"
+                >WhatsApp</span
+                >
+              </div>
+            </div>
+          </div>
         </div>
-        }
-      </div>
 
-      <!-- Partager & Signaler -->
-      <div class="flex justify-between pt-4">
-        <button class="px-4 py-2 border border-gray-300 rounded-md text-sm flex items-center gap-2">
-          <!-- Partager -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-          </svg>
-          Partager
+        <!-- Bouton de signalement -->
+        <button
+          *ngIf="!isAuthor"
+          (click)="openReportModal()"
+          class="flex items-center space-x-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg border border-red-300 w-full sm:w-auto"
+        >
+          <i class="fas fa-flag text-red-500"></i>
+          <span>Signaler</span>
         </button>
-
-        <!-- BOUTON SIGNALER -->
-<button
-  *ngIf="!isAuthor"
-  (click)="openReportModal()"
-  class="px-4 py-2 border border-gray-300 rounded-md text-sm flex items-center gap-2 text-red-500 hover:bg-red-100 transition"
->
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-      d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-  </svg>
-  Signaler
-</button>
-
       </div>
+
     </div>
 
     <!-- Colonne droite - Détails -->
     <div class="space-y-6">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <span class="bg-orange-500 text-white rounded-full px-4 py-1 text-sm font-medium">
+          <span class="bg-[#FF9000] text-white rounded-full px-4 py-1 text-sm font-medium">
             {{
               announcement.operation_type === "don"
               ? "Don"
@@ -99,9 +257,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            {{ announcement.exchange_location_address | slice : 0 : 30 }}
+            <!-- {{ announcement.exchange_location_address | slice : 0 : 30 }} -->
             {{ announcement.created_at.length > 30 ? "..." : "..." }}
           </div>
+
         </div>
 
         <!-- Actions -->
@@ -127,12 +286,13 @@
             </div>
           </div>
         </div>
+
       </div>
 
       <!-- Titre & Prix -->
       <div>
         <h1 class="text-2xl font-bold mb-2">{{ announcement.title }}</h1>
-        <div class="text-orange-500 text-2xl font-bold">
+        <div class="text-[#FF9000] text-2xl font-bold">
           {{
             announcement.operation_type === "don"
             ? "Gratuit"
@@ -144,31 +304,28 @@
       </div>
 
       <!-- Informations -->
-      <div class="space-y-4">
-        <h2 class="text-lg font-semibold">Informations</h2>
+      <div class="bg-white rounded-lg p-4 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">Informations</h2>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <span class="text-gray-500">Catégorie</span>
-            <span class="ml-2 font-medium">{{ announcement.category.name }}</span>
+            <span class="text-secondary text-sm">Categorie:</span>
+            <p class="font-medium text-gray-900">
+              {{ announcement?.category?.name }}
+            </p>
           </div>
           <div>
-            <span class="text-gray-500">État:</span>
-            <span class="ml-2 font-medium">
-              {{
-                announcement.state === "good" ? "Bon état"
-                : announcement.state === "new" ? "Neuf"
-                : announcement.state === "damaged" ? "Abimé"
-                : "Comme neuf"
-              }}
-            </span>
+            <span class="text-secondary text-sm">Etat:</span>
+            <p class="font-medium text-gray-900">{{ announcement?.state }}</p>
           </div>
         </div>
       </div>
 
       <!-- Description -->
-      <div class="space-y-2">
-        <h2 class="text-lg font-semibold">Description</h2>
-        <p class="text-gray-700 whitespace-normal break-words">{{ announcement.description }}</p>
+      <div class="bg-white rounded-lg p-4 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">Description</h2>
+        <p class="text-gray-700 leading-relaxed break-words overflow-hidden">
+          {{ announcement?.description }}
+        </p>
       </div>
 
       <!-- Carte Vendeur -->
@@ -190,77 +347,33 @@
       </div>
 
       <!-- Contacter -->
-      <button class="w-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center gap-2 py-4 rounded-md">
+      <button class="w-full bg-[#FF9000] hover:bg-[#FFA353] text-white flex items-center justify-center gap-2 py-4 rounded-md cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
         Contacter
       </button>
+
     </div>
+
   </div>
 </div>
 
 <!-- Annonces similaires -->
-<h1 class="w-full max-w-7xl mx-auto text-center text-2xl font-bold text-gray-900 mb-6 mt-16 px-4">
+<h1 class="w-full sm:w-[70%] mx-auto text-2xl font-bold text-gray-900 mb-6 mt-16 text-center sm:text-left">
   Annonces similaires
 </h1>
 
-@if (similarAnnouncements.length == 0) {
-  <p class="text-center">Aucune annonce similaire disponible.</p>
-} @else {
-  @for (annonce of similarAnnouncements; track annonce.id){
-  <div class="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-auto mb-16 px-4">
-
-    <!-- Carte annonce similaire -->
-    <div class="relative w-full bg-white shadow-md rounded-lg hover:shadow-2xl transition duration-300">
-      <a [routerLink]="['/single-announcement', annonce.id]">
-        <img class="h-48 w-full object-cover rounded-lg" [src]="'http://localhost:8000/storage/' + annonce.photos[0].url" alt="" />
-      </a>
-      <p class="absolute top-3 right-2 text-white text-xs bg-[#FF9000] p-2 rounded-xl">
-        {{
-          annonce.operation_type === "don" ? "Don"
-          : annonce.operation_type === "exchange" ? "Echange"
-          : annonce.operation_type === "sale" ? "Vente"
-          : annonce.price + " Vente "
-        }}
-      </p>
-
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-        class="size-6 absolute top-65 text-[#FF9000] bg-white w-[35px] p-1 rounded-lg right-2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-      </svg>
-
-      <div class="p-5">
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-black line-clamp-1">
-          {{ annonce.title }}
-        </h5>
-        <div class="flex">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            class="size-6 text-[#6b7280]">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-          </svg>
-          <p class="mb-3 font-normal text-[#6b7280] dark:text-gray-400 line-clamp-1">
-            {{ annonce.exchange_location_address | slice : 0 : 30 }}
-            {{ annonce.created_at.length > 30 ? "..." : "..." }}
-          </p>
-        </div>
-        <div class="flex justify-between">
-          <p class="text-sm font-bold text-[#FF9000]">{{ annonce.price ? annonce.price + ' $' : 'Gratuit' }}</p>
-          <p class="text-[#6b7280]">{{ annonce.created_at }}</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  }
-}
-
-
-
+<div
+  class="w-[70%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto mb-16"
+>
+  @if (similarAnnouncements.length == 0) {
+    <p>Aucune annonce similaire disponible.</p>
+  } @else { @for (annonce of similarAnnouncements; track annonce.id) {
+    <app-announcement-card [announcement]="annonce"></app-announcement-card>
+  } }
+</div>
 
 <!-- Modal de confirmation -->
 <div
@@ -290,13 +403,13 @@
 </div>
 
 <!-- MODAL DE SIGNALEMENT -->
-<div *ngIf="isReportModalOpen" 
+<div *ngIf="isReportModalOpen"
      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-  
+
   <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in">
-    
+
     <!-- Bouton de fermeture (croix) -->
-    <button (click)="closeReportModal()" 
+    <button (click)="closeReportModal()"
             class="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition text-2xl font-bold">
       &times;
     </button>
@@ -336,11 +449,11 @@
 
         <!-- Boutons -->
         <div class="flex justify-end gap-3 pt-4">
-          <button type="button" (click)="closeReportModal()" 
+          <button type="button" (click)="closeReportModal()"
                   class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
             Annuler
           </button>
-          <button type="submit" 
+          <button type="submit"
                   class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
             Envoyer
           </button>
@@ -354,7 +467,7 @@
         Vous avez déjà signalé cette annonce.
       </div>
       <div class="flex justify-center mt-6">
-        <button (click)="closeReportModal()" 
+        <button (click)="closeReportModal()"
                 class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
           Fermer
         </button>
@@ -362,7 +475,5 @@
     </ng-template>
   </div>
 </div>
-
-
 
 <app-footer></app-footer>
