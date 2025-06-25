@@ -135,7 +135,18 @@ reportAnnouncement(payload: {
     );
   }
 
-  
+  // la méthode pour charger tous les favoris en une seule requête
+  loadAllFavorites() {
+    const headers = this.userlocalService.getAuthHeaders();
+    return this.http.get<number[]>(`${this.url}favorites`, {headers}).pipe(
+      tap(favoriteIds => {
+        // Transforme le tableau d'IDs en un objet pour initialiser l'état des favoris
+        // reduce est utilisé pour créer un objet où chaque clé est un ID d'annonce et la valeur est true
+        const favoritesMap = favoriteIds.reduce((acc, id) => ({...acc, [id]: true}), {});
+        this.favoriteState.initializeFavorites(favoritesMap);
+      })
+    );
+  }
 
 
 }
