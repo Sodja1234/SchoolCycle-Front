@@ -11,10 +11,16 @@ export class CategoriesService {
   private url = environment.apiUrl;
   constructor(
     private http: HttpClient,
+     private userlocalService: UserLocalService
   ) {}
 
   //On recupere les categories
   getCategories(): Observable<{ data: any[] }> {
     return this.http.get<{ data: any[] }>(`${this.url}categories`);
+  }
+
+  createCategorie(data: FormData) {
+  const headers = this.userlocalService.getAuthHeaders();
+  return this.http.post(this.url + 'categories', data, { headers });
   }
 }
