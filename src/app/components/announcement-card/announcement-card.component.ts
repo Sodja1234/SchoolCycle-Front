@@ -7,6 +7,7 @@ import { UserLocalService } from '../../core/services/userlocal/userlocal.servic
 import { AuthLoginResponse } from '../../core/models/auth/auth';
 import { FavoriteStateService } from '../../core/services/favorite/favorite.service';
 import { Observable } from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-announcement-card',
@@ -24,6 +25,7 @@ export class AnnouncementCardComponent {
   favoriteMessage: string = '';
   showSucessMessage: boolean = false;
   messageTimeout: any;
+  storageUrl = environment.storageUrl;
 
   constructor(private announcementService: AnnouncementService, public userLocalService : UserLocalService, private favoriteState: FavoriteStateService) {}
   @Input() announcement!: Announcement;
