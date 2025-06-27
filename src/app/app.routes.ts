@@ -53,6 +53,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'profils/:id',
+    loadComponent: () =>
+      import('../app/pages/profile/profils/profils.component').then(
+        (m) => m.ProfilsComponent
+      ),
+  },
+  {
     path: 'user-setting',
     canActivate: [authGuard],
     loadComponent: () =>
@@ -111,6 +118,7 @@ export const routes: Routes = [
     loadComponent :()=> import('../app/pages/page-not-found/page-not-found.component').then((m)=> m.PageNotFoundComponent)
   },
 
+  // Nb : toutes les routes apres 404 ne seront pas prisent en compte par angular
   //pour toutes les routes vides on redigigera à l'acceuil
   {
     path : '',
@@ -123,4 +131,6 @@ export const routes: Routes = [
     path : '**',
     redirectTo : '404'
   },
+
+
 ];
