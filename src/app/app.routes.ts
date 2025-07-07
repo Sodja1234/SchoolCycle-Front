@@ -113,6 +113,13 @@ export const routes: Routes = [
       ).then((m) => m.DashboardComponent),
   },
   {
+    path: 'admin/categories',
+    loadComponent: () =>
+      import(
+        '../app/pages/admin/categories-list/categories-list.component'
+      ).then((m) => m.CategoriesListComponent),
+  },
+  {
     path : '404',
     title : '404 - School Cycle',
     loadComponent :()=> import('../app/pages/page-not-found/page-not-found.component').then((m)=> m.PageNotFoundComponent)
