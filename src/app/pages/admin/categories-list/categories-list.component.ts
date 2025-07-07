@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CategoriesService } from '../../../core/services/categories/categories.service';
 import { CategorieCardComponent } from "../../../components/categorie-card/categorie-card.component";
+import { SidebardComponent } from "../../../components/sidebard/sidebard.component";
 
 @Component({
   selector: 'app-categories-list',
-  imports: [CommonModule, CategorieCardComponent],
+  imports: [CommonModule, CategorieCardComponent, SidebardComponent],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.css',
 })

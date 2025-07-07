@@ -11,10 +11,11 @@ import { User } from '../../../core/models/user';
 import { UserLocalService } from '../../../core/services/userlocal/userlocal.service';
 import { AuthLoginResponse } from '../../../core/models/auth/auth';
 import { CommonModule } from '@angular/common';
+import { SidebardComponent } from "../../../components/sidebard/sidebard.component";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  imports: [CommonModule, SidebardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
