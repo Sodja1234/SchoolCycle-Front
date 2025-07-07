@@ -3,10 +3,12 @@ import { Category } from '../../../core/models/announcement/category';
 
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { CategoriesService } from '../../../core/services/categories/categories.service';
+import { CategorieCardComponent } from "../../../components/categorie-card/categorie-card.component";
 
 @Component({
   selector: 'app-categories-list',
-  imports: [CommonModule, RouterLink ],
+  imports: [CommonModule, CategorieCardComponent],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.css',
 })
