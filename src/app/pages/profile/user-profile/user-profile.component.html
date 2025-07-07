@@ -18,7 +18,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-yellow-400 mr-1">
                         <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
                     </svg>
-                    <span class="font-bold text-sm mr-1">4.8</span>
                 </div>
 
                 <!-- Tags -->
@@ -26,12 +25,12 @@
                 </div>
 
                 <!-- Bio -->
-                <p class="text-gray-700 text-xs leading-relaxed mb-4 px-1">
+                <p class="text-gray-700 text-xs leading-relaxed mb-4 p-5">
                     Élève en 4ème, passionné de sciences et de lecture. Je cherche à échanger mes livres scolaires contre d'autres fournitures.
                 </p>
 
                 <!-- Informations de contact -->
-                <div class="border-t border-b border-gray-200 pt-3 pb-3 px-10 mb-4 text">
+                <div class="border-t border-b border-gray-200 p p-5 mb-4 text">
                     <a href="mailto:alex@exemple.fr" class="flex items-center text-gray-600 text-xs mb-2 hover:text-orange-500 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 flex-shrink-0">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -52,7 +51,7 @@
                             <line x1="8" y1="2" x2="8" y2="6"></line>
                             <line x1="3" y1="10" x2="21" y2="10"></line>
                         </svg>
-                        <span>Membre depuis {{user?.email_verified_at}}</span>
+                        <span>Membre depuis {{user?.email_verified_at| date}}</span>
                     </div>
                 </div>
                 <!-- Bouton modifier profil -->

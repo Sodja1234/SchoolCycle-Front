@@ -1,0 +1,18 @@
+    <div class="bg-white p-5 rounded-lg shadow flex flex-col justify-between h-full">
+      <div class="flex items-center gap-3 mb-2">
+        <div class=" rounded-full">
+          <img class="w-[50px] h-[50px] rounded-full " [src]="'http://localhost:8000/storage/' + categorie.photo" alt="" />
+        </div>
+        <div>
+          <h3> {{categorie.name }} </h3>
+          <p class="text-sm text-gray-600">0 annonces</p>
+        </div>
+      </div>
+      <p class="text-gray-500 text-sm mt-2 mb-4">
+        {{ categorie.description }}
+      </p>
+      <div class="flex gap-3 text-orange-500 text-lg mt-auto">
+        <button title="Éditer">✏️</button>
+        <button title="Supprimer">🗑️</button>
+      </div>
+    </div>
