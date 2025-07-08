@@ -182,7 +182,7 @@ export class AnnouncementGalleryComponent {
     console.log('Filtres envoyés:', filters);
 
     // Appel au service pour récupérer les annonces filtrées
-    this.announcementService.getAnnouncements(page, filters).subscribe({
+    this.announcementService.getAnnouncements(undefined, page, filters).subscribe({
       next: (res) => {
         this.announcements = res.data;
         this.paginationMeta = res.meta;
