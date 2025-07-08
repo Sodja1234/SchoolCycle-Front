@@ -17,17 +17,21 @@ export class AnnouncementListComponent {
 
 
   ngOnInit(){
-    this.getAnnouncements();
+    this.getAnnoucements();
   }
 
-  getAnnouncements(){
-    this.announcementService.getAnnouncements().subscribe({
-      next:(res)=>{
-        this.announcements = res.data;
-        console.log("Annonces", this.announcements)
-      }
-    });
-  }
+ // Récupère les annonces depuis l'API
+ getAnnoucements(page : number = 1) {
+  this.announcementService.getAnnouncements(undefined, page).subscribe({
+    next: (res) => {
+      this.announcements = res.data;
+      console.log('Annonces:', this.announcements);
+    },
+    error:(err) => {
+      console.error("Erreur lors du chargement des annonces :", err);
+    }
+  });
+}
   
 
   
