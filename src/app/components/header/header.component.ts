@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {UserLocalService} from '../../core/services/userlocal/userlocal.service';
+import { AuthLoginResponse } from '../../core/models/auth/auth';
 
 @Component({
   selector: 'app-header',
@@ -18,9 +19,7 @@ export class HeaderComponent {
   }
 
   isConnected: boolean = false;
-  name!: string | undefined;
-  email!: string | undefined;
-  token!: string;
+  user!: AuthLoginResponse | null;
 
 
   ngOnInit() {
@@ -28,11 +27,8 @@ export class HeaderComponent {
   }
 
   userConnected(){
-    const user = this.userLocalService.getUser();
-    this.name = user?.name;
-    this.email = user?.email;
-    const token = user?.token;
-    if (token){
+     this.user = this.userLocalService.getUser();
+    if (this.user?.token){
       this.isConnected = true;
     }else {
       this.isConnected = false;
