@@ -83,7 +83,7 @@ export class AnnouncementService {
   //methode pour recuperer une annonce en particulier
   getAnnoucement(id: number): Observable<Announcement> {
     //on fait une requete http vers l'api  avec l'id de l'annonce passéé en parametre
-    return this.http.get<Announcement>(this.url + 'announcements/' + id);
+    return this.http.get<Announcement>(this.url + 'announcement/public/single/' + id);
   }
 
   //On recupere les categories
