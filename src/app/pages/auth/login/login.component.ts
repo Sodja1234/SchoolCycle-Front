@@ -58,11 +58,24 @@ export class LoginComponent {
       next: (response: AuthLoginResponse) => {
         this.userLocalService.stockerUserLocal(response);
         console.log(response)
-        // Message de succès + redirection après 1,5 seconde
+        
         this.successMessage = 'Connexion réussie. Redirection en cours...';
+        const role = response.role;
+
+        console.log('Role reçu :', role);
+
         setTimeout(() => {
-          this.router.navigate(['/']);
           this.successMessage = ''
+          switch (role) {
+            case 'admin':
+              this.router.navigate(['/admin/dashboard']);
+              break;
+            case 'tutor':
+              this.router.navigate(['/']);
+              break;
+            default:
+              this.router.navigate(['/']);
+          }
         }, 2500);
       },
       error: (err) => {
