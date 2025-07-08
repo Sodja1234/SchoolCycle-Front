@@ -1,10 +1,14 @@
+import { Title } from '@angular/platform-browser';
+import { adminGuard } from './guards/admin/admin.guard';
 import { Routes } from '@angular/router';
 import {guestGuard} from './guards/guest.guard';
 import {authGuard} from './guards/auth/auth.guard';
+import { tutorGuard } from './guards/tutor/tutor.guard';
 
 export const routes: Routes = [
   {
     path: '',
+    title : 'Accueil - School Cycle',
     loadComponent: () =>
       import('../app/pages/home/home/home.component').then(
         (m) => m.HomeComponent
@@ -46,7 +50,8 @@ export const routes: Routes = [
   },
   {
     path: 'profils',
-    canActivate: [authGuard],
+    title : 'Profil - School Cycle',
+    canActivate: [authGuard, tutorGuard],
     loadComponent: () =>
       import('../app/pages/profile/profils/profils.component').then(
         (m) => m.ProfilsComponent
@@ -61,7 +66,8 @@ export const routes: Routes = [
   },
   {
     path: 'user-setting',
-    canActivate: [authGuard],
+    title : 'Paramètres - School Cycle',
+    canActivate: [authGuard, tutorGuard],
     loadComponent: () =>
       import('../app/pages/profile/user-setting/user-setting.component').then(
         (m) => m.UserSettingComponent
@@ -69,7 +75,8 @@ export const routes: Routes = [
   },
   {
     path: 'chat',
-    canActivate: [authGuard],
+    title : 'Chat - School Cycle',
+    canActivate: [authGuard, tutorGuard],
     loadComponent: () =>
       import('../app/pages/chat/chat-container/chat-container.component').then(
         (m) => m.ChatContainerComponent
@@ -77,7 +84,8 @@ export const routes: Routes = [
   },
   {
     path: 'create-announcement',
-    canActivate: [authGuard],
+    title : 'Publier une annonce - School Cycle',
+    canActivate: [authGuard, tutorGuard],
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-create/announcement-create.component'
@@ -85,7 +93,8 @@ export const routes: Routes = [
   },
   {
     path: 'edit-announcement/:id',
-    canActivate: [authGuard],
+    title : 'Modifier une annonce - School Cycle',
+    canActivate: [authGuard, tutorGuard],
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-edit/announcement-edit.component'
@@ -93,6 +102,7 @@ export const routes: Routes = [
   },
   {
     path: 'single-announcement/:id',
+    title : 'Annonce - School Cycle',
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-single/announcement-single.component'
@@ -100,6 +110,7 @@ export const routes: Routes = [
   },
   {
     path: 'announcement-gallery',
+    title : 'Galerie - School Cycle',
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-gallery/announcement-gallery.component'
@@ -107,6 +118,8 @@ export const routes: Routes = [
   },
   {
     path: 'admin/dashboard',
+    title : 'Admin Dashboard - School Cycle',
+    canActivate : [adminGuard, authGuard],
     loadComponent: () =>
       import(
         '../app/pages/admin/dashboard/dashboard.component'
@@ -114,6 +127,8 @@ export const routes: Routes = [
   },
   {
     path: 'admin/categories',
+    title : 'Categories - School Cycle',
+    canActivate : [adminGuard, authGuard],
     loadComponent: () =>
       import(
         '../app/pages/admin/categories-list/categories-list.component'
