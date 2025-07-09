@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau de bord</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+  <div class="flex bg-gray-100 h-full">
+    <!-- Sidebar -->
+    <app-sidebard></app-sidebard>
+
+    <!-- Main Content -->
+    <main class="flex-1 pr-30 pt-10 pl-30 space-y-6">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">Signalements</h1>
+      </div>
+
+      <!-- Filtres principaux -->
+      <div class="flex space-x-6 items-center border-b pb-2 mb-4 text-sm font-medium">
+        <button class="text-orange-600 border-b-2 border-orange-600 pb-1">Tous les Signalements <span
+            class="ml-1 bg-gray-200 px-2 py-0.5 rounded-full text-xs">0</span></button>
+        <button class="text-green-600">En attente <span class="ml-1 font-semibold">0</span></button>
+        <button class="text-yellow-600">Résolu <span class="ml-1 font-semibold">0</span></button>
+      </div>
+
+      <!-- Liste categories -->
+      <div class="flex flex-col gap-4">
+        @for (reports of report; track reports.id) {
+        <app-report-card [report]="reports"></app-report-card>
+        }
+      </div>
+    </main>
+
+      </div>
+</body>
+
+</html>

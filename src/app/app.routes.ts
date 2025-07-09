@@ -135,6 +135,13 @@ export const routes: Routes = [
       ).then((m) => m.AnnouncementListComponent),
   },
   {
+    path: 'admin/reports',
+    loadComponent: () =>
+      import('../app/pages/admin/report-list/report-list.component').then(
+        (m) => m.ReportListComponent
+      ),
+  },
+  {
     path : '404',
     title : '404 - School Cycle',
     loadComponent :()=> import('../app/pages/page-not-found/page-not-found.component').then((m)=> m.PageNotFoundComponent)
