@@ -1,0 +1,41 @@
+<div class="bg-white rounded-lg shadow p-5 flex flex-col space-y-4 border relative">
+
+  <!-- Titre + Signalé par -->
+  <div class="flex items-start space-x-3">
+    <!-- Icône -->
+    <div class="bg-red-100 text-red-600 rounded-full p-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-.01-6a9 9 0 11-6.63 15.56A9 9 0 0112 3z" />
+      </svg>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-semibold text-gray-800"> {{ report.motif }} </h2>
+      <p class="text-sm text-gray-600">Signalé par : <span class="font-medium text-gray-800"> {{ report.user_id }} </span></p>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <p class="text-sm text-gray-700">
+   <span class="font-medium"> {{ report.detail }}</span> 
+  </p>
+
+  <!-- Infos + Catégories -->
+  <div class="flex items-center space-x-4 text-sm text-gray-600">
+    <div class="flex items-center space-x-1">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v10l8-5-8-5z" />
+      </svg>
+      <span> Il y a  {{ report.created_at }} </span>
+    </div>
+  </div>
+
+  <!-- Boutons -->
+  <div class="flex flex-wrap gap-2 pt-2">
+    <button class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm">Examiner</button>
+    <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm">Ignorer</button>
+    <button class="border border-red-500 text-red-600 px-4 py-2 rounded hover:bg-red-100 text-sm">Supprimer l'annonce</button>
+ 
+  </div>
+</div>
+
