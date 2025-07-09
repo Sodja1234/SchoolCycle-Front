@@ -1,7 +1,14 @@
+
+import { User } from '../user';
 import {Announcement} from './announcement';
 
 export interface PaginatedAnnouncements{
   data : Announcement [];
+  links : PaginationUrls;
+  meta : PaginationMeta
+}
+export interface PaginatedUser{
+  data : User [];
   links : PaginationUrls;
   meta : PaginationMeta
 }
