@@ -1,0 +1,61 @@
+<!-- Popup -->
+<div *ngIf="isOpen" class="fixed inset-0 flex items-center justify-center z-50">
+  <div class="absolute inset-0 bg-gray-900/20 backdrop-blur-sm" (click)="close()"></div>
+
+  <div class="bg-white rounded-lg overflow-hidden w-full max-w-lg relative">
+    <!-- Header -->
+    <div class="bg-orange-500 text-white relative p-4 flex items-center gap-2">
+      <button
+        (click)="close()"
+        class="absolute right-2 top-2 rounded p-1 hover:bg-white/20"
+      >
+        <span class="material-icons">close</span>
+      </button>
+      <span class="material-icons">chat</span>
+      <h3 class="font-semibold">Envoyer un message</h3>
+    </div>
+
+    <!-- Contenu -->
+    <div class="p-6">
+      <form (ngSubmit)="send()" class="space-y-4">
+        <!-- Messages rapides -->
+        <div class="space-y-2">
+          <label class="font-medium">Messages rapides</label>
+          <div class="grid grid-cols-1 gap-2">
+            <button
+              *ngFor="let template of messageTemplates"
+              (click)="selectTemplate(template)"
+              type="button"
+              class="text-left rounded border border-gray-300 p-3 text-sm text-gray-700 hover:bg-orange-50 hover:border-orange-500"
+            >
+              {{ template }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Message personnalisé -->
+        <div class="space-y-2">
+          <label for="message" class="font-medium">Votre message</label>
+          <textarea
+            id="message"
+            [(ngModel)]="message"
+            name="message"
+            rows="4"
+            class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:border-orange-500 resize-none"
+            placeholder="Tapez votre message ici..."
+            required
+          ></textarea>
+        </div>
+
+        <!-- Bouton envoyer -->
+        <button
+          type="submit"
+          [disabled]="!message.trim()"
+          class="w-full flex justify-center items-center rounded bg-orange-500 hover:bg-orange-600 text-white py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span class="material-icons mr-2">send</span> Envoyer
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
