@@ -141,6 +141,13 @@ export const routes: Routes = [
         '../app/pages/admin/announcement-list/announcement-list.component'
       ).then((m) => m.AnnouncementListComponent),
   },
+      {
+    path: 'admin/users',
+    loadComponent: () =>
+      import('../app/pages/admin/user-list/user-list.component').then(
+        (m) => m.UserListComponent
+      ),
+  },
   {
     path: 'admin/reports',
     loadComponent: () =>
