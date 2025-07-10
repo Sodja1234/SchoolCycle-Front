@@ -1,7 +1,10 @@
+import { User } from "../user";
+import { Announcement } from "./announcement";
+
 export interface Report {
   id : number;
-  user_id: number;
-  announcement_id: number;
+  user: User;
+  announcement: Announcement;
   motif: string;
   detail?: string;
   created_at:string
