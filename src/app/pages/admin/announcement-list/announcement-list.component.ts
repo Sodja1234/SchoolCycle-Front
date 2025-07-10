@@ -28,13 +28,13 @@ export class AnnouncementListComponent {
   ) {}
 
   ngOnInit() {
-    this.getAnnoucements();
+    this.getAnnouncements();
   }
 
   // Récupère les annonces depuis l'API
-  getAnnoucements(page: number = 1) {
+  getAnnouncements(page: number = 1) {
     //on fait appel au service avec le numero de page passé en parametre
-    this.announcementService.getAnnouncements(page).subscribe({
+    this.announcementService.getAnnouncements(undefined, page).subscribe({
       next: (res) => {
         //on stocke les annonces recus dans la varible data de PaginatedAnnouncements !!
         this.announcements = res.data;
@@ -50,7 +50,6 @@ export class AnnouncementListComponent {
         console.log('paginationMeta:', res.meta);
         console.log('paginationUrls:', res.links);
       },
-
       //cas d'erreur
       error: (err) => {
         console.error('Erreur lors du chargement des annonces :', err);
@@ -70,7 +69,7 @@ export class AnnouncementListComponent {
     const page = pageParam ? +pageParam : 1;
 
     //on renvoit les annonces pour la page selectionné
-    this.getAnnoucements(page);
+    this.getAnnouncements(page);
   }
 
     openDeleteModal(id:number) {
