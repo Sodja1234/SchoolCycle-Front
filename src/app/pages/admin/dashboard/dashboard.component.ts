@@ -12,10 +12,13 @@ import { UserLocalService } from '../../../core/services/userlocal/userlocal.ser
 import { AuthLoginResponse } from '../../../core/models/auth/auth';
 import { CommonModule } from '@angular/common';
 import { SidebardComponent } from "../../../components/sidebard/sidebard.component";
+import { ReportCardComponent } from '../../../components/report-card/report-card.component';
+import { ReportService } from '../../../core/services/report/report.service';
+import { Report } from '../../../core/models/announcement/report';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, SidebardComponent],
+  imports: [CommonModule, SidebardComponent, RouterLink, ReportCardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -25,62 +28,41 @@ export class DashboardComponent {
   paginationUrls!: PaginationUrls;
   user!: AuthLoginResponse | null;
   articleId: number = -1;
+  report!:Report[]
 
   suggestions: Announcement[] = [];
   constructor(
     private announcementService: AnnouncementService,
     private authservice: UserLocalService,
+    private reportService:ReportService
   ) {}
 
   ngOnInit() {
     this.getAnnoucements();
     this.user = this.authservice.getUser();
+    this.getReportList()
     console.log('user', this.user);
   }
 
   // Récupère les annonces depuis l'API
-  getAnnoucements(page: number = 1) {
-    //on fait appel au service avec le numero de page passé en parametre
-    this.announcementService
-      .getAnnouncements(
-        page,
-      )
-      .subscribe({
-        next: (res) => {
-          //on stocke les annonces recus dans la varible data de PaginatedAnnouncements !!
-          this.announcements = res.data;
+   getAnnoucements(page : number = 1) {
+  this.announcementService.getAnnouncements(undefined, page).subscribe({
+    next: (res) => {
+      this.announcements = res.data;
+      console.log('Annonces:', this.announcements);
+    },
+    error:(err) => {
+      console.error("Erreur lors du chargement des annonces :", err);
+    }
+  });
+}
 
-          //on stocke les annonces recus dans la varible meta de PaginatedAnnouncements !!
-          this.paginationMeta = res.meta;
-
-          //on stocke les annonces recus dans la varible links de PaginatedAnnouncements !!
-          this.paginationUrls = res.links;
-
-          //debug
-          console.log('Annonces:', this.announcements);
-          console.log('paginationMeta:', res.meta);
-          console.log('paginationUrls:', res.links);
-        },
-
-        //cas d'erreur
-        error: (err) => {
-          console.error('Erreur lors du chargement des annonces :', err);
-        },
-      });
-  }
-
-  //methode utiliser lorque l'utilisateur clique un lien  de la pagination
-  onPageChange(url: string | null | undefined): void {
-    //si l'url n'est pas valide, on return rien
-    if (typeof url !== 'string') return;
-
-    //on extrait  le parametre page depuis l'url
-    const pageParam = new URL(url).searchParams.get('page');
-
-    //on converti la valeur page en nombre
-    const page = pageParam ? +pageParam : 1;
-
-    //on renvoit les annonces pour la page selectionné
-    this.getAnnoucements(page);
+  getReportList(){
+    this.reportService.getReport().subscribe({
+      next:(res)=>{
+        this.report = res.data
+        console.log("hello", this.report)
+      }
+    })
   }
 }
