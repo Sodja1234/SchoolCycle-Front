@@ -8,8 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100  font-sans">
-  <div class="flex bg-gray-100 h-full ">
+<body class="bg-gray-100  h-full font-sans">
+  <div class="flex bg-gray-100 ">
     <!-- Sidebar -->
     <app-sidebard></app-sidebard>
 
@@ -24,12 +24,12 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white p-4 rounded shadow">
           <p class="text-sm text-gray-500">Annonces actives</p>
-          <h3 class="text-2xl font-bold"> 0 </h3>
+          <h3 class="text-2xl font-bold">  </h3>
           <p class="text-green-500 text-sm">+</p>
         </div>
         <div class="bg-white p-4 rounded shadow">
           <p class="text-sm text-gray-500">Utilisateurs inscrits</p>
-          <h3 class="text-2xl font-bold"> 0</h3>
+          <h3 class="text-2xl font-bold"> </h3>
           <p class="text-green-500 text-sm">+</p>
         </div>
         <div class="bg-white p-4 rounded shadow">
@@ -39,16 +39,16 @@
         </div>
         <div class="bg-white p-4 rounded shadow">
           <p class="text-sm text-gray-500">Signalements en attente</p>
-          <h3 class="text-2xl font-bold text-red-500">0</h3>
+          <h3 class="text-2xl font-bold text-red-500">  </h3>
           <p class="text-red-500 text-sm">+</p>
         </div>
       </div>
 
       <!-- Annonces récentes -->
-      <div class="bg-white p-4 rounded shadow">
+      <div class="bg-white mb-10 p-4 rounded shadow">
         <div class="flex justify-between items-center mb-4">
           <h4 class="">Annonces récentes</h4>
-          <a class="text-orange-500 text-sm">Voir toutes</a>
+          <a [routerLink]="['/admin/announcements']" class="text-orange-500 text-sm">Voir toutes</a>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm text-left text-gray-700">
@@ -91,7 +91,7 @@
                 <td class="p-2">{{ announce.created_at }}</td>
                 <td class="p-2 space-x-2">
                   <button class="text-purple-500">✏️</button>
-                  <button class="text-red-500">🗑️</button>
+                  <button class="text-red-500">🔐</button>
 
                 </td>
               </tr>
@@ -100,49 +100,17 @@
           </table>
         </div>
       </div>
-
-      <!-- Container de pagination qui s'affiche que si des liens existent -->
-      <div class="mb-5 flex justify-center" *ngIf="paginationMeta?.links?.length">
-        <nav aria-label="Page navigation">
-          <ul class="flex items-center -space-x-px h-8 text-sm">
-            <!-- Boucle sur chaque lien de pagination -->
-            <li *ngFor="let link of paginationMeta.links">
-              <!-- on desactive s'il y a pas d'url -->
-              <button [disabled]="!link.url" (click)="onPageChange(link.url)"
-                class="flex items-center justify-center px-3 h-8 leading-tight border transition-colors duration-200"
-                [ngClass]="{
-                    'rounded-s-lg': link.label.includes('Previous'),
-                    'rounded-e-lg': link.label.includes('Next'),
-                    'text-white bg-[#FF8C00] border-[#FF8C00] hover:bg-[#FF9D1A] hover:border-[#FF9D1A]':
-                      link.active,
-                    'text-gray-600 bg-white border-gray-200 hover:bg-orange-50 hover:text-[#FF8C00]':
-                      !link.active,
-                    'cursor-not-allowed opacity-50': !link.url
-                  }">
-                <span class="sr-only" *ngIf="link.label.includes('Previous')">Précédent</span>
-                <span class="sr-only" *ngIf="link.label.includes('Next')">Suivant</span>
-
-                <!-- On affiche le numero de la page  -->
-                <svg *ngIf="link.label.includes('Previous')" class="w-2.5 h-2.5 rtl:rotate-180"
-                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M5 1 1 5l4 4" />
-                </svg>
-
-                <!-- On affiche le numero de la page  -->
-                <svg *ngIf="link.label.includes('Next')" class="w-2.5 h-2.5 rtl:rotate-180"
-                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m1 9 4-4-4-4" />
-                </svg>
-                <span [innerHTML]="link.label" *ngIf="
-                      !link.label.includes('Previous') &&
-                      !link.label.includes('Next')
-                    "></span>
-              </button>
-            </li>
-          </ul>
-        </nav>
+      <!-- Report récentes -->
+      <div class="bg-white mb-10 p-4 rounded shadow">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="">Report récents</h4>
+          <a [routerLink]="['/admin/reports']" class="text-orange-500 text-sm">Voir toutes</a>
+        </div>
+        <div class="flex flex-col gap-4">
+        @for (reports of report; track reports.id) {
+          <app-report-card  [report]="reports"></app-report-card>
+        }
+        </div>
       </div>
     </main>
   </div>
