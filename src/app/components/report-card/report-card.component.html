@@ -5,19 +5,21 @@
     <!-- Icône -->
     <div class="bg-red-100 text-red-600 rounded-full p-2">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-.01-6a9 9 0 11-6.63 15.56A9 9 0 0112 3z" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 9v2m0 4h.01m-.01-6a9 9 0 11-6.63 15.56A9 9 0 0112 3z" />
       </svg>
     </div>
 
     <div>
       <h2 class="text-lg font-semibold text-gray-800"> {{ report.motif }} </h2>
-      <p class="text-sm text-gray-600">Signalé par : <span class="font-medium text-gray-800"> {{ report.user_id }} </span></p>
+      <p class="text-sm text-gray-600">Signalé par : <span class="font-medium text-gray-800"> {{ report.user.name }}
+        </span></p>
     </div>
   </div>
 
   <!-- Description -->
   <p class="text-sm text-gray-700">
-   <span class="font-medium"> {{ report.detail }}</span> 
+    <span class="font-medium"> {{ report.detail }}</span>
   </p>
 
   <!-- Infos + Catégories -->
@@ -26,16 +28,35 @@
       <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v10l8-5-8-5z" />
       </svg>
-      <span> Il y a  {{ report.created_at }} </span>
+      <span> Il y a {{ report.created_at }} </span>
     </div>
   </div>
 
   <!-- Boutons -->
   <div class="flex flex-wrap gap-2 pt-2">
-    <button class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm">Examiner</button>
+    <a [routerLink]="['/single-announcement', report.announcement.id]"
+      class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm">
+      Examiner
+    </a>
     <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm">Ignorer</button>
-    <button class="border border-red-500 text-red-600 px-4 py-2 rounded hover:bg-red-100 text-sm">Supprimer l'annonce</button>
- 
+    <button  (click)="openDeleteModal(report.announcement.id)" class="border border-red-500 text-red-600 px-4 py-2 rounded hover:bg-red-100 text-sm">Désactiver
+      l'annonce</button>
   </div>
 </div>
 
+<!-- Modal de confirmation -->
+<div *ngIf="isDeleteModalOpen" class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Confirmer la désactivation</h2>
+    <p class="text-gray-600 mb-6">
+      Êtes-vous sûr de vouloir désactiver cette annonce ?
+    </p>
+    <div class="flex justify-end gap-4">
+      <button (click)="closeDeleteModal()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+        Annuler
+      </button>
+      <button (click)="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+        Désactiver
+      </button>
+    </div>
+  </div>
