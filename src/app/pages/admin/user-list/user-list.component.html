@@ -8,15 +8,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 h-full font-sans text-gray-700">
-  <div class="flex h-full">
+<body class="bg-gray-100 h-full font-sans">
+  <div class="flex bg-gray-100 ">
         <!-- Sidebar -->
     <app-sidebard></app-sidebard>
     <div class="flex-1 pr-30 pt-10 pl-30 space-y-6">
       <!-- Header -->
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold">Utilisateurs</h1>
-        <button class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">+ Ajouter un utilisateur</button>
       </div>
 
       <!-- Filtres principaux -->
@@ -58,6 +57,7 @@
 
       <!-- Tableau des utilisateurs -->
       <div class="bg-white rounded shadow overflow-x-auto">
+        <div class="overflow-x-auto" >
         <table class="w-full text-sm text-left">
           <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
             <tr>
@@ -70,8 +70,8 @@
               <th class="p-3">Actions</th>
             </tr>
           </thead>
-          @for(user of users; track user.id){
           <tbody class="divide-y divide-gray-200">
+          @for(user of users; track user.id){
             
             <tr>
               <td class="p-3 flex items-center space-x-2">
@@ -95,12 +95,60 @@
                 <button class="text-red-600 hover:text-red-800">🔐</button>
               </td>
             </tr>
-          </tbody>
         }
+
+          </tbody>
+          
         </table>
+
       </div>
+      </div>
+                              <!-- Container de pagination qui s'affiche que si des liens existent -->
+            <div class="mb-5 flex justify-center" *ngIf="paginationMeta?.links?.length">
+                <nav aria-label="Page navigation">
+                    <ul class="flex items-center -space-x-px h-8 text-sm">
+                        <!-- Boucle sur chaque lien de pagination -->
+                        <li *ngFor="let link of paginationMeta.links">
+                            <!-- on desactive s'il y a pas d'url -->
+                            <button [disabled]="!link.url" (click)="onPageChange(link.url)"
+                                class="flex items-center justify-center px-3 h-8 leading-tight border transition-colors duration-200"
+                                [ngClass]="{
+                    'rounded-s-lg': link.label.includes('Previous'),
+                    'rounded-e-lg': link.label.includes('Next'),
+                    'text-white bg-[#FF8C00] border-[#FF8C00] hover:bg-[#FF9D1A] hover:border-[#FF9D1A]':
+                      link.active,
+                    'text-gray-600 bg-white border-gray-200 hover:bg-orange-50 hover:text-[#FF8C00]':
+                      !link.active,
+                    'cursor-not-allowed opacity-50': !link.url
+                  }">
+                                <span class="sr-only" *ngIf="link.label.includes('Previous')">Précédent</span>
+                                <span class="sr-only" *ngIf="link.label.includes('Next')">Suivant</span>
+
+                                <!-- On affiche le numero de la page  -->
+                                <svg *ngIf="link.label.includes('Previous')" class="w-2.5 h-2.5 rtl:rotate-180"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M5 1 1 5l4 4" />
+                                </svg>
+
+                                <!-- On affiche le numero de la page  -->
+                                <svg *ngIf="link.label.includes('Next')" class="w-2.5 h-2.5 rtl:rotate-180"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                                <span [innerHTML]="link.label" *ngIf="
+                      !link.label.includes('Previous') &&
+                      !link.label.includes('Next')
+                    "></span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
     </div>
   </div>
+  
 
 
 </body>
