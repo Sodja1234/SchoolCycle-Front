@@ -90,7 +90,7 @@ export class AnnouncementListComponent {
   deleteAnnouncement() {
     this.announcementService.deleteAnnouncement(this.articleId).subscribe({
       next: () => {
-        this.router.navigate(['/admin/announcement']);
+        window.location.reload();
       },
       error: (err) => {
         console.error('Erreur suppression annonce', err);
