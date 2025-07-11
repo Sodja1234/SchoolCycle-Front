@@ -67,6 +67,10 @@ export class AnnouncementService {
     if (filters.is_cancelled != null) {
       params = params.set('is_cancelled', filters.is_cancelled);
     }
+    // ✅ Filtrage par deleted_at
+    if (filters.deleted_at != null) {
+      params = params.set('deleted_at', filters.deleted_at);
+    }
   
     // Construction de l'URL en fonction de la présence d'un ID
     let url = this.url + 'announcements/public';
