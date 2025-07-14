@@ -40,6 +40,10 @@ export class AnnouncementSingleComponent {
   isModalOpen = false;
   isDeleteModalOpen = false;
   isReportModalOpen = false;
+  //affichage d'un pop up contenant un message d'erreur ou de success
+  showToastReport = false;
+  toastReportType: 'success' | 'error' = 'success';
+  toastReportMessage = '';
   isFavorite$!: Observable<boolean>;
   user: AuthLoginResponse | null = null;
 
@@ -53,6 +57,7 @@ export class AnnouncementSingleComponent {
   detail: string = '';
   isReportSent = false;
   hasAlreadyReported = false;
+  reported!:string
 
   map: L.Map | undefined;
 
@@ -199,11 +204,6 @@ export class AnnouncementSingleComponent {
   }
 
   submitReport() {
-    if (!this.motif.trim()) {
-      alert("Le motif est requis.");
-      return;
-    }
-
     const payload = {
       user_id: this.currentUserId,
       announcement_id: this.articleId,
@@ -216,14 +216,25 @@ export class AnnouncementSingleComponent {
         this.isReportSent = true;
         const reportKey = `report_${this.articleId}_by_${this.currentUserId}`;
         localStorage.setItem(reportKey, 'true');
-        this.hasAlreadyReported = true;
-        alert('Votre signalement a été envoyé.');
+        //this.hasAlreadyReported = true;
+        this.toastReportType = 'success';
+        this.showToastReport = true
+        this.toastReportMessage = "Annonce signalée";
+        setTimeout(() => {
+        this.showToastReport = false;
+        window.location.reload()
+      }, 2000);
         this.motif = '';
         this.detail = '';
       },
       error: (err) => {
         console.error("Erreur lors du signalement :", err);
-        alert("Erreur lors de l'envoi du signalement.");
+        this.toastReportType = 'error';
+        this.showToastReport = true
+        this.toastReportMessage = "Remplissez correctement le formulaire";
+        setTimeout(() => {
+        this.showToastReport = false;
+      }, 2000);
       },
     });
   }
