@@ -493,6 +493,19 @@
       </div>
     </ng-template>
   </div>
+
+  <div *ngIf="showToastReport" class="fixed top-0 left-0 w-full z-50 flex justify-center">
+  <div [ngClass]="{
+      'bg-green-500': toastReportType === 'success',
+      'bg-red-500': toastReportType === 'error'
+    }"
+    class="text-white px-6 py-3 rounded-b shadow-md w-full max-w-md mx-auto flex justify-between items-center animate-slide-down">
+    <p class="text-lg text-center font-semibold">{{ toastReportMessage }}</p>
+    <a [routerLink]="['']">❌</a>
+  </div>
 </div>
+</div>
+
+
 
 <app-footer></app-footer>
