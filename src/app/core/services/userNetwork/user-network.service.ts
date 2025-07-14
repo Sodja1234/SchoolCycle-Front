@@ -18,6 +18,6 @@ export class UserNetworkService {
       .set('page', page)
       .set('per_page', 10);
     const headers = this.userlocalService.getAuthHeaders();
-    return this.http.get<PaginatedUser>(this.url + 'users', { params });
+    return this.http.get<PaginatedUser>(this.url + 'users', { params,headers });
   }
 }
