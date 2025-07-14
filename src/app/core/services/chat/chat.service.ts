@@ -14,7 +14,14 @@ export class ChatService {
   constructor(private http: HttpClient) { }
 
   getAuthToken(){
-    const token = localStorage.getItem('token');
+    const userSession = localStorage.getItem('userSession');
+    let token = null;
+    
+    if (userSession) {
+      const user = JSON.parse(userSession);
+      token = user.token;
+    }
+    
     const headers = new HttpHeaders({
       Authorization : `Bearer ${token}`
     });
@@ -56,6 +63,30 @@ export class ChatService {
   //Méthode asynchrone pour l'envoie des messages 
   async sendMessageAsync(conversation: number, content: string): Promise<Message>{
     return await firstValueFrom(this.sendMessage(conversation, content));
+  }
+
+  //Récuperer le chat existant pour l'utilisateur connecté et une annonce donnée
+  getUserChatForAnnouncement(announcementId: number): Observable<Chat>{
+    const headers = this.getAuthToken();
+    return this.http.get<Chat>(`${this.baseUrl}announcements/${announcementId}/user-chat`, { headers });
+  }
+
+  // Créer un chat pour une annonce et envoyer le premier message
+  createChatWithMessage(announcementId: number, content: string): Observable<Chat>{
+    const headers = this.getAuthToken();
+    return this.http.post<Chat>(
+      `${this.baseUrl}announcements/${announcementId}/chats`,
+      { content }, { headers } 
+    );
+  }
+
+  // Fermer un chat (marquer comme terminé)
+  closeChat(chatId: number): Observable<any>{
+    const headers = this.getAuthToken();
+    return this.http.post<any>(
+      `${this.baseUrl}chats/${chatId}/close`,
+      {}, { headers } 
+    );
   }
 
 }
