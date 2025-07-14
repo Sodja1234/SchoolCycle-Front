@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Announcement } from '../../../core/models/announcement/announcement';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AnnouncementService } from '../../../core/services/announcement/announcement.service';
@@ -13,15 +13,26 @@ import { AuthLoginResponse } from '../../../core/models/auth/auth';
 import { UserLocalService } from '../../../core/services/userlocal/userlocal.service';
 import { FavoriteStateService } from '../../../core/services/favorite/favorite.service';
 import L from 'leaflet';
+import { ChatPopUpsComponent } from "../../chat/chat-pop-ups/chat-pop-ups.component";
 
 @Component({
   selector: 'app-announcement-single',
   standalone: true,
-  imports: [RouterLink, HeaderComponent, FooterComponent, CommonModule, FormsModule, AnnouncementCardComponent],
+  imports: [RouterLink, HeaderComponent, FooterComponent, CommonModule, FormsModule, AnnouncementCardComponent, ChatPopUpsComponent],
   templateUrl: './announcement-single.component.html',
   styleUrl: './announcement-single.component.css',
 })
 export class AnnouncementSingleComponent {
+  @ViewChild('chatPopups') chatPopups!: ChatPopUpsComponent;
+  
+  openChatPopUp(){
+    if (!this.user || !this.user.token) {
+      // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.chatPopups.openPopUpOrRedirect();
+  }
   constructor(
     private annoncementService: AnnouncementService,
     private route: ActivatedRoute,
