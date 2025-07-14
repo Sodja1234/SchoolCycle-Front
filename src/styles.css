@@ -2,5 +2,165 @@
 @import "tailwindcss";
 @import "flowbite/src/themes/default";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Styles personnalisés pour l'interface de chat */
+@layer components {
+  /* Scrollbar personnalisée pour les zones de chat */
+  .chat-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db #f3f4f6;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 3px;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+  
+  /* Mode sombre pour la scrollbar */
+  .dark .chat-scrollbar {
+    scrollbar-color: #4b5563 #1f2937;
+  }
+  
+  .dark .chat-scrollbar::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
+  
+  .dark .chat-scrollbar::-webkit-scrollbar-thumb {
+    background: #4b5563;
+  }
+  
+  .dark .chat-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+  }
+  
+  /* Animation pour les messages */
+  .message-enter {
+    animation: messageSlideIn 0.3s ease-out;
+  }
+  
+  @keyframes messageSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Animation pour le bouton d'envoi */
+  .send-button-pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  /* Styles pour les bulles de messages */
+  .message-bubble {
+    position: relative;
+    word-wrap: break-word;
+  }
+  
+  .message-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .message-bubble.sent::before {
+    right: -8px;
+    border-left: 8px solid #ea580c;
+    border-bottom: 8px solid transparent;
+  }
+  
+  .message-bubble.received::before {
+    left: -8px;
+    border-right: 8px solid #ffffff;
+    border-bottom: 8px solid transparent;
+  }
+  
+  .dark .message-bubble.received::before {
+    border-right-color: #374151;
+  }
+  
+  /* Styles pour les indicateurs de statut */
+  .status-indicator {
+    position: relative;
+  }
+  
+  .status-indicator::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+  }
+  
+  .dark .status-indicator::after {
+    border-color: #1f2937;
+  }
+  
+  /* Styles pour les transitions fluides */
+  .chat-transition {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  /* Styles pour les états de focus améliorés */
+  .chat-focus:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  }
+  
+  /* Styles pour les états de hover améliorés */
+  .chat-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .chat-hover:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Styles globaux pour améliorer l'expérience utilisateur */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Styles pour les écrans très petits */
+@media (max-width: 640px) {
+  .chat-container {
+    height: 100vh;
+    height: 100dvh; /* Pour les navigateurs modernes */
+  }
+}
