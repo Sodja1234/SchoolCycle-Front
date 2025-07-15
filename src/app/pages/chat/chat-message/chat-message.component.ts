@@ -17,12 +17,12 @@ export class ChatMessageComponent implements OnInit {
   userId? : number;
   constructor(){}
   ngOnInit(): void {
-      const idString = localStorage.getItem('id');
-      const id = idString !== null? Number(idString): null;
-      if(id !== null && !isNaN(id)){
-        this.userId = id;
-      }else{
-        console.error("User ID n'est pas un nombre valide");
+      const userSession = localStorage.getItem('userSession');
+      if (userSession) {
+        const user = JSON.parse(userSession);
+        this.userId = user.id;
+      } else {
+        console.error("User session is not available in localStorage");
       }
   }
 

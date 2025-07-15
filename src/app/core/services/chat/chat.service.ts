@@ -89,4 +89,10 @@ export class ChatService {
     );
   }
 
+  //Récuperer les informations de contact pour un chat
+  getContactInfo(chatId: number): Observable<any>{
+    const headers = this.getAuthToken();
+    return this.http.get<any>(`${this.baseUrl}chats/${chatId}/contact-info`, { headers });
+  }
+
 }

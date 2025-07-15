@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { NgIf } from '@angular/common';
 import { ChatService } from '../../../core/services/chat/chat.service';
 import { FormsModule } from '@angular/forms';
 
@@ -13,7 +14,7 @@ interface PendingMessage{
 
 @Component({
   selector: 'app-chat-input',
-  imports: [FormsModule],
+  imports: [FormsModule, NgIf],
   templateUrl: './chat-input.component.html',
   styleUrl: './chat-input.component.css'
 })
@@ -22,6 +23,11 @@ export class ChatInputComponent {
    * ID de la conversation active
    */
   @Input() conversation?: number;
+
+  /**
+   * Indique si le chat est fermé
+   */
+  @Input() isChatClosed: boolean = false;
 
   /**
    * Evenement émis lorsqu'un message est envoyé avec succès 
@@ -34,6 +40,11 @@ export class ChatInputComponent {
   @Output() pendingMessagesChange = new EventEmitter<{ [chatId: number] : PendingMessage[]}>();
 
   messageContent: string = ''; //Contenu du message à envoyer
+
+  /**
+   * Indique si un message est en cours d'envoi
+   */
+  isSending: boolean = false;
 
   /**
    * Map contenant les messages en attente d'envoi
@@ -58,7 +69,25 @@ export class ChatInputComponent {
 
     async sendMessage(): Promise<void> {
     const content = this.messageContent.trim();
-    if (!content || !this.conversation) return;
+    
+    // Validation : vérifier qu'il y a du contenu et une conversation sélectionnée
+    if (!content) {
+      console.warn('Tentative d\'envoi d\'un message vide');
+      return;
+    }
+    
+    if (!this.conversation) {
+      console.warn('Tentative d\'envoi d\'un message sans conversation sélectionnée');
+      return;
+    }
+
+    if (this.isChatClosed) {
+      console.warn('Tentative d\'envoi d\'un message dans un chat fermé');
+      alert('Impossible d\'envoyer un message dans une conversation fermée');
+      return;
+    }
+
+    this.isSending = true;
 
     if (!this.pendingMessagesMap[this.conversation]) {
       this.pendingMessagesMap[this.conversation] = [];
@@ -78,6 +107,29 @@ export class ChatInputComponent {
       const msg = this.pendingMessagesMap[this.conversation].find(m => m.content === content);
       if (msg) msg.error = true;
       this.updatePendingMessages();
+    } finally {
+      this.isSending = false;
+    }
+  }
+
+  /**
+   * Ajuste la hauteur du textarea automatiquement
+   * @param event événement d'input
+   */
+  adjustTextareaHeight(event: any): void {
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+  }
+
+  /**
+   * Gère l'appui sur la touche Entrée
+   * @param event événement keydown
+   */
+  onEnterPress(event: any): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
     }
   }
 
