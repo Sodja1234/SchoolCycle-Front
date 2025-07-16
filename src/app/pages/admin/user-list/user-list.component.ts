@@ -13,8 +13,10 @@ import { CommonModule } from '@angular/common';
 })
 export class UserListComponent {
   users!: User[];
+  userId: number = -1;
   paginationMeta!: PaginationMeta;
   paginationUrls!: PaginationUrls;
+  deactivationModal = false
 
   constructor(
     private userNetworkService: UserNetworkService,
@@ -55,5 +57,32 @@ export class UserListComponent {
 
     //on renvoit les annonces pour la page selectionné
     this.getUser(page);
+  }
+
+
+  openDeactivationModal(id:number) {
+    this.deactivationModal = true;
+     this.userId = id;
+  }
+
+  closeDeactivationModal() {
+    this.deactivationModal = false;
+  }
+  
+  
+  confirmDeactivation() {
+    this.toggleStatusUser();
+    this.closeDeactivationModal();
+  } 
+
+  toggleStatusUser(){
+    this.userNetworkService.toggleStatusUser(this.userId).subscribe({
+      next:()=>{
+          window.location.reload()
+      },
+      error:(err)=>{
+        console.error('erreur de désactivation', err)
+      }
+    })
   }
 }
