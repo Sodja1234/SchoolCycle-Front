@@ -1,0 +1,63 @@
+<!-- Overlay sombre pour le panneau latéral -->
+<div class="fixed inset-0 z-40 bg-black/30 dark:bg-black/60 backdrop-blur-sm" (click)="onClose()"></div>
+
+<!-- Panneau latéral -->
+<aside class="fixed top-0 right-0 h-full w-full sm:w-[400px] max-w-full z-50 bg-white dark:bg-gray-900 shadow-xl flex flex-col transition-transform duration-300">
+  <!-- En-tête -->
+  <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-orange-50 dark:bg-orange-900/30">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-xl font-bold">
+        {{ contact?.name ? contact.name[0] : '?' }}
+      </div>
+      <div>
+        <div class="text-lg font-semibold text-gray-900 dark:text-white">{{ contact?.name || 'Contact' }}</div>
+        <div class="text-sm text-gray-500 dark:text-gray-300">{{ contact?.email }}</div>
+      </div>
+    </div>
+    <button (click)="onClose()" class="p-2 rounded hover:bg-orange-100 dark:hover:bg-orange-800 transition" title="Fermer">
+      <svg class="w-6 h-6 text-gray-500 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Contenu -->
+  <div class="flex-1 overflow-y-auto p-6 space-y-8">
+    <!-- Chargement -->
+    <div *ngIf="loading" class="flex items-center justify-center h-32">
+      <span class="text-orange-600 dark:text-orange-400 animate-pulse">Chargement...</span>
+    </div>
+
+    <!-- Erreur -->
+    <div *ngIf="error" class="text-red-600 dark:text-red-400 text-center">{{ error }}</div>
+
+    <!-- Infos du contact -->
+    <div *ngIf="!loading && !error">
+      <h3 class="text-md font-semibold text-gray-900 dark:text-white mb-2">Informations du contact</h3>
+      <ul class="space-y-1">
+        <li><span class="font-medium text-gray-700 dark:text-gray-200">Nom :</span> {{ contact?.name }}</li>
+        <li><span class="font-medium text-gray-700 dark:text-gray-200">Adresse e-mail :</span> {{ contact?.email }}</li>
+      </ul>
+    </div>
+
+    <!-- Historique des discussions -->
+    <div *ngIf="!loading && !error">
+      <h3 class="text-md font-semibold text-gray-900 dark:text-white mt-6 mb-2">Historique des discussions</h3>
+      <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+        <li *ngFor="let item of history" class="py-3 flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-orange-100 dark:bg-orange-900 flex items-center justify-center text-orange-600 dark:text-orange-400 font-bold">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ item.title }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">Annonce #{{ item.announcement_id }}</div>
+          </div>
+        </li>
+        <li *ngIf="history.length === 0" class="py-6 text-center text-gray-400 dark:text-gray-500">Aucun historique de discussion</li>
+      </ul>
+    </div>
+  </div>
+</aside>

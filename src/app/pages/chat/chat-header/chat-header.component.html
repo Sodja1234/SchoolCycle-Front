@@ -1,27 +1,63 @@
-<div **ngIf="chat" class="flex items-center justify-between border-b border-gray-200/70 dark:border-gray-700/40 px-4 py-3 bg-white dark:bg-gray-800 shadow-sm">
-  <!-- Partie gauche avec avatar et informations de profil -->
-  <div class="flex items-center gap-3">
+<!-- En-tête du chat -->
+<div *ngIf="chat" class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+  
+  <!-- Informations du contact -->
+  <div class="flex items-center space-x-3">
     <!-- Avatar -->
-    <div class="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-lg font-semibold text-gray-600 dark:text-gray-300">
-      {{getInitials(getOtherParticipantName())}}
+    <div class="flex-shrink-0">
+      <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold">
+        {{ getInitials(getOtherParticipantName()) }}
+      </div>
     </div>
     
-    <!-- Informations de profil -->
-    <div>
-      <div class="font-semibold text-gray-800 dark:text-gray-200">{{getOtherParticipantName()}}</div>
-      <div class="text-sm text-gray-500 dark:text-gray-400">Re: {{chat?.posted_by?.title}}</div>
+    <!-- Détails du contact -->
+    <div class="flex-1 min-w-0">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white truncate">
+        {{ getOtherParticipantName() }}
+      </h2>
+      <div class="flex items-center space-x-2 mt-1">
+        <span class="text-sm text-orange-600 dark:text-orange-400 font-medium">
+          {{ chat?.posted_by?.title }}
+        </span>
+        <span class="text-gray-400">•</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+          {{ chat?.messages?.length || 0 }} messages
+        </span>
+      </div>
     </div>
   </div>
   
-  <!-- Partie droite avec boutons d'action -->
-  <div class="flex items-center gap-2">
+  <!-- Actions -->
+  <div class="flex items-center space-x-2">
     
-    <!-- Bouton d'action principale -->
-    <button class="bg-[#00ff40] hover:bg-[#0d6122] text-white px-3 py-1.5 rounded flex items-center gap-1.5 text-sm">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <!-- Bouton marquer comme terminé - seulement pour le créateur de l'annonce -->
+    <button 
+      *ngIf="isAnnouncementCreator() && !isChatClosed()"
+      (click)="markAsCompleted()"
+      class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200"
+    >
+      <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
       </svg>
-      Marqué comme Terminer
+      Terminer
+    </button>
+
+    <!-- Indicateur de chat fermé -->
+    <div *ngIf="isChatClosed()" class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700">
+      <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+      Fermé
+    </div>
+
+    <!-- Menu d'actions -->
+    <button 
+      title="Menu d'actions"
+      (click)="onOpenInfo()"
+      class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+      </svg>
     </button>
   </div>
 </div>
