@@ -46,12 +46,27 @@ export class ChatListComponent implements OnInit {
   }
 
   getOtherParticipant(chat: Chat): string{
-    if (chat.posted_by.created_by === this.userId){
+    // Si l'utilisateur connecté est le créateur de l'annonce
+    if (chat.posted_by.id === this.userId){
       const firstMsg = chat.messages[0];
-
       return firstMsg ? firstMsg.sender.name : 'Utilisateur inconnu';
     }
 
-    return chat.posted_by.name;
+    // Sinon, c'est le nom de l'utilisateur qui a créé l'annonce
+    return chat.posted_by.created_by;
+  }
+
+  getLastMessageContent(chat: Chat): string {
+    if (chat.messages && chat.messages.length > 0) {
+      return chat.messages[chat.messages.length - 1].content;
+    }
+    return 'Aucun message';
+  }
+
+  getLastMessageTime(chat: Chat): string {
+    if (chat.messages && chat.messages.length > 0) {
+      return chat.messages[chat.messages.length - 1].created_at;
+    }
+    return '';
   }
 }

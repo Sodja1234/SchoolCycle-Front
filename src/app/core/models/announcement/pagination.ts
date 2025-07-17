@@ -1,6 +1,7 @@
 
 import { User } from '../user';
 import {Announcement} from './announcement';
+import {Report} from './report';
 
 export interface PaginatedAnnouncements{
   data : Announcement [];
@@ -9,6 +10,12 @@ export interface PaginatedAnnouncements{
 }
 export interface PaginatedUser{
   data : User [];
+  links : PaginationUrls;
+  meta : PaginationMeta
+}
+
+export interface PaginatedReport{
+  data : Report [];
   links : PaginationUrls;
   meta : PaginationMeta
 }
