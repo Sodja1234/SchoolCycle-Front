@@ -13,6 +13,7 @@ export interface PaginatedUser{
   links : PaginationUrls;
   meta : PaginationMeta
 }
+
 export interface PaginatedReport{
   data : Report [];
   links : PaginationUrls;

@@ -30,7 +30,7 @@ export class UserListComponent {
       next: (res) => {
         this.users = res.data;
         console.log('all users', this.users);
-        
+
         this.paginationMeta = res.meta;
         this.paginationUrls = res.links;
         console.log(this.users);
@@ -43,7 +43,7 @@ export class UserListComponent {
     });
   }
 
-  
+
   //methode utiliser lorque l'utilisateur clique un lien  de la pagination
   onPageChange(url: string | null | undefined): void {
     //si l'url n'est pas valide, on return rien
@@ -68,12 +68,12 @@ export class UserListComponent {
   closeDeactivationModal() {
     this.deactivationModal = false;
   }
-  
-  
+
+
   confirmDeactivation() {
     this.toggleStatusUser();
     this.closeDeactivationModal();
-  } 
+  }
 
   toggleStatusUser(){
     this.userNetworkService.toggleStatusUser(this.userId).subscribe({
@@ -86,3 +86,4 @@ export class UserListComponent {
     })
   }
 }
+

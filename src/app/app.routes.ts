@@ -5,10 +5,12 @@ import {guestGuard} from './guards/guest.guard';
 import {authGuard} from './guards/auth/auth.guard';
 import { tutorGuard } from './guards/tutor/tutor.guard';
 
+
 export const routes: Routes = [
   {
     path: '',
     title : 'Accueil - School Cycle',
+
     loadComponent: () =>
       import('../app/pages/home/home/home.component').then(
         (m) => m.HomeComponent
@@ -58,9 +60,17 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'profils/:id',
+    loadComponent: () =>
+      import('../app/pages/profile/profils/profils.component').then(
+        (m) => m.ProfilsComponent
+      ),
+  },
+  {
     path: 'user-setting',
     title : 'Paramètres - School Cycle',
     canActivate: [authGuard, tutorGuard],
+
     loadComponent: () =>
       import('../app/pages/profile/user-setting/user-setting.component').then(
         (m) => m.UserSettingComponent
@@ -70,6 +80,7 @@ export const routes: Routes = [
     path: 'chat',
     title : 'Chat - School Cycle',
     canActivate: [authGuard, tutorGuard],
+
     loadComponent: () =>
       import('../app/pages/chat/chat-container/chat-container.component').then(
         (m) => m.ChatContainerComponent
@@ -79,6 +90,7 @@ export const routes: Routes = [
     path: 'create-announcement',
     title : 'Publier une annonce - School Cycle',
     canActivate: [authGuard, tutorGuard],
+
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-create/announcement-create.component'
@@ -88,6 +100,7 @@ export const routes: Routes = [
     path: 'edit-announcement/:id',
     title : 'Modifier une annonce - School Cycle',
     canActivate: [authGuard, tutorGuard],
+
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-edit/announcement-edit.component'
@@ -96,6 +109,7 @@ export const routes: Routes = [
   {
     path: 'single-announcement/:id',
     title : 'Annonce - School Cycle',
+
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-single/announcement-single.component'
@@ -104,10 +118,50 @@ export const routes: Routes = [
   {
     path: 'announcement-gallery',
     title : 'Galerie - School Cycle',
+
     loadComponent: () =>
       import(
         '../app/pages/announcement/announcement-gallery/announcement-gallery.component'
       ).then((m) => m.AnnouncementGalleryComponent),
+  },
+  {
+    path: 'admin/dashboard',
+    title : 'Admin Dashboard - School Cycle',
+    canActivate : [adminGuard, authGuard],
+    loadComponent: () =>
+      import(
+        '../app/pages/admin/dashboard/dashboard.component'
+      ).then((m) => m.DashboardComponent),
+  },
+  {
+    path: 'admin/categories',
+    title : 'Categories - School Cycle',
+    canActivate : [adminGuard, authGuard],
+    loadComponent: () =>
+      import(
+        '../app/pages/admin/categories-list/categories-list.component'
+      ).then((m) => m.CategoriesListComponent),
+  },
+  {
+    path: 'admin/announcements',
+    loadComponent: () =>
+      import(
+        '../app/pages/admin/announcement-list/announcement-list.component'
+      ).then((m) => m.AnnouncementListComponent),
+  },
+      {
+    path: 'admin/users',
+    loadComponent: () =>
+      import('../app/pages/admin/user-list/user-list.component').then(
+        (m) => m.UserListComponent
+      ),
+  },
+  {
+    path: 'admin/reports',
+    loadComponent: () =>
+      import('../app/pages/admin/report-list/report-list.component').then(
+        (m) => m.ReportListComponent
+      ),
   },
   {
     path: 'admin/dashboard',
@@ -154,6 +208,7 @@ export const routes: Routes = [
     loadComponent :()=> import('../app/pages/page-not-found/page-not-found.component').then((m)=> m.PageNotFoundComponent)
   },
 
+  // Nb : toutes les routes apres 404 ne seront pas prisent en compte par angular
   //pour toutes les routes vides on redigigera à l'acceuil
   {
     path : '',
@@ -166,4 +221,6 @@ export const routes: Routes = [
     path : '**',
     redirectTo : '404'
   },
+
+
 ];

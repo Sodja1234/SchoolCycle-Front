@@ -24,7 +24,7 @@ import { ChatPopUpsComponent } from "../../chat/chat-pop-ups/chat-pop-ups.compon
 })
 export class AnnouncementSingleComponent {
   @ViewChild('chatPopups') chatPopups!: ChatPopUpsComponent;
-  
+
   openChatPopUp(){
     if (!this.user || !this.user.token) {
       // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
