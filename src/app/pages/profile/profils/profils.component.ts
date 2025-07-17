@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
-import { AnnouncementProfileComponent } from '../announcement-profile/announcement-profile.component';
+import { AnnouncementProfileComponent } from '../announcemevntuser/announcement-profile/announcement-profile.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { HeaderComponent } from '../../../components/header/header.component';
@@ -12,11 +12,13 @@ import { AnnouncementFavoriteComponent } from '../announcemevntuser/announcement
     AnnouncementProfileComponent,
     FooterComponent,HeaderComponent,
   MatTabsModule,AnnouncementFavoriteComponent
+
 ],
   templateUrl: './profils.component.html',
   styleUrl: './profils.component.css'
 })
 export class ProfilsComponent {
+   userId!: number
   selectedTab: string = 'tab1';
   tabIndex: number = 0;
 
