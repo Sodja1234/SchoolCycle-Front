@@ -9,13 +9,23 @@
   <!-- Composant B (Onglets Annonces/Favoris) -->
   <div class="w-full lg:w-[calc(70%-1rem)] xl:w-[70%] rounded shadow row-span-1 px-3 sm:px-5">
     <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)" class="w-full">
-      <mat-tab label="Annonces">
+      <mat-tab>
+             <ng-template mat-tab-label>
+                <span class="pb-2  text-black font-medium">
+                  Annonces
+                    </span>
+                    </ng-template>
         <ng-template matTabContent>
           <app-announcement-profile [id]="userId"></app-announcement-profile>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Favoris">
+      <mat-tab >
+          <ng-template mat-tab-label>
+            <span class="pb-2  text-black font-medium">
+              Favories
+                </span>
+            </ng-template>
         <ng-template matTabContent>
           <app-announcement-favorite></app-announcement-favorite>
         </ng-template>
