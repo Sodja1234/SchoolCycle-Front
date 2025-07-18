@@ -1,17 +1,17 @@
 <app-header></app-header>
-<div class="flex flex-row flex-wrap my-10 w-full sm:w-[90%] lg:w-[75%]   mx-auto ">
-  <!-- Composant A (gauche en haut) -->
-  <div>
-    <app-user-profile></app-user-profile>
+
+<div class="flex flex-col lg:flex-row flex-wrap my-5 md:my-10 w-full sm:w-[90%] lg:w-[75%] mx-auto gap-4 lg:gap-6">
+  <!-- Composant A (Profil utilisateur) -->
+  <div class="w-full lg:w-[calc(30%-1rem)] xl:w-[25%]">
+    <app-user-profile [id]="userId"></app-user-profile>
   </div>
 
-  <!-- Composant B (droite en haut) -->
-  <div class=" w-[70%] ml-3  rounded shadow row-span-1 px-5">
-
-    <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
-      <mat-tab label="Annonces" class=>
+  <!-- Composant B (Onglets Annonces/Favoris) -->
+  <div class="w-full lg:w-[calc(70%-1rem)] xl:w-[70%] rounded shadow row-span-1 px-3 sm:px-5">
+    <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)" class="w-full">
+      <mat-tab label="Annonces">
         <ng-template matTabContent>
-          <app-announcement-profile></app-announcement-profile>
+          <app-announcement-profile [id]="userId"></app-announcement-profile>
         </ng-template>
       </mat-tab>
 
@@ -22,7 +22,6 @@
       </mat-tab>
     </mat-tab-group>
   </div>
-
-
 </div>
+
 <app-footer></app-footer>

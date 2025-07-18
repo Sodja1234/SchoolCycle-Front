@@ -16,7 +16,7 @@ export class ReportListComponent {
   report!:Report[]
   paginationMeta!: PaginationMeta;
   paginationUrls!: PaginationUrls;
-  
+
   constructor( private reportService: ReportService ){}
 
   ngOnInit(){
