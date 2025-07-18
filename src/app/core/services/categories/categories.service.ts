@@ -23,4 +23,9 @@ export class CategoriesService {
   const headers = this.userlocalService.getAuthHeaders();
   return this.http.post(this.url + 'categories', data, { headers });
   }
+
+  updateCategorie(id:number,data:FormData){
+    const headers = this.userlocalService.getAuthHeaders();
+    return this.http.put(`${this.url}categories/${id}`, data, {headers})
+  }
 }
