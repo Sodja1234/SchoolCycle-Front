@@ -23,4 +23,9 @@ export class ReportService {
     const headers = this.userlocalService.getAuthHeaders();
     return this.http.get<PaginatedReport>(this.url + 'reports', {params,headers });
   }
+
+  ignoreReport(id:number){
+    const headers = this.userlocalService.getAuthHeaders();
+    return this.http.delete(`${this.url}report/${id}`,{ headers })
+  }
 }

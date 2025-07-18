@@ -1,48 +1,47 @@
-<div class="bg-white rounded-lg shadow p-5 flex flex-col space-y-4 border relative">
+<div class="bg-white rounded-lg shadow-sm p-5 flex flex-col space-y-4  relative">
 
   <!-- Titre + Signalé par -->
   <div class="flex items-start space-x-3">
     <!-- Icône -->
     <div class="bg-red-100 text-red-600 rounded-full p-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M12 9v2m0 4h.01m-.01-6a9 9 0 11-6.63 15.56A9 9 0 0112 3z" />
-      </svg>
+      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+        <path fill="#df2d00" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
     </div>
 
     <div>
       <h2 class="text-lg font-semibold text-gray-800"> {{ report.motif }} </h2>
-      <p class="text-sm text-gray-600">Signalé par : <span class="font-medium text-gray-800"> {{ report.user.name }}
+      <p class="text-sm pt-2 text-gray-600">Signalé par : <span class="font-medium text-gray-800"> {{ report.user.name }}
         </span></p>
+              <!-- Description -->
+      <p class="text-sm pt-2 text-gray-700">
+        <span class=" text-sm  font-medium"> {{ report.detail }}</span>
+      </p>
+
+      <!-- Infos + Catégories -->
+      <div class="flex pt-2 items-center space-x-4 text-sm text-gray-600">
+        <div class="flex items-center space-x-1">
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+            <path fill="#c0c0c0" d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
+          <span class="pb-1">{{ report.created_at }} </span>
+        </div>
+      </div>
+
+      <!-- Boutons -->
+      <div class="flex flex-wrap gap-2 pt-2">
+        <a [routerLink]="['/single-announcement', report.announcement.id]"
+          class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm">
+          Examiner
+        </a>
+        <button (click)="openIgnoreModal(report.id)"  class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm">Ignorer</button>
+        <button  (click)="openDeleteModal(report.announcement.id,report.id)" class="border border-red-500 text-red-600 px-4 py-2 rounded hover:bg-red-100 text-sm">Désactiver
+          l'annonce</button>
+      </div>
+    </div>
     </div>
   </div>
 
-  <!-- Description -->
-  <p class="text-sm text-gray-700">
-    <span class="font-medium"> {{ report.detail }}</span>
-  </p>
 
-  <!-- Infos + Catégories -->
-  <div class="flex items-center space-x-4 text-sm text-gray-600">
-    <div class="flex items-center space-x-1">
-      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v10l8-5-8-5z" />
-      </svg>
-      <span> Il y a {{ report.created_at }} </span>
-    </div>
-  </div>
-
-  <!-- Boutons -->
-  <div class="flex flex-wrap gap-2 pt-2">
-    <a [routerLink]="['/single-announcement', report.announcement.id]"
-      class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm">
-      Examiner
-    </a>
-    <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm">Ignorer</button>
-    <button  (click)="openDeleteModal(report.announcement.id)" class="border border-red-500 text-red-600 px-4 py-2 rounded hover:bg-red-100 text-sm">Désactiver
-      l'annonce</button>
-  </div>
-</div>
 
 <!-- Modal de confirmation -->
 <div *ngIf="isDeleteModalOpen" class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50">
@@ -60,3 +59,22 @@
       </button>
     </div>
   </div>
+  </div>
+
+<!-- Modal de confirmation  -->
+<div *ngIf="isReportModalOpen" class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Confirmer l'action</h2>
+    <p class="text-gray-600 mb-6">
+      Êtes-vous sûr de vouloir ignorer ce signalement ?
+    </p>
+    <div class="flex justify-end gap-4">
+      <button (click)="closeIgnoreModal()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+        Annuler
+      </button>
+      <button (click)="confirmIgnore()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+        Ignorer
+      </button>
+    </div>
+  </div>
+</div>

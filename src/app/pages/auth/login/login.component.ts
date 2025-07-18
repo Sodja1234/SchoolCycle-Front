@@ -1,6 +1,6 @@
 // Import des modules nécessaires à Angular, à la navigation, aux formulaires réactifs et aux validations
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -36,7 +36,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private userLocalService : UserLocalService,
-    private router: Router
+    private router: Router,
+    private route : ActivatedRoute
   ) {
     // Initialisation du formulaire avec deux champs : email et mot de passe
     this.loginForm = this.fb.group({
@@ -58,23 +59,37 @@ export class LoginComponent {
       next: (response: AuthLoginResponse) => {
         this.userLocalService.stockerUserLocal(response);
         console.log(response)
-        
+
         this.successMessage = 'Connexion réussie. Redirection en cours...';
         const role = response.role;
 
         console.log('Role reçu :', role);
 
         setTimeout(() => {
-          this.successMessage = ''
-          switch (role) {
-            case 'admin':
-              this.router.navigate(['/admin/dashboard']);
-              break;
-            case 'tutor':
-              this.router.navigate(['/']);
-              break;
-            default:
-              this.router.navigate(['/']);
+          this.successMessage = '';
+
+          try {
+            const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+            const decodedUrl = returnUrl ? decodeURIComponent(returnUrl) : null;
+
+            switch (role) {
+              case 'admin':
+                this.router.navigate(['/admin/dashboard']);
+                break;
+              case 'tutor':
+                // Vérifie que l'URL est valide et interne à l'application
+                if (decodedUrl && decodedUrl.startsWith('/')) {
+                  this.router.navigateByUrl(decodedUrl).catch(() => this.router.navigate(['/']));
+                } else {
+                  this.router.navigate(['/']);
+                }
+                break;
+              default:
+                this.router.navigate(['/']);
+            }
+          } catch (e) {
+            console.error('Erreur lors de la redirection:', e);
+            this.router.navigate(['/']);
           }
         }, 2500);
       },

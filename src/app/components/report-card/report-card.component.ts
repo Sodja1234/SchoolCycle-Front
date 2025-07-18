@@ -4,6 +4,7 @@ import { Report } from '../../core/models/announcement/report';
 import { Announcement } from '../../core/models/announcement/announcement';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ReportService } from '../../core/services/report/report.service';
 
 @Component({
   selector: 'app-report-card',
@@ -12,17 +13,20 @@ import { CommonModule } from '@angular/common';
   styleUrl: './report-card.component.css',
 })
 export class ReportCardComponent {
-  reportId!: number;
+  reportId: number =-1;
   articleId: number = -1;
   isModalOpen = false;
   isDeleteModalOpen = false;
-  constructor(private announcementService: AnnouncementService) {}
+  isReportModalOpen:boolean = false;
+  constructor(private announcementService: AnnouncementService, private reportService:ReportService) {}
   @Input() report!: Report;
   @Input() announcement!: Announcement;
 
-  openDeleteModal(id: number) {
+  openDeleteModal(id: number,idReport:number) {
     this.isDeleteModalOpen = true;
     this.articleId = id;
+    this.reportId=idReport;
+
   }
 
   closeDeleteModal() {
@@ -41,6 +45,41 @@ export class ReportCardComponent {
       },
       error: (err) => {
         console.error('Erreur suppression annonce', err);
+      },
+    });
+    this.reportService.ignoreReport(this.reportId).subscribe({
+      next:()=>{
+        console.log('report désactivé',this.report)
+      },
+      error:(err)=>{
+        console.error('erreur de désactivation', err)
+      }
+    })
+  }
+
+
+  openIgnoreModal(id: number) {
+    console.log("click",id)
+    this.isReportModalOpen = true;
+    this.reportId = id;
+  }
+
+  closeIgnoreModal() {
+    this.isReportModalOpen = false;
+  }
+
+  confirmIgnore() {
+    this.ignoreReport();
+    this.closeIgnoreModal();
+  }
+
+  ignoreReport() {
+    this.reportService.ignoreReport(this.reportId).subscribe({
+      next: () => {
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error('Erreur suppression report', err);
       },
     });
   }
