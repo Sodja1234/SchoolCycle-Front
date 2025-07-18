@@ -1,278 +1,93 @@
+<!-- Simple Toast Notification -->
+<div *ngIf="showSimpleToast" [class]="toastClass">
+  {{ toastMessage }}
+</div>
+
 <app-header></app-header>
-<!-- Affichage message de succès  -->
+
+<!-- Success Message for Favorites -->
 <div *ngIf="showSuccessMessage" class="bg-green-100 text-green-800 p-4 font-bold rounded-lg fixed top-16 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300">
   {{ successMessageFavorite }}
 </div>
-<!-- Conteneur principal responsive -->
-<div
-  class="w-[90%] sm:w-[70%] max-w-7xl mx-auto p-6 space-y-8 rounded-2xl shadow-lg mt-4"
->
+
+<!-- Main Container -->
+<div class="w-[90%] sm:w-[70%] max-w-7xl mx-auto p-6 space-y-8 rounded-2xl shadow-lg mt-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-    <!-- Colonne gauche - Galerie d'images -->
+    <!-- Left Column - Image Gallery -->
     <div class="space-y-4">
-
+      <!-- Main Image -->
       <div class="relative bg-gray-100 rounded-lg aspect-square flex items-center justify-center overflow-hidden">
-
-        <!-- Bouton favoris -->
-        <button
-        *ngIf="user !== null"
-        (click)="toggleFavorite()"
-          class="absolute top-3 left-3 bg-white text-[#FF9000] p-1 rounded-lg shadow cursor-pointer z-10"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5"
-            [attr.fill] = "(isFavorite$ | async) ? '#FF9000' : 'none'"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
-            />
+        <!-- Favorite Button -->
+        <button *ngIf="user !== null" (click)="toggleFavorite()"
+                class="absolute top-3 left-3 bg-white text-[#FF9000] p-1 rounded-lg shadow cursor-pointer z-10">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+               [attr.fill]="(isFavorite$ | async) ? '#FF9000' : 'none'" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"/>
           </svg>
         </button>
 
-        <!-- Image principale -->
-        <img
-          class="w-full h-full object-cover"
-          [src]="storageUrl + currentImage"
-          alt="Image principale"
-        />
-
-      </div>
-
-      <!-- Miniatures -->
-      <div class="flex flex-wrap gap-2">
-        <img
-          *ngFor="let photo of announcement.photos"
-          [src]="storageUrl + photo.url"
-          alt="miniature"
-          (click)="changeMainImage(photo.url)"
-          class="w-20 h-20 object-cover cursor-pointer border rounded-2xl border-gray-300 hover:border-[#FF9000]"
-        />
-      </div>
-
-      <div class="relative w-full sm:w-auto overflow-visible">
-
-      <!-- Carte Leaflet -->
-        <div
-          id="map"
-          class="h-[400px] w-full mt-5 relative z-10"
-        ></div>
-        <!-- Boutons d'action -->
-        <div class="flex flex-wrap gap-4 items-start pt-4">
-          <!-- Bouton de partage avec menu déroulant -->
-          <div class="relative w-full sm:w-auto">
-            <!-- Bouton principal -->
-            <button
-              (click)="toggleShareMenu = !toggleShareMenu"
-              class="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer w-full sm:w-auto"
-            >
-              <i class="fas fa-share-alt text-gray-600"></i>
-              <span class="text-gray-700">Partager</span>
-            </button>
-
-            <!-- Menu déroulant responsive -->
-            <div
-              *ngIf="toggleShareMenu"
-              class="absolute z-50 bottom-full mb-2 left-0 bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-full max-w-xs sm:max-w-none sm:w-[360px]"
-            >
-
-            <div
-                class="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-6 sm:gap-x-6 sm:gap-y-4"
-              >
-                <!-- Toast de succès -->
-                <div
-                  *ngIf="successMessage"
-                  class="bg-white border-l-4 border-green-500 rounded-lg shadow-lg p-4 flex items-start animate-toast-in"
-                >
-                  <div class="flex-shrink-0 text-green-500 mr-3">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div class="flex-1">
-                    <p class="text-sm font-medium text-green-800">
-                      {{ successMessage }}
-                    </p>
-                  </div>
-                  <button
-                    (click)="successMessage = ''"
-                    class="ml-3 text-gray-400 hover:text-gray-600"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <!-- End Toast de succès -->
-
-                <!-- Icône 1 : Copier le lien -->
-                <div class="flex flex-col items-center w-1/4 sm:w-20">
-                  <button
-                    (click)="copyLink()"
-                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full cursor-pointer"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M10 14L21 3m-1 0H14a1 1 0 00-1 1v6m-4 4l-7 7m0 0h6a1 1 0 001-1v-6"
-                      />
-                    </svg>
-                  </button>
-                  <span class="text-xs sm:text-sm mt-2 text-center leading-tight"
-                  >Copier<br />le lien</span
-                  >
-                </div>
-
-                <!-- Icône 2 : Facebook -->
-                <div class="flex flex-col items-center w-1/4 sm:w-20">
-                  <a
-                    [href]="
-                    'https://www.facebook.com/sharer/sharer.php?u=' +
-                    encodedShareUrl
-                  "
-                    target="_blank"
-                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.2 1.8.2v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3H14v7A10 10 0 0 0 22 12z"
-                      />
-                    </svg>
-                  </a>
-                  <span class="text-xs sm:text-sm mt-2 text-center"
-                  >Facebook</span
-                  >
-                </div>
-
-                <!-- Icône 3 : LinkedIn -->
-                <div class="flex flex-col items-center w-1/4 sm:w-20">
-                  <a
-                    [href]="
-                    'https://www.linkedin.com/sharing/share-offsite/?url=' +
-                    encodedShareUrl
-                  "
-                    target="_blank"
-                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M19 0h-14c-2.8 0-5 2.2-5 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5v-14c0-2.8-2.2-5-5-5zM7 19h-3v-9h3v9zM5.5 8.5c-1 0-1.8-.8-1.8-1.8S4.5 5 5.5 5s1.8.8 1.8 1.8-.8 1.7-1.8 1.7zM20 19h-3v-4.5c0-1.1-.9-2-2-2s-2 .9-2 2V19h-3v-9h3v1.2c.4-.8 1.5-1.4 2.5-1.4 2 0 3.5 1.5 3.5 3.5V19z"
-                      />
-                    </svg>
-                  </a>
-                  <span class="text-xs sm:text-sm mt-2 text-center"
-                  >LinkedIn</span
-                  >
-                </div>
-
-                <!-- Icône 4 : WhatsApp -->
-                <div class="flex flex-col items-center w-1/4 sm:w-20">
-                  <a
-                    [href]="
-                    'https://api.whatsapp.com/send?text=' + encodedShareUrl
-                  "
-                    target="_blank"
-                    class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M12 2a10 10 0 0 0-8.727 14.9L2 22l5.293-1.378A10 10 0 1 0 12 2zm.256 15.588c-2.27-.002-4.62-1.2-6.236-3.034-1.074-1.262-1.846-2.835-1.846-4.09 0-1.253.84-2.275 2.016-2.275.332 0 .66.024.975.07.493.074.703.937.778 1.31.07.34.136.546.194.722.108.327.04.556-.123.77-.123.163-.254.306-.383.44-.167.172-.342.38-.258.63.083.243.37.805.854 1.28.616.607 1.366 1.177 2.146 1.426.263.087.48.025.666-.092.183-.116.323-.3.478-.497.154-.196.31-.41.492-.402.27.01.63.18.983.326.383.162.761.338 1.072.526.309.186.51.34.576.537.066.2.066.413.03.612-.073.422-.296.816-.65 1.106-.49.407-1.146.61-1.888.61z"
-                      />
-                    </svg>
-                  </a>
-                  <span class="text-xs sm:text-sm mt-2 text-center"
-                  >WhatsApp</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bouton de signalement -->
-          <button
-            *ngIf="!isAuthor"
-            (click)="openReportModal()"
-            class="flex items-center space-x-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg border border-red-300 w-full sm:w-auto"
-          >
-            <i class="fas fa-flag text-red-500"></i>
-            <span>Signaler</span>
-          </button>
+        <!-- Main Image or Placeholder -->
+        <img *ngIf="currentImage" class="w-full h-full object-cover" [src]="storageUrl + currentImage" alt="Image principale"/>
+        <div *ngIf="!currentImage" class="flex flex-col items-center justify-center p-4">
+          <svg class="w-16 h-16 text-gray-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            <path stroke-linecap="round" stroke-width="1.2" d="M4 20L20 4" class="text-gray-300"/>
+            <circle cx="12" cy="8" r="0.5" fill="currentColor" class="animate-bounce" style="animation-delay: 0.1s"/>
+          </svg>
+          <span class="text-sm text-gray-500 text-center font-medium mt-2">Aucune image disponible</span>
         </div>
       </div>
 
+      <!-- Thumbnails -->
+      <div class="flex flex-wrap gap-2">
+        <img *ngFor="let photo of announcement.photos" [src]="storageUrl + photo.url" alt="miniature"
+             (click)="changeMainImage(photo.url)"
+             class="w-20 h-20 object-cover cursor-pointer border rounded-2xl border-gray-300 hover:border-[#FF9000]"/>
+      </div>
 
+      <!-- Map -->
+      <div class="relative w-full sm:w-auto overflow-visible">
+        <div *ngIf="map" id="map" class="h-[400px] w-full mt-5 relative z-10"></div>
+        <div *ngIf="!map" class="h-full flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+          <svg class="w-24 h-24 text-gray-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="25" width="70" height="50" rx="2" fill="white" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M30 35 L50 45 L70 35" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="40" cy="60" r="3" fill="currentColor"/>
+            <circle cx="60" cy="55" r="2" fill="currentColor"/>
+            <path d="M30 65 L50 55 L70 65" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            <g class="text-gray-400 transform translateX(10)">
+              <circle cx="75" cy="30" r="12" fill="white" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M70 25 L80 35 M80 25 L70 35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </g>
+            <rect x="25" y="75" width="50" height="8" rx="4" fill="currentColor" fill-opacity="0.1"/>
+            <path d="M30 79 L50 79" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div class="mt-4 text-center">
+            <p class="text-gray-500 font-medium">Localisation indisponible</p>
+            <p class="text-sm text-gray-400 mt-1">Nous n'avons pas pu charger la carte</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Colonne droite - Détails -->
+    <!-- Right Column - Details -->
     <div class="space-y-6">
+      <!-- Operation Type and Date -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <span class="bg-[#FF9000] text-white rounded-full px-4 py-1 text-sm font-medium">
             {{
               announcement.operation_type === "don"
-              ? "Don"
-              : announcement.operation_type === "exchange"
-              ? "Echange"
-              : announcement.operation_type === "sale"
-              ? "Vente"
-              : announcement.price + " "
+                ? "Don"
+                : announcement.operation_type === "exchange"
+                  ? "Echange"
+                  : announcement.operation_type === "sale"
+                    ? "Vente"
+                    : "Aucun type disponible"
             }}
           </span>
-          <div class="flex justify-between text-gray-500 text-sm line-clamp-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            </svg>
-            <!-- {{ announcement.exchange_location_address | slice : 0 : 30 }} -->
-            {{ announcement.created_at.length > 30 ? "..." : "..." }}
-          </div>
-
         </div>
 
         <!-- Actions -->
@@ -280,16 +95,17 @@
           {{ announcement.created_at }}
           <p *ngIf="isModified" class="text-sm text-gray-500">Modifié</p>
 
+          <!-- Author Actions -->
           <div *ngIf="isAuthor" class="relative inline-block text-left">
             <button (click)="toggleModal()" class="px-4 text-white">
               <svg class="w-[10px] h-[25px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
                 <path fill="#ff8000"
-                  d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                      d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/>
               </svg>
             </button>
             <div *ngIf="isModalOpen" class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
               <div class="px-4 py-3 text-sm text-gray-700">
-                <a [routerLink]="['/edit-announcement', announcement.id]">Modifier l’annonce</a><br>
+                <a [routerLink]="['/edit-announcement', announcement.id]">Modifier l'annonce</a><br>
                 <button class="text-red-500" (click)="openDeleteModal()">Supprimer l'annonce</button>
               </div>
               <div class="flex justify-end gap-2 p-2 border-t border-gray-100">
@@ -298,48 +114,44 @@
             </div>
           </div>
         </div>
-
       </div>
 
-      <!-- Titre & Prix -->
+      <!-- Title & Price -->
       <div>
         <h1 class="text-2xl font-bold mb-2">{{ announcement.title }}</h1>
         <div class="text-[#FF9000] text-2xl font-bold">
           {{
             announcement.operation_type === "don"
-            ? "Gratuit"
-            : announcement.operation_type === "exchange"
-            ? "Echange"
-            : announcement.price + " $ "
+              ? "Gratuit"
+              : announcement.operation_type === "exchange"
+                ? "Echange"
+                : announcement.price | currency : 'CDF '
           }}
         </div>
       </div>
 
-      <!-- Informations -->
+      <!-- Information Section -->
       <div class="bg-white rounded-lg p-4 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 mb-3">Informations</h2>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <span class="text-secondary text-sm">Categorie:</span>
-            <p class="font-medium text-gray-900">
-              {{ announcement?.category?.name }}
-            </p>
+            <p class="font-medium text-gray-900">{{ announcement?.category?.name }}</p>
           </div>
           <div>
             <span class="text-secondary text-sm">Etat:</span>
             <p class="font-medium text-gray-900">
               {{ announcement?.state === 'new' ? 'Neuf' :
-                 announcement?.state === 'good' ? 'Bon état' :
-                   announcement?.state === 'damaged' ? 'Abîmé' :
-                     announcement?.state === 'like new' ? 'Comme neuf' :
-                        'État inconnu'
-              }}
+              announcement?.state === 'good' ? 'Bon état' :
+                announcement?.state === 'damaged' ? 'Abîmé' :
+                  announcement?.state === 'like new' ? 'Comme neuf' :
+                    'État inconnu' }}
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Description -->
+      <!-- Description Section -->
       <div class="bg-white rounded-lg p-4 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 mb-3">Description</h2>
         <p class="text-gray-700 leading-relaxed break-words overflow-hidden">
@@ -347,13 +159,13 @@
         </p>
       </div>
 
-      <!-- Carte Vendeur -->
+      <!-- Seller Card -->
       <div class="p-4 border border-gray-200 rounded-lg">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
           <div class="flex-1">
@@ -365,30 +177,105 @@
         </div>
       </div>
 
-      <!-- Contacter -->
-      <button class="w-full bg-[#FF9000] hover:bg-[#FFA353] text-white flex items-center justify-center gap-2 py-4 rounded-md cursor-pointer"
-        (click)="openChatPopUp()"
-      >
+      <!-- Contact Button -->
+      <button *ngIf="!isAuthor && isAdmin" class="w-full bg-[#FF9000] hover:bg-[#FFA353] text-white flex items-center justify-center gap-2 py-4 rounded-md cursor-pointer"
+              (click)="openChatPopUp()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
         Contacter
       </button>
 
-    </div>
+      <button [routerLink]="['/chat']" *ngIf="isAuthor" class="w-full bg-[#FF9000] hover:bg-[#FFA353] text-white flex items-center justify-center gap-2 py-4 rounded-md cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        Voir mes messages
+      </button>
 
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4 items-start pt-4">
+        <!-- Share Button with Dropdown -->
+        <div class="relative w-full sm:w-auto">
+          <button (click)="toggleShareMenu = !toggleShareMenu"
+                  class="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer w-full sm:w-auto">
+            <i class="fas fa-share-alt text-gray-600"></i>
+            <span class="text-gray-700">Partager</span>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div *ngIf="toggleShareMenu"
+               class="absolute z-50 bottom-full mb-2 left-0 bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-full max-w-xs sm:max-w-none sm:w-[360px]">
+            <div class="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-6 sm:gap-x-6 sm:gap-y-4">
+              <!-- Copy Link -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <button (click)="copyLink()"
+                        class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14L21 3m-1 0H14a1 1 0 00-1 1v6m-4 4l-7 7m0 0h6a1 1 0 001-1v-6"/>
+                  </svg>
+                </button>
+                <span class="text-xs sm:text-sm mt-2 text-center leading-tight">Copier<br />le lien</span>
+              </div>
+
+              <!-- Facebook -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <a [href]="'https://www.facebook.com/sharer/sharer.php?u=' + encodedShareUrl" target="_blank"
+                   class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.2 1.8.2v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3H14v7A10 10 0 0 0 22 12z"/>
+                  </svg>
+                </a>
+                <span class="text-xs sm:text-sm mt-2 text-center">Facebook</span>
+              </div>
+
+              <!-- LinkedIn -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <a [href]="'https://www.linkedin.com/sharing/share-offsite/?url=' + encodedShareUrl" target="_blank"
+                   class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.8 0-5 2.2-5 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5v-14c0-2.8-2.2-5-5-5zM7 19h-3v-9h3v9zM5.5 8.5c-1 0-1.8-.8-1.8-1.8S4.5 5 5.5 5s1.8.8 1.8 1.8-.8 1.7-1.8 1.7zM20 19h-3v-4.5c0-1.1-.9-2-2-2s-2 .9-2 2V19h-3v-9h3v1.2c.4-.8 1.5-1.4 2.5-1.4 2 0 3.5 1.5 3.5 3.5V19z"/>
+                  </svg>
+                </a>
+                <span class="text-xs sm:text-sm mt-2 text-center">LinkedIn</span>
+              </div>
+
+              <!-- WhatsApp -->
+              <div class="flex flex-col items-center w-1/4 sm:w-20">
+                <a [href]="'https://api.whatsapp.com/send?text=' + encodedShareUrl" target="_blank"
+                   class="bg-[#ff9000] hover:bg-orange-600 p-4 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2a10 10 0 0 0-8.727 14.9L2 22l5.293-1.378A10 10 0 1 0 12 2zm.256 15.588c-2.27-.002-4.62-1.2-6.236-3.034-1.074-1.262-1.846-2.835-1.846-4.09 0-1.253.84-2.275 2.016-2.275.332 0 .66.024.975.07.493.074.703.937.778 1.31.07.34.136.546.194.722.108.327.04.556-.123.77-.123.163-.254.306-.383.44-.167.172-.342.38-.258.63.083.243.37.805.854 1.28.616.607 1.366 1.177 2.146 1.426.263.087.48.025.666-.092.183-.116.323-.3.478-.497.154-.196.31-.41.492-.402.27.01.63.18.983.326.383.162.761.338 1.072.526.309.186.51.34.576.537.066.2.066.413.03.612-.073.422-.296.816-.65 1.106-.49.407-1.146.61-1.888.61z"/>
+                  </svg>
+                </a>
+                <span class="text-xs sm:text-sm mt-2 text-center">WhatsApp</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report Button -->
+        <button *ngIf="!isAuthor && !isAdmin" (click)="!hasAlreadyReported && openReportModal()"
+                [class]="hasAlreadyReported ?
+            'flex items-center space-x-2 px-4 py-2 text-gray-500 rounded-lg border border-gray-300 w-full sm:w-auto cursor-not-allowed' :
+            'flex items-center space-x-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg border border-red-300 w-full sm:w-auto'"
+                [disabled]="hasAlreadyReported">
+          <i class="fas fa-flag" [class.text-red-500]="!hasAlreadyReported" [class.text-gray-500]="hasAlreadyReported"></i>
+          <span>{{ hasAlreadyReported ? 'Déjà signalé' : 'Signaler' }}</span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Annonces similaires -->
+<!-- Similar Announcements -->
 <h1 class="w-full sm:w-[70%] mx-auto text-2xl font-bold text-gray-900 mb-6 mt-16 text-center sm:text-left">
   Annonces similaires
 </h1>
 
-<div
-  class="w-[70%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto mb-16"
->
+<div class="w-[70%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
   @if (similarAnnouncements.length == 0) {
     <p>Aucune annonce similaire disponible.</p>
   } @else { @for (annonce of similarAnnouncements; track annonce.id) {
@@ -396,123 +283,122 @@
   } }
 </div>
 
-<!-- Modal de confirmation -->
-<div
-  *ngIf="isDeleteModalOpen"
-  class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50"
->
+<!-- Delete Confirmation Modal -->
+<div *ngIf="isDeleteModalOpen" class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
     <h2 class="text-xl font-semibold text-gray-800 mb-4">Confirmer la suppression</h2>
     <p class="text-gray-600 mb-6">
       Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est irréversible.
     </p>
     <div class="flex justify-end gap-4">
-      <button
-        (click)="closeDeleteModal()"
-        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-      >
+      <button (click)="closeDeleteModal()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
         Annuler
       </button>
-      <button
-        (click)="confirmDelete()"
-        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-      >
+      <button (click)="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
         Supprimer
       </button>
     </div>
   </div>
 </div>
 
-<!-- MODAL DE SIGNALEMENT -->
-<div *ngIf="isReportModalOpen"
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-
-  <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in">
-
-    <!-- Bouton de fermeture (croix) -->
-    <button (click)="closeReportModal()"
-            class="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition text-2xl font-bold">
-      &times;
+<!-- Report Modal -->
+<div *ngIf="isReportModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4" (click)="closeReportModal()">
+  <div (click)="$event.stopPropagation()" class="relative w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 md:p-8 animate-fade-in">
+    <!-- Close Button -->
+    <button (click)="closeReportModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-red-500 transition-all rounded-full hover:bg-gray-100">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
     </button>
 
-    <!-- Titre -->
-    <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">
-      Signaler cette annonce
-    </h2>
-
-    <!-- Contenu : formulaire ou message déjà signalé -->
-    <div *ngIf="!hasAlreadyReported; else dejaSignale">
-      <form (ngSubmit)="submitReport()" #reportForm="ngForm" class="space-y-4">
-
-        <!-- Champ Motif -->
-        <div>
-          <label class="block mb-1 font-medium text-gray-700">Motif <span class="text-red-500">*</span></label>
-          <input
-            [(ngModel)]="motif"
-            name="motif"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-            placeholder="Ex : Contenu inapproprié"
-            required
-          />
-        </div>
-
-        <!-- Champ Détail -->
-        <div>
-          <label class="block mb-1 font-medium text-gray-700">Détail (facultatif)</label>
-          <textarea
-            [(ngModel)]="detail"
-            name="detail"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
-            rows="4"
-            placeholder="Expliquez votre signalement si nécessaire"
-          ></textarea>
-        </div>
-
-        <!-- Boutons -->
-        <div class="flex justify-end gap-3 pt-4">
-          <button type="button" (click)="closeReportModal()"
-                  class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
-            Annuler
-          </button>
-          <button type="submit"
-                  class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
-            Envoyer
-          </button>
-        </div>
-      </form>
+    <!-- Title -->
+    <div class="text-center mb-6">
+      <h2 class="text-xl md:text-2xl font-bold text-gray-800">Signaler cette annonce</h2>
+      <p class="text-gray-500 mt-1 text-sm">Aidez-nous à améliorer notre plateforme</p>
     </div>
 
-    <!-- MESSAGE SI DÉJÀ SIGNALÉ -->
-    <ng-template #dejaSignale>
-      <div class="text-center text-red-600 font-semibold text-lg">
-        Vous avez déjà signalé cette annonce.
-      </div>
-      <div class="flex justify-center mt-6">
-        <button (click)="closeReportModal()"
-                class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+    <!-- Content -->
+    <ng-container *ngIf="!hasAlreadyReported; else alreadyReported">
+      <ng-container *ngIf="isAuthenticated; else requireLogin">
+        <!-- Report Form -->
+        <form (ngSubmit)="submitReport()" #reportForm="ngForm" class="space-y-5">
+          <!-- Reason -->
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Motif du signalement <span class="text-red-500">*</span></label>
+            <select [(ngModel)]="motif" name="motif" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" required>
+              <option value="" disabled selected>Sélectionnez un motif</option>
+              <option value="inappropriate">Contenu inapproprié</option>
+              <option value="spam">Spam ou publicité</option>
+              <option value="false_info">Information erronée</option>
+              <option value="other">Autre raison</option>
+            </select>
+          </div>
+
+          <!-- Custom Reason -->
+          <div *ngIf="motif === 'other'">
+            <label class="block mb-2 text-sm font-medium text-gray-700">Précisez la raison <span class="text-red-500">*</span></label>
+            <input [(ngModel)]="customMotif" name="customMotif" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500" required>
+          </div>
+
+          <!-- Details -->
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Détails supplémentaires</label>
+            <textarea [(ngModel)]="detail" name="detail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 min-h-[120px]" placeholder="Décrivez le problème en quelques mots..."></textarea>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="button" (click)="closeReportModal()" class="px-5 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-all">
+              Annuler
+            </button>
+            <button type="submit" [disabled]="reportForm.invalid" class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed transition-all">
+              Envoyer le signalement
+            </button>
+          </div>
+        </form>
+      </ng-container>
+
+      <!-- Not Authenticated -->
+      <ng-template #requireLogin>
+        <div class="text-center py-6">
+          <div class="mx-auto w-20 h-20 mb-4 text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-gray-800 mb-2">Connexion requise</h3>
+          <p class="text-gray-500 mb-6">Vous devez être connecté pour signaler ce contenu</p>
+          <div class="flex justify-center gap-3">
+            <button (click)="closeReportModal()" class="px-5 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+              Retour
+            </button>
+            <button (click)="redirectToLogin()" class="px-5 py-2.5 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600">
+              Se connecter
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <!-- Already Reported -->
+    <ng-template #alreadyReported>
+      <div class="text-center py-6">
+        <div class="mx-auto w-20 h-20 mb-4 text-green-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-medium text-gray-800 mb-2">Signalement enregistré</h3>
+        <p class="text-gray-500 mb-6">Nous avons bien reçu votre signalement et le traiterons rapidement.</p>
+        <button (click)="closeReportModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200">
           Fermer
         </button>
       </div>
     </ng-template>
   </div>
-
-  <div *ngIf="showToastReport" class="fixed top-0 left-0 w-full z-50 flex justify-center">
-  <div [ngClass]="{
-      'bg-green-500': toastReportType === 'success',
-      'bg-red-500': toastReportType === 'error'
-    }"
-    class="text-white px-6 py-3 rounded-b shadow-md w-full max-w-md mx-auto flex justify-between items-center animate-slide-down">
-    <p class="text-lg text-center font-semibold">{{ toastReportMessage }}</p>
-    <a [routerLink]="['']">❌</a>
-  </div>
 </div>
-</div>
-
-<app-chat-pop-ups
-#chatPopups
-[announcementCreatorId]="announcement.created_by.id"
-[announcementId]="announcement.id">
+<!-- Chat Component -->
+<app-chat-pop-ups #chatPopups [announcementCreatorId]="announcement.created_by.id" [announcementId]="announcement.id">
 </app-chat-pop-ups>
-
 
 <app-footer></app-footer>
