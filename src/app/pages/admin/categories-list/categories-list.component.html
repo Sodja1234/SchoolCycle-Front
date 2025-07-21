@@ -8,8 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 font-sans">
-  <div class="flex bg-gray-100 h-full">
+<body class="bg-gray-100 font-sans min-h-screen ">
+  <div class="flex bg-gray-100 min-h-screen">
     <!-- Sidebar -->
     <app-sidebard></app-sidebard>
 
@@ -35,7 +35,7 @@
       <!-- Liste categories -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
         @for (category of categories; track category.id) {
-        <app-categorie-card [categorie]="category"></app-categorie-card>
+        <app-categorie-card [categorie]="category"  (edit)="openEditModal($event)"></app-categorie-card>
         }
       </div>
     </main>
@@ -101,6 +101,59 @@
             <button type="submit"
               class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-700 transition duration-200">
               Créer
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modale -->
+      <div *ngIf="editModalOpen" class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50">
+        <!-- Affichage du toast avec le message d'erreur ou de success -->
+        <div *ngIf="showToast" class="fixed top-0 left-0 w-full z-50 flex justify-center">
+          <div [ngClass]="{
+                'bg-green-500': toastType === 'success',
+                'bg-red-500': toastType === 'error'
+              }"
+            class="text-white px-6 py-3 rounded-b shadow-md w-full max-w-md mx-auto flex justify-between items-center animate-slide-down">
+            <p class="text-lg text-center font-semibold">
+              {{ toastMessage }}
+            </p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+          <!-- Bouton fermer -->
+          <button (click)="closeEditModal()"
+            class="absolute top-2 right-2 text-orange-500 hover:text-red-600 text-xl font-bold">
+            &times;
+          </button>
+
+          <!-- Formulaire -->
+          <form [formGroup]="editCategorieForm" (ngSubmit)="onEditSubmit()" class="space-y-4">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">
+              Modifier une catégorie
+            </h2>
+
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700">Nom de la catégorie</label>
+              <input formControlName="name" placeholder="Nom de la catégorie"
+                class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" />
+              <div *ngIf="isSubmited && editCategorieForm.get('name')?.errors?.['required']"
+                class="text-red-500 text-sm">
+                Le nom est obligatoire
+              </div>
+            </div>
+
+            <div>
+              <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+              <textarea formControlName="description" placeholder="Description" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
+              <div *ngIf="isSubmited && editCategorieForm.get('description')?.errors?.['required']"
+                class="text-red-500 text-sm">
+                La description est  obligatoire
+              </div>
+            </div>
+            <button type="submit"
+              class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-700 transition duration-200">
+              Modifier
             </button>
           </form>
         </div>
