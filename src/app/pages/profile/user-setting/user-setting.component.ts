@@ -4,10 +4,12 @@ import { UserProfileInfoComponent } from '../user-profile-info/user-profile-info
 import { SecurityComponent } from '../security/security.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { HeaderComponent } from "../../../components/header/header.component";
+import { FooterComponent } from "../../../components/footer/footer.component";
 
 @Component({
   selector: 'app-user-setting',
-  imports: [UserPreferencesComponent,UserProfileInfoComponent,SecurityComponent,MatTabsModule],
+  imports: [UserPreferencesComponent, UserProfileInfoComponent, SecurityComponent, MatTabsModule, HeaderComponent, FooterComponent],
   templateUrl: './user-setting.component.html',
   styleUrl: './user-setting.component.css'
 })
