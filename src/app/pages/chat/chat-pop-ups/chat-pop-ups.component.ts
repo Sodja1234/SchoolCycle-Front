@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChatService } from '../../../core/services/chat/chat.service';
@@ -8,7 +8,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-chat-pop-ups',
-  imports: [NgFor, FormsModule, NgIf],
+  imports: [NgFor, FormsModule, NgIf, NgClass],
   templateUrl: './chat-pop-ups.component.html',
   styleUrl: './chat-pop-ups.component.css'
 })
@@ -18,6 +18,7 @@ export class ChatPopUpsComponent {
   isOpen = false;
   message = '';
   chatId?: number;
+  userId?: number | null;
 
   messageTemplates = [
     "Bonjour, je suis intéressé(e) par votre annonce. Pouvez‑vous me donner plus d'informations ?",
@@ -25,13 +26,26 @@ export class ChatPopUpsComponent {
     "Bonjour, quel est votre meilleur prix ? Merci",
   ];
 
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+  showToast = false;
+
   constructor(private chatService: ChatService, private router: Router) { }
+    ngOnInit(): void{
+    const userSession = localStorage.getItem('userSession');
+    if (userSession) {
+      const user = JSON.parse(userSession);
+      this.userId = user.id;
+    } else {
+      console.error('User session is not available in localStorage');
+      this.userId = null;
+    }
+  }
 
   async openPopUpOrRedirect() {
-    const userId = Number(localStorage.getItem('id'));
-    if (userId === this.announcementCreatorId) {
+    if (this.userId === this.announcementCreatorId) {
+      console.log(true);
       try {
-        // Vérifie si un chat existe déjà pour cette annonce et cet utilisateur (créateur)
         const chat = await firstValueFrom(
           this.chatService.getUserChatForAnnouncement(this.announcementId!)
         );
@@ -39,17 +53,21 @@ export class ChatPopUpsComponent {
         this.router.navigate(['/chat']);
       } catch (err: any) {
         if (err.status === 404) {
-          // Aucun chat existant pour cette annonce
-          alert("Vous n'avez pas encore de chat pour cette annonce.");
+          this.showToastMessage("Vous n'avez pas encore de chat pour cette annonce.", 'error');
+          // NE PAS rediriger
+        } else if (err.status === 403) {
+          this.showToastMessage("Le créateur ne peut pas avoir de chat avec lui-même.", 'error');
+          // NE PAS rediriger
         } else {
-          alert("Une erreur est survenue.");
+          this.showToastMessage("Une erreur est survenue.", 'error');
           console.error(err);
         }
       }
       return;
     }
+
+    // Pour les autres utilisateurs
     try {
-      // Vérifie si un chat existe déjà pour cette annonce et cet utilisateur
       const chat = await firstValueFrom(
         this.chatService.getUserChatForAnnouncement(this.announcementId!)
       );
@@ -59,11 +77,11 @@ export class ChatPopUpsComponent {
       if (err.status === 404) {
         // Aucun chat existant, ouvrir le pop-up
         this.isOpen = true;
-      } else if (err.status === 403){
-        // Interdiction d'accéder à un chat avec soi-même
-        alert("Vous n'avez pas encore de chat pour cette annonce.")
-      }else {
-        alert("Une erreur est survenue.");
+      } else if (err.status === 403) {
+        this.showToastMessage("Vous n'avez pas encore de chat pour cette annonce.", 'error');
+        // NE PAS rediriger
+      } else {
+        this.showToastMessage("Une erreur est survenue.", 'error');
         console.error(err);
       }
     }
@@ -87,18 +105,27 @@ export class ChatPopUpsComponent {
         this.router.navigate(['/chat']);
       } catch (err: any) {
         if (err.status === 403) {
-          alert("Vous ne pouvez pas créer un chat avec vous-même.");
+          this.showToastMessage("Vous ne pouvez pas créer un chat avec vous-même.", 'error');
           this.close();
         } else if (err.status === 422) {
-          alert("Impossible de créer un chat sans message.");
+          this.showToastMessage("Impossible de créer un chat sans message.", 'error');
         } else if (err.status === 409) {
-          // Si le back retourne un 409 pour "chat déjà existant", On redirige vers le chat
           this.router.navigate(['/chat']);
         } else {
+          this.showToastMessage("Une erreur est survenue.", 'error');
           console.error(err);
         }
       }
     }
+  }
+
+  showToastMessage(message: string, type: 'success' | 'error' = 'success', duration: number = 3000) {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, duration);
   }
 
 }
