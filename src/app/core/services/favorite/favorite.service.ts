@@ -15,11 +15,23 @@ export class FavoriteStateService {
   // favorites$ est un Observable qui émet l'état actuel des favoris
   public favorites$ = this.favoritesSubject.asObservable();
 
+
+  constructor(){
+    // charge les favoris depuis le localstorage au démarrage
+    const saved = localStorage.getItem('favorites');
+    if(saved){
+      this.favoritesSubject.next(JSON.parse(saved));
+    }
+  }
+
   // Met à jour l'état d'un favori
   setFavorite(announcementId: number, isFavorite: boolean): void {
     const current = this.favoritesSubject.value;
-    // Met à jour l'état du favori dans l'objet actuel
-    this.favoritesSubject.next({...current, [announcementId]: isFavorite});
+    const updated = {...current, [announcementId] : isFavorite};
+
+    // Met à jour à la fois le state et le localstorage
+    this.favoritesSubject.next(updated);
+    localStorage.setItem('favorites',JSON.stringify(updated));
   }
 
   // Récupère l'état d'un favori
@@ -28,7 +40,7 @@ export class FavoriteStateService {
     // Utilise pipe pour transformer l'Observable des favoris
     // map pour vérifier si l'ID de l'annonce est dans les favoris
     // distinctUntilChanged pour éviter les émissions redondantes
-    return this.favorites$.pipe(
+    return this.favoritesSubject.pipe(
       map(favorites => !!favorites[announcementId]),
       distinctUntilChanged()
     );
