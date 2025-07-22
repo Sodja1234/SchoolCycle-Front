@@ -22,10 +22,9 @@
 </div>
 <!-- End alertes filtres -->
 
-
 <!-- 🔎 Formulaire de filtre -->
 <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
-  <div class="w-[90%] md:w-[70%] max-w-6xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-200 mt-12 mb-12">
+  <div class="w-[90%] md:w-[72%] max-w-6xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-200 mt-12 mb-12">
     <h1 class="text-2xl font-bold text-[#ff9000] mb-2">Rechercher des fournitures</h1>
 
     <!-- 🔍 Barre de recherche -->
@@ -112,33 +111,46 @@
   </div>
 </form>
 
-<!-- Aucune annonce -->
-@if (announcements.length == 0 || announcements == null) {
-  <div class="max-w-6xl mx-auto text-center mt-12 mb-12">
-    <h3 class="text sm:text-1xl md:text-2xl font-bold mb-4">
-      @if (noResults) {
-        Aucune annonce liée à cette recherche ou filtrage ❌
-      } @else {
-        Aucune annonce disponible en ce moment ❌
+<!-- Conteneur principal -->
+<div class="w-full md:w-[75%] mx-auto px-4 py-8 sm:py-12">
+
+  <!-- État vide -->
+  @if (announcements.length == 0 || announcements == null) {
+    <div class="bg-white rounded-xl shadow-sm p-8 sm:p-12 text-center">
+      <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 sm:mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 sm:h-12 sm:w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 class="text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 mb-2">
+        @if (noResults) {
+          Aucune annonce correspondant à votre recherche
+        } @else {
+          Aucune annonce disponible actuellement
+        }
+      </h3>
+      <p class="text-gray-500 text-sm sm:text-base max-w-md mx-auto">
+        @if (noResults) {
+          Essayez d'ajuster vos critères de recherche ou filtre.
+        } @else {
+          Rejoignez notre communauté pour publier la première annonce.
+        }
+      </p>
+    </div>
+  }
+  @else {
+    <!-- Modifié ici pour centrer sur mobile -->
+    <div class="flex flex-col items-center sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 w-full">
+      @for(announcement of announcements; track announcement.id) {
+        <app-announcement-card
+          [announcement]="announcement"
+          class="w-full max-w-xs sm:max-w-none">
+        </app-announcement-card>
       }
-    </h3>
-    <p class="mb-6 max-w-2xl mx-auto text-sm sm:text-base">
-      @if (noResults) {
-        Essayez d’ajuster vos critères ou revenez plus tard.
-      } @else {
-        Rejoindre notre communauté pour publier des annonces.
-      }
-    </p>
-  </div>
-}
-@else {
-  <div class="w-[70%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto mb-16">
-    <app-announcement-card
-      *ngFor="let announcement of announcements"
-      [announcement]="announcement">
-    </app-announcement-card>
-  </div>
-}
+    </div>
+  }
+</div>
 
 
 <!-- ⏩ Pagination -->

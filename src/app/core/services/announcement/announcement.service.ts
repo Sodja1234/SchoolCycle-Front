@@ -176,9 +176,58 @@ export class AnnouncementService {
   }
 
 
-   getAnnouncementFavorite():Observable<{data:Announcement[]}>{
+   getAnnouncementFavorite( page: number = 1, filters: any = {}):Observable<PaginatedAnnouncements>{
+
+    let params = new HttpParams()
+      .set('page', page)
+      .set('per_page', 12);
+
+    // 🔍 Filtrage par mot-clé de recherche (titre ou description)
+    if (filters.search) {
+      params = params.set('search', filters.search);
+    }
+
+    // Filtrage par type d’opération (ex: sale, exchange, don)
+    if (Array.isArray(filters.operation_type) && filters.operation_type.length) {
+      params = params.set('operation_type', filters.operation_type.join(','));
+    }
+
+    // Filtrage par état (ex: new, like_new, used)
+    if (Array.isArray(filters.state) && filters.state.length) {
+      params = params.set('state', filters.state.join(','));
+    }
+
+    // Filtrage par prix minimum
+    if (filters.min_price != null) {
+      params = params.set('min_price', filters.min_price);
+    }
+
+    // Filtrage par prix maximum
+    if (filters.max_price != null) {
+      params = params.set('max_price', filters.max_price);
+    }
+
+    // Tri par champ
+    if (filters.sort_field) {
+      params = params.set('sort_field', filters.sort_field);
+    }
+
+    // Direction du tri
+    if (filters.sort_direction) {
+      params = params.set('sort_direction', filters.sort_direction);
+    }
+
+    // ✅ Filtrage par is_completed
+    if (filters.is_completed != null) {
+      params = params.set('is_completed', filters.is_completed);
+    }
+
+    // ✅ Filtrage par is_cancelled
+    if (filters.is_cancelled != null) {
+      params = params.set('is_cancelled', filters.is_cancelled);
+    }
     const headers=this.userlocalService.getAuthHeaders();
-    return this.http.get<{data:Announcement[]}>(this.url + 'annoncements/favorites',{headers})
+    return this.http.get<PaginatedAnnouncements>(this.url + 'annoncements/favorites',{headers})
   }
 
   // Méthode ajoutée pour signaler une annonce

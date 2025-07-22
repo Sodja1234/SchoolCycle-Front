@@ -3,6 +3,7 @@ import { NgIf } from '@angular/common';
 import { Chat } from '../../../core/models/chat/chat';
 import { ChatService } from '../../../core/services/chat/chat.service';
 import { firstValueFrom } from 'rxjs';
+import { EchoService } from '../../../core/services/websocket/echo.service';
 
 @Component({
   selector: 'app-chat-header',
@@ -19,7 +20,25 @@ export class ChatHeaderComponent {
   @Output() chatClosed = new EventEmitter<void>();
   @Output() openInfo = new EventEmitter<void>();
 
-  constructor(private chatService: ChatService) {}
+  private statusListener: any;
+
+  constructor(private chatService: ChatService, private echoService: EchoService) {}
+
+  ngOnInit(): void {
+    if (this.chat) {
+      this.statusListener = this.echoService.listen(`chat.${this.chat.id}`, 'chat.status.changed', (data: any) => {
+        if (this.chat) {
+          this.chat.is_closed = data.is_closed;
+          this.chat.closed_at = data.closed_at;
+          this.chat.close_to = data.close_to;
+        }
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.statusListener?.stopListening?.();
+  }
 
   // Debug pour voir si le chat est reçu
   ngOnChanges() {

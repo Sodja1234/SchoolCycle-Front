@@ -4,17 +4,20 @@ import { Announcement } from '../../../../core/models/announcement/announcement'
 import { AnnouncementCardComponent } from '../../../../components/announcement-card/announcement-card.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserLocalService } from '../../../../core/services/userlocal/userlocal.service';
+import { PaginationMeta, PaginationUrls } from '../../../../core/models/announcement/pagination';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-announcement-profile',
-  imports: [AnnouncementCardComponent],
+  imports: [AnnouncementCardComponent,CommonModule],
   templateUrl: './announcement-profile.component.html',
   styleUrl: './announcement-profile.component.css'
 })
 export class AnnouncementProfileComponent {
   announcements!:Announcement[]
   errorMsg!:string;
-
+  paginationUrls!: PaginationUrls;
+  paginationMeta!: PaginationMeta;
   userAnnouncement!:Announcement[];
   isOwner:boolean=false;
   @Input()userId!:number;
@@ -32,6 +35,12 @@ getAnnouncementUser(page : number = 1){
     next:(res)=>{
       this.announcements=res.data;
       console.log('recupetation des annonces',this.announcements)
+
+      this.paginationMeta = res.meta;
+
+        //on stocke les annonces recus dans la varible links de PaginatedAnnouncements !!
+      this.paginationUrls = res.links;
+
     },
     error:(err)=>{
       this.errorMsg = err.error.message
@@ -39,6 +48,21 @@ getAnnouncementUser(page : number = 1){
     }
   })
 }
+
+//methode utiliser lorque l'utilisateur clique un lien  de la pagination
+  onPageChange(url: string | null | undefined): void {
+    //si l'url n'est pas valide, on return rien
+    if (typeof url !== 'string') return;
+
+    //on extrait  le parametre page depuis l'url
+    const pageParam = new URL(url).searchParams.get('page');
+
+    //on converti la valeur page en nombre
+    const page = pageParam ? +pageParam : 1;
+
+    //on renvoit les annonces pour la page selectionné
+    this.getAnnouncementUser(page);
+  }
 
 getAnnouncementpublic(){
   this.announcementService.getAnnouncements(this.userId).subscribe({
@@ -50,6 +74,7 @@ getAnnouncementpublic(){
     },
     error:(err)=>{
       console.error('Erreur lors du chargement des annonces :', err);
+
     }
   })
 }
@@ -73,4 +98,5 @@ loadAnnouncement(){
  })
 
   }
+
 }
