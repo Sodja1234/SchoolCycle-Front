@@ -6,6 +6,7 @@ import { AnnouncementListComponent } from "./pages/announcement/announcement-lis
 import { ProfilsComponent } from './pages/profile/profils/profils.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
+import { AnnouncementService } from './core/services/announcement/announcement.service';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +16,11 @@ import { HeaderComponent } from './components/header/header.component';
 })
 export class AppComponent {
 
+  constructor(private announcementService : AnnouncementService){}
+
   ngOnInit(): void {
     //alert('Hello World!')
     initFlowbite();
+    this.announcementService.loadAllFavorites().subscribe();
   }
 }
