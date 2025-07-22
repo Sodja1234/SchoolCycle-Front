@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Chat } from '../../../core/models/chat/chat';
 import { User } from '../../../core/models/user';
 import { ChatService } from '../../../core/services/chat/chat.service';
+import { EchoService } from '../../../core/services/websocket/echo.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -18,13 +19,42 @@ export class ChatListComponent implements OnInit {
 
   pendingMessages: {content: string, error: boolean}[] = [];
 
-  constructor(private chatservice: ChatService){}
+  constructor(private chatservice: ChatService, private echoService: EchoService){}
 
   ngOnInit(): void {
       this.chatservice.getChats().subscribe({
-        next: (data) => {this.chats = data; console.log('Chats reçu  :', this.chats );},
+        next: (data: any) => {
+          console.log('DATA CHATS', data);
+          this.chats = Array.isArray(data) ? data : data.data;
+          this.listenToAllChats();
+        },
         error : (err) => console.error('Erreur de chargement des chats', err),
       });
+  }
+
+  private chatListeners: any[] = [];
+
+  private listenToAllChats() {
+    // Nettoie les anciens listeners
+    this.chatListeners.forEach(listener => listener?.stopListening?.());
+    this.chatListeners = [];
+    this.chats.forEach(chat => {
+      const listener = this.echoService.listen(`chat.${chat.id}`, 'message.sent', (data: any) => {
+        // Rafraîchit la liste des chats à chaque nouveau message
+        this.chatservice.getChats().subscribe({
+          next: (data: any) => {
+            console.log('DATA CHATS (refresh)', data);
+            this.chats = Array.isArray(data) ? data : data.data;
+          },
+          error : (err) => console.error('Erreur de rafraîchissement des chats', err),
+        });
+      });
+      this.chatListeners.push(listener);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.chatListeners.forEach(listener => listener?.stopListening?.());
   }
 
   getUserNamebyId(id : number): string{

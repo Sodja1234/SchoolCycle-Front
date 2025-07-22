@@ -4,7 +4,7 @@ import { ChatHeaderComponent } from "../chat-header/chat-header.component";
 import { ChatMessageComponent } from "../chat-message/chat-message.component";
 import { ChatInputComponent } from "../chat-input/chat-input.component";
 import { ChatService } from '../../../core/services/chat/chat.service';
-import { WebSocketService, ChatMessage, ChatStatusUpdate } from '../../../core/services/websocket/websocket.service';
+import { EchoService } from '../../../core/services/websocket/echo.service';
 import { Chat } from '../../../core/models/chat/chat';
 import { NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -26,16 +26,14 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
   //Map des messages en attente par chatId
   pendingMessagesMap: { [chatId: number]: { content: string, error: boolean }[] } = {};
 
-  // Subscriptions pour les WebSockets
-  private messageSubscription?: Subscription;
-  private chatStatusSubscription?: Subscription;
-  private connectionStatusSubscription?: Subscription;
+  // Subscriptions pour Echo
+  private echoSubscription?: any;
 
   @ViewChild(ChatInputComponent) chatInputComponent! : ChatInputComponent;
 
   constructor(
     private chatService : ChatService,
-    private webSocketService: WebSocketService
+    private echoService: EchoService
   ){}
 
   ngOnInit(): void{
@@ -43,9 +41,6 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
     if (userSession) {
       const user = JSON.parse(userSession);
       this.userId = user.id;
-      
-      // Initialisation de la connexion WebSocket
-      this.initializeWebSocket(user.token);
     } else {
       console.error('User session is not available in localStorage');
       this.userId = null;
@@ -53,57 +48,16 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Nettoyer les subscriptions
-    this.messageSubscription?.unsubscribe();
-    this.chatStatusSubscription?.unsubscribe();
-    this.connectionStatusSubscription?.unsubscribe();
-    
-    // Déconnecter le WebSocket
-    this.webSocketService.disconnect();
+    this.echoSubscription?.stopListening?.();
+    this.echoService.disconnect();
   }
 
-  /**
-   * Initialise la connexion WebSocket et les listeners
-   */
-  private initializeWebSocket(token: string): void {
-    this.webSocketService.connect(token).then(() => {
-      console.log('WebSocket connecté avec succès');
-      
-      // S'abonner aux messages en temps réel
-      this.messageSubscription = this.webSocketService.messages$.subscribe(
-        (message: ChatMessage) => {
-          this.handleNewMessage(message);
-        }
-      );
 
-      // S'abonner aux changements de statut des chats
-      this.chatStatusSubscription = this.webSocketService.chatStatusUpdates$.subscribe(
-        (update: ChatStatusUpdate) => {
-          this.handleChatStatusUpdate(update);
-        }
-      );
-
-      // S'abonner au statut de connexion
-      this.connectionStatusSubscription = this.webSocketService.connectionStatus$.subscribe(
-        (connected: boolean) => {
-          console.log('Statut de connexion WebSocket:', connected);
-        }
-      );
-
-      // S'abonner aux mises à jour de l'utilisateur
-      if (this.userId) {
-        this.webSocketService.subscribeToUser(this.userId);
-      }
-
-    }).catch(error => {
-      console.error('Erreur lors de la connexion WebSocket:', error);
-    });
-  }
 
   /**
    * Gère les nouveaux messages reçus en temps réel
    */
-  private handleNewMessage(message: ChatMessage): void {
+  private handleNewMessage(message: any): void {
     // Si le message appartient au chat actuellement sélectionné
     if (this.selectedchat && message.conversation === this.selectedchat.id) {
       // Ajouter le message au chat sélectionné
@@ -132,7 +86,7 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
   /**
    * Gère les mises à jour de statut des chats
    */
-  private handleChatStatusUpdate(update: ChatStatusUpdate): void {
+  private handleChatStatusUpdate(update: any): void {
     // Si le chat mis à jour est celui actuellement sélectionné
     if (this.selectedchat && update.chat_id === this.selectedchat.id) {
       this.selectedchat.is_closed = update.is_closed;
@@ -165,18 +119,21 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
 
   onChatSelected(chat: Chat){
     // Se désabonner du chat précédent s'il y en avait un
-    if (this.selectedchat) {
-      this.webSocketService.unsubscribeFromChat(this.selectedchat.id);
-    }
-
+    this.echoSubscription?.stopListening?.();
     this.chatService.getMessages(chat.id).subscribe({
       next: (messages) => {
         this.selectedchat = {...chat, messages: messages};
-        
-        // S'abonner au canal WebSocket du nouveau chat
-        this.webSocketService.subscribeToChat(chat.id);
+        // S'abonner au canal Echo du nouveau chat
+        this.echoSubscription = this.echoService.listen(
+          `chat.${chat.id}`,
+          '.message.sent',
+          (data: any) => {
+            console.log('DATA MESSAGE', data);
+            this.handleNewMessage(data);
+          }
+        );
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error("Erreur lors de la récupération des messages :", err);
       }
     });
