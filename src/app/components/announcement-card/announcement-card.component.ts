@@ -33,6 +33,7 @@ export class AnnouncementCardComponent {
   ngOnInit() {
     this.user = this.userLocalService.getUser();
     this.isFavorite$ = this.favoriteState.isFavorite(this.announcement.id);
+
     console.log('Photo recuperer', this.announcement.photos[0]?.url);
   }
 
