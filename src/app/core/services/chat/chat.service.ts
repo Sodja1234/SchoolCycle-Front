@@ -71,6 +71,13 @@ export class ChatService {
     return this.http.get<Chat>(`${this.baseUrl}announcements/${announcementId}/user-chat`, { headers });
   }
 
+  //Récuperer le chat pour une annonce quand on est le créateur de l'annonce
+  chatsForAnnouncement(announcementId: number): Observable<Chat>{
+    const headers = this.getAuthToken();
+    return this.http.get<Chat>(`${this.baseUrl}announcements/${announcementId}/chats`, { headers })
+
+  }
+
   // Créer un chat pour une annonce et envoyer le premier message
   createChatWithMessage(announcementId: number, content: string): Observable<Chat>{
     const headers = this.getAuthToken();
