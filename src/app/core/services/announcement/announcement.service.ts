@@ -252,15 +252,6 @@ reportAnnouncement(payload: {
     );
   }
 
-  // Methode pour verifier si une annonce est en favoris
-  checkFavorite(announcementId: number) {
-    const headers = this.userlocalService.getAuthHeaders();
-    return this.http.get(`${this.url}favorites/${announcementId}/check`, {headers}).pipe(
-      tap((res: any) => {
-        this.favoriteState.setFavorite(announcementId, res.is_favorite);
-      })
-    );
-  }
 
   // la méthode pour charger tous les favoris en une seule requête
   loadAllFavorites() {
@@ -270,6 +261,7 @@ reportAnnouncement(payload: {
         // Transforme le tableau d'IDs en un objet pour initialiser l'état des favoris
         // reduce est utilisé pour créer un objet où chaque clé est un ID d'annonce et la valeur est true
         const favoritesMap = favoriteIds.reduce((acc, id) => ({...acc, [id]: true}), {});
+        localStorage.setItem('favorites',JSON.stringify(favoritesMap));
         this.favoriteState.initializeFavorites(favoritesMap);
       })
     );

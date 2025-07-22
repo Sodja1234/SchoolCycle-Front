@@ -34,8 +34,6 @@ export class AnnouncementCardComponent {
     this.user = this.userLocalService.getUser();
     this.isFavorite$ = this.favoriteState.isFavorite(this.announcement.id);
 
-    // Vérifiez l'état initial
-    this.announcementService.checkFavorite(this.announcement.id).subscribe();
     console.log('Photo recuperer', this.announcement.photos[0]?.url);
   }
 
