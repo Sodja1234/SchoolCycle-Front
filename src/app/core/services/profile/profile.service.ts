@@ -23,8 +23,10 @@ export class ProfileService {
   }
 
   updateProfile(formdata: FormData): Observable<Profile> {
+    
+    
     const headers = this.userLocalService.getAuthHeaders();
-    return this.http.put<Profile>(this.baseUrl + 'tutors/update', formdata, { headers });
+    return this.http.post<Profile>(this.baseUrl + 'tutors/update?_method=PUT', formdata, { headers });
   }
 
   updateUserPassword(data: PutPassword) {
