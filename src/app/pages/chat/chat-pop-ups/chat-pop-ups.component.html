@@ -59,3 +59,19 @@
     </div>
   </div>
 </div>
+
+<!-- Toast notification -->
+<div *ngIf="showToast"
+     class="fixed top-8 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow font-semibold flex items-center gap-2"
+     [ngClass]="{
+       'bg-white text-orange-600 border border-orange-300': toastType === 'success',
+       'bg-white text-red-600 border border-red-300': toastType === 'error'
+     }">
+  <svg *ngIf="toastType === 'success'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+  </svg>
+  <svg *ngIf="toastType === 'error'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+  </svg>
+  {{ toastMessage }}
+</div>

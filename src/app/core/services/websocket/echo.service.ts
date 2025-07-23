@@ -56,6 +56,10 @@ export class EchoService implements OnDestroy {
     this.echo.disconnect();
   }
 
+  leave(channel: string) {
+    this.echo.leave(channel);
+  }
+
   ngOnDestroy(): void {
     this.disconnect();
   }
