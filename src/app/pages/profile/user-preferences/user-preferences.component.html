@@ -1,58 +1,43 @@
+<div class="w-full mx-auto bg-white rounded-xl shadow p-6">
+  <div class="mt-6 space-y-6">
+    <div>
+      <h2 class="text-orange-600 font-semibold mb-2">Catégories de fournitures préférées</h2>
 
-        <div class="w-full mx-auto bg-white rounded-xl shadow p-6">
-  
+      <label class="block text-sm mb-1">Ajouter des catégories de fournitures</label>
+      <div class="flex items-center gap-2 mb-2">
+        <select [(ngModel)]="selectedCategoryId" class="flex-1 border rounded px-3 py-2 text-sm">
+          <option value="" disabled selected>Sélectionner une catégorie</option>
+          <option *ngFor="let category of categories" [value]="category.id.toString()">
+            {{ category.name }}
+          </option>
+        </select>
+        <button (click)="onAddCategory()" class="bg-orange-500 text-white px-4 py-2 rounded">
+          + Ajouter
+        </button>
+      </div>
 
-      <!-- Content -->
-      <div class="mt-6 space-y-6">
-        <!-- Catégories de fournitures préférées -->
-        <div class="bg-orange-50 p-4 rounded-md">
-          <h2 class="text-orange-600 font-semibold mb-2">Catégories de fournitures préférées</h2>
+      <p class="text-xs text-gray-500 mb-2">
+        Ces catégories seront utilisées pour vous suggérer des annonces qui correspondent à vos intérêts.
+      </p>
 
-          <label class="block text-sm mb-1">Ajouter des catégories de fournitures</label>
-          <div class="flex items-center gap-2 mb-2">
-            <select class="flex-1 border rounded px-3 py-2 text-sm">
-              <option>Sélectionner une catégorie</option>
-            </select>
-            <button class="bg-orange-500 text-white px-4 py-2 rounded">+ Ajouter</button>
-          </div>
-          <p class="text-xs text-gray-500 mb-2">Ces catégories seront utilisées pour vous suggérer des annonces qui correspondent à vos intérêts.</p>
-
-          <div class="flex flex-wrap gap-2 p-2 bg-white rounded border">
-            <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-medium">Livres scolaires ✖</span>
-            <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-medium">Fournitures d'art ✖</span>
-          </div>
-
-          <!-- Populaires -->
-          <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-            <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-orange-500"> <span>Livres scolaires</span></label>
-            <label class="flex items-center space-x-2"><input type="checkbox" class="accent-orange-500"> <span>Manuels</span></label>
-            <label class="flex items-center space-x-2"><input type="checkbox" class="accent-orange-500"> <span>Cahiers</span></label>
-            <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-orange-500"> <span>Stylos et crayons</span></label>
-            <label class="flex items-center space-x-2"><input type="checkbox" class="accent-orange-500"> <span>Calculatrices</span></label>
-            <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-orange-500"> <span>Fournitures d'art</span></label>
-          </div>
-        </div>
-
-        <!-- Préférences de recherche -->
-        <div class="bg-orange-50 p-4 rounded-md">
-          <h2 class="text-orange-600 font-semibold mb-2">Préférences de recherche</h2>
-
-          <label class="block text-sm mb-1">Rayon de recherche (km)</label>
-          <input type="number" class="w-full border rounded px-3 py-2 text-sm mb-4" value="10" />
-
-          <label class="block text-sm mb-1">Types d'annonces préférés</label>
-          <div class="flex flex-wrap gap-4 text-sm">
-            <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-orange-500"> <span>Vente</span></label>
-            <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-orange-500"> <span>Échange</span></label>
-            <label class="flex items-center space-x-2"><input type="checkbox" checked class="accent-orange-500"> <span>Don</span></label>
-          </div>
-        </div>
-
-        <!-- Boutons -->
-        <div class="flex justify-end space-x-4 pt-4">
-          <button class="text-gray-600 hover:underline">Annuler</button>
-          <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-semibold">Enregistrer les modifications</button>
-        </div>
+      <div class="flex flex-wrap gap-2 p-2 bg-white rounded border min-h-[40px]">
+        <span *ngFor="let cat of favoriteCategories" class="text-orange-700 px-3 py-1 rounded-full text-sm font-medium bg-orange-100 flex items-center gap-2">
+          {{ cat.name }}
+          <button (click)="removeCategory(cat)" class="text-orange-700 hover:text-orange-900 font-bold">&times;</button>
+        </span>
+        <span *ngIf="favoriteCategories.length === 0" class="text-gray-400 text-sm italic">
+          Aucune catégorie préférée ajoutée.
+        </span>
       </div>
     </div>
-<!-- </div> -->
+
+    <div class="flex justify-end space-x-4 pt-4">
+      <button (click)="onCancel()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
+              style="--tw-ring-color: #ff9000;">Annuler</button>
+      <button (click)="onSave()" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-semibold"
+              style="--tw-ring-color: #ff9000;">
+        Enregistrer
+      </button>
+    </div>
+  </div>
+</div>
