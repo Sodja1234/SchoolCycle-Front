@@ -18,7 +18,6 @@ export class UserProfileInfoComponent implements OnInit {
   userProfile!: Profile | undefined;
   user!: AuthLoginResponse | null;
   avatarUrl: string | undefined;
- 
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +33,7 @@ export class UserProfileInfoComponent implements OnInit {
       bio: [''],
       adresse: [''],
       profession: [''],
-       avatar: ['']
+      avatar: [null]
     });
 
     this.user = this.userLocalService.getUser();
@@ -45,7 +44,6 @@ export class UserProfileInfoComponent implements OnInit {
     this.profileService.getProfileTutor().subscribe({
       next: (response) => {
         const userData = response.data.user;
-        this.avatarUrl = userData.avatarUrl || ''; 
         this.profileForm.patchValue({
           name: userData.name,
           telephone: response.data.telephone,
@@ -55,6 +53,9 @@ export class UserProfileInfoComponent implements OnInit {
           avatar: null
         });
         this.userProfile = response.data;
+
+        this.avatarUrl = this.userProfile.avatar ?? undefined;
+
         console.log('Profil utilisateur récupéré:', this.userProfile);
       },
       error: (error) => {
@@ -68,6 +69,7 @@ export class UserProfileInfoComponent implements OnInit {
       console.warn('Formulaire invalide');
       return;
     }
+
     const formData = new FormData();
     const formValue = this.profileForm.value;
 
@@ -81,11 +83,12 @@ export class UserProfileInfoComponent implements OnInit {
       formData.append('avatar', formValue.avatar);
     }
 
-    this.profileService.updateProfile(formData).subscribe({
+    // Appel à la méthode updateName
+    this.profileService.updateName(formData).subscribe({
       next: () => {
         console.log('Profil mis à jour');
-        this.getProfileTutor(); // Recharge les données pour mise à jour visuelle
-        this.router.navigate(['/profils']);
+        this.getProfileTutor(); 
+        this.router.navigate(['/profils']); // Redirection après succès
       },
       error: (err) => {
         console.error('Erreur lors de la mise à jour :', err);
@@ -102,7 +105,7 @@ export class UserProfileInfoComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.result) {
-          this.avatarUrl = reader.result as string; // Met à jour la prévisualisation
+          this.avatarUrl = reader.result as string; 
         }
       };
       reader.readAsDataURL(file);
