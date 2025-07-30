@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Chat } from '../../../core/models/chat/chat';
 import { ChatService } from '../../../core/services/chat/chat.service';
 import { firstValueFrom } from 'rxjs';
@@ -7,7 +7,7 @@ import { EchoService } from '../../../core/services/websocket/echo.service';
 
 @Component({
   selector: 'app-chat-header',
-  imports: [NgIf],
+  imports: [NgIf, NgClass],
   templateUrl: './chat-header.component.html',
   styleUrl: './chat-header.component.css'
 })
@@ -50,26 +50,51 @@ export class ChatHeaderComponent {
     return this.chat?.posted_by.id === this.userId;
   }
 
+
+  // Toast & Modal
+  isCloseModalOpen: boolean = false;
+  toastMessage: string = '';
+  toastType: 'success' | 'error' = 'success';
+  showSimpleToast: boolean = false;
+
   // Vérifier si le chat est fermé
   isChatClosed(): boolean {
     return this.chat?.is_closed || false;
   }
 
-  // Marquer comme terminé
-  async markAsCompleted(): Promise<void> {
-    if (!this.chat) return;
+  // Afficher le toast
+  showToast(message: string, type: 'success' | 'error' = 'success', duration: number = 3000) {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showSimpleToast = true;
+    setTimeout(() => this.showSimpleToast = false, duration);
+  }
 
+  // Ouvrir le modal de confirmation
+  openCloseModal() {
+    this.isCloseModalOpen = true;
+  }
+
+  // Fermer le modal
+  closeCloseModal() {
+    this.isCloseModalOpen = false;
+  }
+
+  // Méthode appelée après confirmation
+  async confirmCloseChat() {
+    if (!this.chat) return;
     try {
       await firstValueFrom(this.chatService.closeChat(this.chat.id));
       this.chatClosed.emit();
-      alert('Annonce marquée comme terminée avec succès !');
+      this.showToast('Annonce marquée comme terminée avec succès !', 'success');
     } catch (error: any) {
       if (error.status === 409) {
-        alert('Cette annonce a déjà été marquée comme terminée.');
+        this.showToast('Cette annonce a déjà été marquée comme terminée.', 'error');
       } else {
-        alert('Erreur lors de la fermeture du chat : ' + (error.error?.message || 'Erreur inconnue'));
+        this.showToast('Erreur lors de la fermeture du chat : ' + (error.error?.message || 'Erreur inconnue'), 'error');
       }
     }
+    this.closeCloseModal();
   }
 
   onOpenInfo() {

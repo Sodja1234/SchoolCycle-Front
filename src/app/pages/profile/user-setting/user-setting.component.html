@@ -1,30 +1,48 @@
+<app-header></app-header>
 
-     <div class="max-w-4xl mx-auto p-6">
-      <div class="bg-orange-500 flex flex-col items-center justify-center text-white rounded-t-lg px-6 py-4">
-        <h1 class="text-xl font-bold">Modifier votre profil</h1>
-        <p class="text-sm">Personnalisez vos informations pour améliorer votre expérience</p>
-      </div>
+<div class="max-w-4xl mx-auto p-6">
+  <div class="bg-orange-500 flex flex-col items-center justify-center text-white rounded-t-lg px-6 py-4">
+    <h1 class="text-xl font-bold">Modifier votre profil</h1>
+    <p class="text-sm">Personnalisez vos informations pour améliorer votre expérience</p>
+  </div>
 
-      <div class="bg-white rounded-b-lg shadow-md">
-           
-            <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
-      <mat-tab label="Informations personnelles" >
-          <ng-template matTabContent>
-           <app-user-profile-info></app-user-profile-info>
+  <div class="bg-white rounded-b-lg shadow-md">
+    <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
+      
+      <mat-tab >
+        <ng-template mat-tab-label>
+          <span class="pb-2  text-black font-medium">
+              Informations Personnelles
+              </span>
+              </ng-template>
+        <ng-template matTabContent>
+          <app-user-profile-info></app-user-profile-info>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Préférences">
+      <mat-tab >
+        <ng-template mat-tab-label>
+          <span class="pb-2  text-black font-medium">
+           Préférences
+              </span>
+              </ng-template>
         <ng-template matTabContent>
           <app-user-preferences></app-user-preferences>
-
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Sécurité">
+      <mat-tab >
+        <ng-template mat-tab-label>
+          <span class="pb-2  text-black font-medium">
+            Sécurité
+              </span>
+              </ng-template>
         <ng-template matTabContent>
           <app-security></app-security>
         </ng-template>
       </mat-tab>
+
     </mat-tab-group>
-        <!--  -->
+  </div>
+</div>
+<app-footer></app-footer>

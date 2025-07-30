@@ -9,10 +9,12 @@ import { Chat } from '../../../core/models/chat/chat';
 import { NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ChatInfoComponent } from '../chat-info/chat-info.component';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-chat-container',
-  imports: [ChatListComponent, ChatHeaderComponent, ChatMessageComponent, ChatInputComponent, ChatInfoComponent, NgIf],
+  imports: [ChatListComponent, ChatHeaderComponent, ChatMessageComponent, ChatInputComponent, ChatInfoComponent, NgIf, RouterModule],
   templateUrl: './chat-container.component.html',
   styleUrl: './chat-container.component.css'
 })
@@ -118,8 +120,10 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
 
 
   onChatSelected(chat: Chat){
-    // Se désabonner du chat précédent s'il y en avait un
-    this.echoSubscription?.stopListening?.();
+    // Quitter le canal du chat précédent s'il y en avait un
+    if (this.selectedchat) {
+      this.echoService.leave(`chat.${this.selectedchat.id}`);
+    }
     this.chatService.getMessages(chat.id).subscribe({
       next: (messages) => {
         this.selectedchat = {...chat, messages: messages};

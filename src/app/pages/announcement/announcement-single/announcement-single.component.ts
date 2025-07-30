@@ -8,12 +8,13 @@ import { FooterComponent } from '../../../components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AnnouncementCardComponent } from '../../../components/announcement-card/announcement-card.component';
-import { Observable, Subscription } from 'rxjs';
+import { firstValueFrom, Observable, Subscription } from 'rxjs';
 import { AuthLoginResponse } from '../../../core/models/auth/auth';
 import { UserLocalService } from '../../../core/services/userlocal/userlocal.service';
 import { FavoriteStateService } from '../../../core/services/favorite/favorite.service';
 import L from 'leaflet';
 import { ChatPopUpsComponent } from "../../chat/chat-pop-ups/chat-pop-ups.component";
+import { ChatService } from '../../../core/services/chat/chat.service';
 
 @Component({
   selector: 'app-announcement-single',
@@ -72,7 +73,8 @@ export class AnnouncementSingleComponent implements OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private favoriteState: FavoriteStateService,
-    private userLocalService: UserLocalService
+    private userLocalService: UserLocalService,
+    private chatService: ChatService,
   ) {}
 
   ngOnInit() {
@@ -278,6 +280,25 @@ export class AnnouncementSingleComponent implements OnDestroy {
     }
     this.chatPopups.openPopUpOrRedirect();
   }
+
+  async goToChatIfExists(){
+    try{
+      const chat = await firstValueFrom(
+        this.chatService.chatsForAnnouncement(this.announcement.id)
+      );
+      //Si un chat existe, on redirige vers la page de chat
+      this.router.navigate(['/chat']);
+    } catch(err: any){
+      if (err.status === 404) {
+        this.showToast("Vous n'avez pas encore de messages pour cette annonce", 'error');
+    }else if (err.status === 403){
+      this.showToast("Vous n'avez pas encore de messages pour cette annonce", 'error')
+    }else{
+      this.showToast("Une erreur est survenue lors de la récupération du chat", 'error');
+      console.error('Erreur récupération chat:', err);
+    }
+  }
+}
 
   // Delete Methods
   openDeleteModal() { this.isDeleteModalOpen = true; }
