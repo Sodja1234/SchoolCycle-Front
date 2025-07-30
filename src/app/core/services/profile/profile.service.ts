@@ -41,4 +41,9 @@ export class ProfileService {
     return this.http.put(this.baseUrl + 'users/update-password', data, { headers });
   }
 
+  updateName(formdata:FormData){
+    const headers = this.userLocalService.getAuthHeaders();
+    return this.http.post<Profile>(this.baseUrl + 'users/update?_method=PUT', formdata, { headers });
+  }
+
 }
