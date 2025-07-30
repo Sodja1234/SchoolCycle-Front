@@ -7,10 +7,13 @@ import { ActionRapideComponent } from "../action-rapide/action-rapide.component"
 import { CommonModule } from '@angular/common';
 import { Announcement } from '../../../core/models/announcement/announcement';
 import { AnnouncementService } from '../../../core/services/announcement/announcement.service';
+import { ProfileService } from '../../../core/services/profile/profile.service';
+import { Profile } from '../../../core/models/profile/profile';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
-  imports: [RouterLink, ActionRapideComponent,CommonModule],
+  imports: [RouterLink, ActionRapideComponent,CommonModule,ReactiveFormsModule],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css'
 })
@@ -22,15 +25,18 @@ export class UserProfileComponent {
   isOwner: boolean = false;
   currentUserId!:number
   announcement!:Announcement
+  profile!:Profile
 
   constructor(
     private userLocalService: UserLocalService,
     private announcementService: AnnouncementService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private profileService:ProfileService
   ) {}
 
   ngOnInit(): void {
+    
 
     if (!this.userId) {
       this.loadAnnouncement();
@@ -40,7 +46,11 @@ export class UserProfileComponent {
     }
 
     this.user = this.userLocalService.getUser();
+    
+  this.getTutorProfile();
+   
   }
+  
 
 
   getInfoUser(): void {
@@ -59,6 +69,18 @@ export class UserProfileComponent {
       }
     });
   }
+  getTutorProfile(): void {
+    this.profileService.getProfileTutor().subscribe({
+      next: (res) => {
+        this.profile = res.data; 
+        console.log('Profil du tuteur récupéré :', this.profile);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération du profil du tuteur :', err);
+      }
+    });
+  }
+
 
   loadAnnouncement(): void {
     this.route.params.subscribe((params) => {

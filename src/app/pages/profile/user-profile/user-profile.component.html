@@ -3,11 +3,14 @@
         <!-- Bannière -->
         <div class="h-12 md:h-16 bg-orange-custom" style="background-color: #ff9000;"></div>
 
-        <div class="relative">
-            <!-- Photo de profil -->
-            <div class="relative w-16 h-16 md:w-20 md:h-20 mx-auto -mt-8 md:-mt-10 mb-3">
-                <div class="w-full h-full rounded-full bg-gray-200 border-4 border-white"></div>
-            </div>
+        <div class="relative w-16 h-16 md:w-20 md:h-20 mx-auto -mt-8 md:-mt-10 mb-3">
+            <img 
+              *ngIf="profile?.avatar" 
+              [src]="profile.avatar" 
+              alt="Avatar utilisateur"
+              class="w-full h-full object-cover rounded-full border-4 border-white bg-gray-200" />
+            <div *ngIf="!profile?.avatar" class="w-full h-full rounded-full bg-gray-200 border-4 border-white"></div>
+          </div>
 
             <!-- Informations du profil -->
             @if (userInfo.length == 0) {
@@ -30,10 +33,11 @@
                     </div>
 
                     <!-- Bio -->
-                    <p class="text-gray-700 text-xs leading-relaxed mb-4 px-3 md:p-5">
-                        Élève en 4ème, passionné de sciences et de lecture. Je cherche à échanger mes livres scolaires contre d'autres fournitures.
+                    <p class="text-gray-700 font-bold text-xs leading-relaxed mb-4 px-3 md:p-5">
+                        {{profile?.bio}}
+                       
                     </p>
-
+                   
                     <!-- Informations de contact -->
                     <div class="border-t border-b border-gray-200 px-3 py-3 md:p-5 mb-4 text">
                         <a href="mailto:alex@exemple.fr" class="flex items-center text-gray-600 text-xs mb-2 hover:text-orange-500 transition-colors">
@@ -47,8 +51,15 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 flex-shrink-0">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                             </svg>
-                            <span>06 12 34 56 78</span>
+                            <span>{{profile?.telephone}}</span>
                         </a>
+                        <div class="flex items-center text-gray-600 text-xs mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4 mr-2 flex-shrink-0">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                            </svg>
+                            <span class="truncate">{{ profile?.adresse }}</span>
+                        </div>
                         <div class="flex items-center text-gray-600 text-xs">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 flex-shrink-0">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -71,7 +82,7 @@
             }
         </div>
     </div>
-</div>
+
 <div class="mt-6 md:mt-12">
     <app-action-rapide></app-action-rapide>
 </div>
