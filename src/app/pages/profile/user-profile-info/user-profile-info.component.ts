@@ -6,10 +6,11 @@ import { ProfileService } from '../../../core/services/profile/profile.service';
 import { UserLocalService } from '../../../core/services/userlocal/userlocal.service';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-profile-info',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,CommonModule],
   templateUrl: './user-profile-info.component.html',
   styleUrls: ['./user-profile-info.component.css']
 })
@@ -18,6 +19,11 @@ export class UserProfileInfoComponent implements OnInit {
   userProfile!: Profile | undefined;
   user!: AuthLoginResponse | null;
   avatarUrl: string | undefined;
+
+  // Variables toast
+  showToast = false;
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
 
   constructor(
     private fb: FormBuilder,
@@ -53,20 +59,19 @@ export class UserProfileInfoComponent implements OnInit {
           avatar: null
         });
         this.userProfile = response.data;
-
         this.avatarUrl = this.userProfile.avatar ?? undefined;
-
         console.log('Profil utilisateur récupéré:', this.userProfile);
       },
       error: (error) => {
         console.error('Erreur lors de la récupération du profil utilisateur: ', error);
+        this.showToastMessage('Erreur lors du chargement du profil', 'error');
       }
     });
   }
 
   onSubmit(): void {
     if (this.profileForm.invalid) {
-      console.warn('Formulaire invalide');
+      this.showToastMessage('Veuillez remplir correctement le formulaire', 'error');
       return;
     }
 
@@ -83,14 +88,17 @@ export class UserProfileInfoComponent implements OnInit {
       formData.append('avatar', formValue.avatar);
     }
 
-    // Appel à la méthode updateName
     this.profileService.updateName(formData).subscribe({
       next: () => {
-        console.log('Profil mis à jour');
-        this.getProfileTutor(); 
-        this.router.navigate(['/profils']); // Redirection après succès
+        this.showToastMessage('Profil mis à jour avec succès', 'success');
+        this.getProfileTutor();
+        setTimeout(() => {
+          this.showToast = false;
+          this.router.navigate(['/profils']);
+        }, 2000);
       },
       error: (err) => {
+        this.showToastMessage('Erreur lors de la mise à jour du profil', 'error');
         console.error('Erreur lors de la mise à jour :', err);
       }
     });
@@ -105,10 +113,19 @@ export class UserProfileInfoComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.result) {
-          this.avatarUrl = reader.result as string; 
+          this.avatarUrl = reader.result as string;
         }
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  private showToastMessage(message: string, type: 'success' | 'error') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+
+    const duration = type === 'success' ? 2000 : 3000;
+    setTimeout(() => (this.showToast = false), duration);
   }
 }
