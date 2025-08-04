@@ -3,6 +3,8 @@ import { CategoriesService } from '../../../core/services/categories/categories.
 import { FormsModule } from '@angular/forms';
 import { UserLocalService } from '../../../core/services/userlocal/userlocal.service';
 import { CommonModule } from '@angular/common';
+import { ProfileService } from '../../../core/services/profile/profile.service';
+import { Category } from '../../../core/models/announcement/category';
 
 
 @Component({
@@ -19,21 +21,29 @@ export class UserPreferencesComponent implements OnInit{
   // la liste de catégories favorites
   favoriteCategories: any[] = [];
 
-  constructor(private categoriesService: CategoriesService,userLocalService:UserLocalService) {}
+  constructor(private categoriesService: CategoriesService,userLocalService:UserLocalService,private profileService: ProfileService) {}
 
   ngOnInit(): void {
     this.loadCategories();
   }
 
-  loadCategories(): void {
-    this.categoriesService.getCategories().subscribe({
-      next: (res) => {
-        this.categories = res.data;
+   loadCategories(): void {
+    this.profileService.getCategories().subscribe({
+      next: (cats) => {
+        this.categories = cats;
         console.log('Catégories chargées :', this.categories);
       },
-      error: (err) => {
-        console.error('Erreur chargement catégories :', err);
-      }
+      error: (err) => console.error('Erreur chargement catégories :', err)
+    });
+  }
+
+  loadFavoriteCategories(): void {
+    this.profileService.getPreferences().subscribe({
+      next: (cats) => {
+        this.favoriteCategories = cats;
+        console.log('Préférences chargées :', this.favoriteCategories);
+      },
+      error: (err) => console.error('Erreur chargement préférences :', err)
     });
   }
 
@@ -52,19 +62,22 @@ export class UserPreferencesComponent implements OnInit{
     }
   }
 
-  removeCategory(cat: any): void {
+  removeCategory(cat: Category): void {
     this.favoriteCategories = this.favoriteCategories.filter(c => c.id !== cat.id);
   }
 
-  // le bouton Annuler 
   onCancel(): void {
     this.favoriteCategories = [];
     this.selectedCategoryId = null;
   }
 
-  // Le bouton Enregistrer
   onSave(): void {
-    console.log('Catégories préférées à enregistrer : ', this.favoriteCategories);
-    
+    const categoryIds = this.favoriteCategories.map(c => c.id);
+    console.log('Catégories préférées à enregistrer :', categoryIds);
+
+    this.profileService.savePreferences(categoryIds).subscribe({
+      next: () => alert('Préférences mises à jour avec succès'),
+      error: () => alert('Erreur lors de la mise à jour des préférences')
+    });
   }
 }
