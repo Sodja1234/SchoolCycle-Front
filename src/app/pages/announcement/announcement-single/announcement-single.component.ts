@@ -398,4 +398,7 @@ export class AnnouncementSingleComponent implements OnDestroy {
     });
     this.closeReportModal();
   }
+  reloadMap(){
+    this.ngOnInit();
+  }
 }
