@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy } from '@angular/core';
+import {Component, ViewChild, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import { Announcement } from '../../../core/models/announcement/announcement';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AnnouncementService } from '../../../core/services/announcement/announcement.service';
@@ -60,7 +60,8 @@ export class AnnouncementSingleComponent implements OnDestroy {
   toastType: 'success' | 'error' = 'success';
 
   // Map
-  map: L.Map | undefined;
+  map: L.Map | null = null;
+  isMapReady:boolean = false
 
   // Timeouts
   private messageTimeout: any;
@@ -72,9 +73,9 @@ export class AnnouncementSingleComponent implements OnDestroy {
     private announcementService: AnnouncementService,
     private route: ActivatedRoute,
     private router: Router,
-    private favoriteState: FavoriteStateService,
+    private favoriteState: FavoriteStateService,private chatService: ChatService,
     private userLocalService: UserLocalService,
-    private chatService: ChatService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -92,6 +93,11 @@ export class AnnouncementSingleComponent implements OnDestroy {
     if (this.map) this.map.remove();
     clearTimeout(this.messageTimeout);
     clearTimeout(this.toastTimeout);
+  }
+
+  //scroll automatique vers le haut
+  ngAfterViewInit() {
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
   private loadAnnouncementData() {
@@ -135,8 +141,15 @@ export class AnnouncementSingleComponent implements OnDestroy {
         }
       },
       error: (err) => {
-        this.showToast("Erreur lors du chargement de l'annonce", 'error');
-        console.error("Erreur chargement annonce :", err);
+        const errorMessage = err?.error?.Erreur || err?.error?.message || '';
+
+        // Cas : Annonce n'existe pas ou pas trouvé
+        if (err.status === 404) {
+          this.router.navigate(['/announcement-not-found']);
+        }else {
+          this.showToast("Erreur lors du chargement de l'annonce", 'error');
+          console.error("Erreur chargement annonce :", err);
+        }
       }
     });
   }
@@ -193,35 +206,96 @@ export class AnnouncementSingleComponent implements OnDestroy {
 
   // Map Methods
   geocodeAddress(address: string): void {
-    if (!address.trim()) return;
+    if (!address?.trim()) {
+      console.warn('Adresse vide ou non définie', address);
+      this.isMapReady = false;
+      return;
+    }
 
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+    console.log('Adresse à géocoder:', address); // Log l'adresse reçue
+
+    const cleanedAddress = address
+      .replace(/\s+/g, '+')
+      .replace(/,/g, '%2C')
+      .replace(/;/g, '%3B');
+
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${cleanedAddress}&addressdetails=1&limit=1&countrycodes=cd`;
+
+    console.log('URL de requête Nominatim:', url); // Log l'URL complète
+
     fetch(url)
-      .then(res => res.json())
+      .then(res => {
+        console.log('Statut de la réponse:', res.status); // Log le statut HTTP
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
-        if (data?.length) {
-          this.initMap(parseFloat(data[0].lat), parseFloat(data[0].lon));
+        console.log('Réponse complète Nominatim:', data); // Log la réponse complète
+
+        if (data?.length > 0) {
+          const result = data[0];
+          console.log('Résultat trouvé:', {
+            adresse: result.display_name,
+            latitude: result.lat,
+            longitude: result.lon,
+            type: result.type,
+            importance: result.importance
+          });
+
+          const lat = parseFloat(result.lat);
+          const lon = parseFloat(result.lon);
+          this.initMap(lat, lon);
+        } else {
+          console.warn('Aucun résultat pour l\'adresse:', address);
+          this.isMapReady = false;
+          this.showToast('Adresse non trouvée', 'error');
         }
       })
-      .catch(err => console.error('Erreur géolocalisation :', err));
+      .catch(err => {
+        console.error('Erreur géocodage:', err);
+        this.isMapReady = false;
+        this.showToast('Erreur de géolocalisation', 'error');
+      });
   }
 
   initMap(lat: number, lon: number): void {
-    if (this.map) this.map.remove();
+    try {
+      // Supprimer la carte existante si elle existe
+      if (this.map) {
+        this.map.remove();
+        this.map = null;
+      }
 
-    this.map = L.map('map').setView([lat, lon], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(this.map);
+      // Attendre que le DOM soit mis à jour
+      setTimeout(() => {
+        this.map = L.map('map').setView([lat, lon], 13);
 
-    L.marker([lat, lon])
-      .addTo(this.map)
-      .bindPopup('Lieu de rendez-vous')
-      .openPopup();
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap'
+        }).addTo(this.map);
 
-    setTimeout(() => this.map?.invalidateSize(), 100);
+        L.marker([lat, lon])
+          .addTo(this.map)
+          .bindPopup('Lieu de rendez-vous');
+
+        this.isMapReady = true;
+
+        // Forcer le redimensionnement après un léger délai
+        setTimeout(() => {
+          this.map?.invalidateSize();
+        }, 300);
+      }, 0);
+    } catch (e) {
+      console.error('Erreur initialisation carte:', e);
+      this.isMapReady = false;
+    }
   }
 
+  tryGeocodeAgain() {
+    if (this.announcement?.exchange_location_address) {
+      this.geocodeAddress(this.announcement.exchange_location_address);
+    }
+  }
   // Favorite Methods
   toggleFavorite() {
     this.announcementService.toggleFavorite(this.announcement.id).subscribe({
@@ -323,5 +397,8 @@ export class AnnouncementSingleComponent implements OnDestroy {
       queryParams: { returnUrl: this.router.url }
     });
     this.closeReportModal();
+  }
+  reloadMap(){
+    this.ngOnInit();
   }
 }
