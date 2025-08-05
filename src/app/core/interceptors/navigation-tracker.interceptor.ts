@@ -18,6 +18,5 @@ export const navigationTrackerInterceptor: HttpInterceptorFn = (req, next) => {
         urlStorage.setPreviousUrl(event.urlAfterRedirects);
       }
     });
-
   return next(req);
 };
