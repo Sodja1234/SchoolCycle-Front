@@ -306,4 +306,8 @@ export class AnnouncementCreateComponent implements OnInit {
       },
     });
   }
+
+  reloadMap(){
+    this.initMap();
+  }
 }

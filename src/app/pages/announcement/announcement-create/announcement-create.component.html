@@ -1,93 +1,178 @@
 <app-header></app-header>
 
-<!-- Affichage du toast avec le message d'erreur ou de success -->
+<!-- Toast moderne centré -->
+<div *ngIf="showToast"
+     class="fixed top-[10%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+  <div class="bg-white rounded-lg shadow-lg p-4 flex items-start animate-toast-in min-w-[300px] max-w-md"
+       [ngClass]="{
+         'border-l-4 border-green-500': toastType === 'success',
+         'border-l-4 border-red-500': toastType === 'error'
+       }">
+    <!-- Icône -->
+    <div class="flex-shrink-0 mr-3" [ngClass]="{
+      'text-green-500': toastType === 'success',
+      'text-red-500': toastType === 'error'
+    }">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path *ngIf="toastType === 'success'" fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        <path *ngIf="toastType === 'error'" fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      </svg>
+    </div>
 
-<div *ngIf="showToast" class="fixed top-0 left-0 w-full z-50 flex justify-center">
-  <div [ngClass]="{
-      'bg-green-500': toastType === 'success',
-      'bg-red-500': toastType === 'error'
-    }"
-    class="text-white px-6 py-3 rounded-b shadow-md w-full max-w-md mx-auto flex justify-between items-center animate-slide-down">
-    <p class="text-lg text-center font-semibold">{{ toastMessage }}</p>
-    <a [routerLink]="['']">❌</a>
+    <!-- Message -->
+    <div class="flex-1">
+      <p class="font-medium" [ngClass]="{
+        'text-green-800': toastType === 'success',
+        'text-red-800': toastType === 'error'
+      }">
+        {{ toastMessage }}
+      </p>
+    </div>
+
+    <!-- Bouton de fermeture -->
+    <button (click)="showToast = false" class="ml-3 text-gray-400 hover:text-gray-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
   </div>
 </div>
 
-<div class="w-full max-w-4xl mx-auto shadow-xl rounded-xl mt-10 px-4">
-  <!-- Orange Header -->
-  <div class="flex flex-col items-center justify-center bg-[#FF9000] p-8 sm:p-10 rounded-t-xl text-center">
-    <p class="text-white text-lg sm:text-xl font-bold">Créer une nouvelle annonce</p>
-    <p class="text-white text-sm">Partager les détails de vos fournitures scolaires pour vendre, échanger ou donner</p>
-  </div>
-
-  <div class="w-full mb-8 p-4 sm:p-6 space-y-8">
-    <form [formGroup]="createAnnoucmentForm" (ngSubmit)="onSubmit()">
-      
-      <!-- Section 1: Type de l'annonce -->
-      <div class="space-y-4">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
-          <h2 class="text-xl font-semibold text-gray-900">Type de l'annonce</h2>
+<div class="min-h-screen bg-white mt-10 mb-10">
+  <div class="px-4 max-w-4xl mx-auto pt-8">
+    <!-- Formulaire avec en-tête intégré -->
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <!-- En-tête orange -->
+      <div class="bg-gradient-to-r from-[#FF9000] to-[#FF7A00] text-white py-8 px-8">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold mb-3">Créer une nouvelle annonce</h1>
+          <p class="text-lg text-orange-100">
+            Partagez les détails de vos fournitures scolaires pour les vendre, échanger ou donner
+          </p>
         </div>
-        <select id="state" formControlName="operation_type"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-orange-500 focus:outline-none">
-          <option value="" disabled>Sélectionner le type de l'annonce</option>
-          <option value="don">Don 🎁</option>
-          <option value="exchange">Échange 💱</option>
-          <option value="sale">Vente 🛒</option>
-        </select>
-        <div *ngIf="isSubmited && createAnnoucmentForm.get('operation_type')?.errors?.['required']"
-          class="text-red-500 text-sm">Champ obligatoire</div>
       </div>
 
-      <!-- Section 2: Information général -->
-      <div class="space-y-4">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</div>
-          <h2 class="text-xl font-semibold text-gray-900">Information générale</h2>
+      <!-- Contenu du formulaire -->
+      <form [formGroup]="createAnnoucmentForm" (ngSubmit)="onSubmit()" class="p-8 space-y-8">
+
+        <!-- Section 1: Type d'annonce - Version moderne avec SVG -->
+        <div class="bg-[#F5F5F5] p-6 rounded-xl border border-[#FFD0A9]">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-[#FF9000] text-white font-bold text-2xl">
+              1
+            </div>
+            <h2 class="text-[#7A4100] text-2xl font-bold">Type d'annonce</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Option Vente -->
+            <label class="cursor-pointer">
+              <input type="radio" name="operation_type" value="sale" class="sr-only peer" formControlName="operation_type">
+              <div class="flex flex-col items-center p-6 border-2 rounded-xl bg-white transition-all peer-checked:border-[#FF9000] peer-checked:ring-2 peer-checked:ring-[#FF9000] hover:border-[#FF9000] hover:shadow-md">
+                <div class="text-[#FF9000] mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-1 text-gray-800">Vente</h3>
+                <p class="text-gray-600 text-center text-sm">Vendez vos fournitures à un prix fixe</p>
+              </div>
+            </label>
+
+            <!-- Option Échange -->
+            <label class="cursor-pointer">
+              <input type="radio" name="operation_type" value="exchange" formControlName="operation_type" class="sr-only peer">
+              <div class="flex flex-col items-center p-6 border-2 rounded-xl bg-white transition-all peer-checked:border-[#FF9000] peer-checked:ring-2 peer-checked:ring-[#FF9000] hover:border-[#FF9000] hover:shadow-md">
+                <div class="text-[#FF9000] mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-1 text-gray-800">Échange</h3>
+                <p class="text-gray-600 text-center text-sm">Échangez contre d'autres fournitures</p>
+              </div>
+            </label>
+
+            <!-- Option Don -->
+            <label class="cursor-pointer">
+              <input type="radio" name="operation_type" value="don" formControlName="operation_type" class="sr-only peer">
+              <div class="flex flex-col items-center p-6 border-2 rounded-xl bg-white transition-all peer-checked:border-[#FF9000] peer-checked:ring-2 peer-checked:ring-[#FF9000] hover:border-[#FF9000] hover:shadow-md">
+                <div class="text-[#FF9000] mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-1 text-gray-800">Don</h3>
+                <p class="text-gray-600 text-center text-sm">Donnez gratuitement à quelqu'un</p>
+              </div>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmited && createAnnoucmentForm.get('operation_type')?.errors?.['required']" class="mt-2 text-sm text-red-600">
+            <span class="font-medium">Erreur :</span> Veuillez sélectionner un type d'annonce.
+          </div>
         </div>
 
-        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm space-y-4">
-              <!-- Titre -->
-          <div>
-            <label for="title" class="block text-sm font-medium mb-1">Titre de l'annonce</label>
-            <input id="title" type="text" formControlName="title" placeholder="Ex: Livre de mathématique 6ème"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none" />
-            <div *ngIf="isSubmited && createAnnoucmentForm.get('title')?.errors?.['required']"
-              class="text-red-500 text-sm">Le titre est requis</div>
-          </div>
-                  <!-- Description -->
-
-          <div>
-            <label for="description" class="block text-sm font-medium mb-1">Description</label>
-            <textarea id="description" rows="4" formControlName="description"
-              placeholder="Faites une description de votre article"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none resize-none"></textarea>
+        <!-- Section 2: Information générale -->
+        <div class="bg-[#F5F5F5] p-6 rounded-xl border border-[#FFD0A9]">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-[#FF9000] text-white font-bold text-2xl">
+              2
+            </div>
+            <h2 class="text-[#7A4100] text-2xl font-bold">Information générale</h2>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-6">
+            <!-- Titre -->
             <div>
-              <label for="category_id" class="block text-sm font-medium mb-1">Catégorie</label>
-              <select id="category_id" formControlName="category_id"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none">
-                <option value="" disabled>Sélectionner une catégorie</option>
-                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-              </select>
-              <div *ngIf="isSubmited && createAnnoucmentForm.get('category_id')?.errors?.['required']"
-                class="text-red-500 text-sm">La catégorie est requise</div>
-            </div>
-            <!-- Prix (affiché uniquement pour 'sale') -->
-            <div *ngIf="createAnnoucmentForm.get('operation_type')?.value === 'sale'">
-              <label for="price" class="block text-sm font-medium mb-1">Prix</label>
-              <input id="price" type="number" formControlName="price" placeholder="Ex: 10000"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none" />
+              <label for="title" class="block text-sm font-semibold text-[#7A4100] mb-2">Titre de l'annonce</label>
+              <input id="title" type="text" formControlName="title" placeholder="Ex: Livre de mathématique 6ème"
+                     class="w-full px-5 py-3 border border-[#FFD0A9] rounded-xl focus:ring-2 focus:ring-[#FF9000] focus:outline-none text-gray-700 bg-white"
+                     [class.border-red-500]="(isSubmited || createAnnoucmentForm.get('title')?.touched) && createAnnoucmentForm.get('title')?.invalid" />
+              <div *ngIf="isSubmited && createAnnoucmentForm.get('title')?.errors?.['required']"
+                   class="mt-2 text-sm text-red-600">
+                <span class="font-medium">Erreur :</span> Le titre est requis
+              </div>
             </div>
 
-              <!-- État -->
-            <div class="md:col-span-2">
-              <label for="state" class="block text-sm font-medium mb-1">État</label>
+            <!-- Description -->
+            <div>
+              <label for="description" class="block text-sm font-semibold text-[#7A4100] mb-2">Description</label>
+              <textarea id="description" rows="4" formControlName="description"
+                        placeholder="Faites une description de votre article"
+                        class="w-full px-5 py-3 border border-[#FFD0A9] rounded-xl focus:ring-2 focus:ring-[#FF9000] focus:outline-none text-gray-700 bg-white resize-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Catégorie - Prend toute la largeur si pas de vente -->
+              <div [class.md:col-span-2]="createAnnoucmentForm.get('operation_type')?.value !== 'sale'">
+                <label for="category_id" class="block text-sm font-semibold text-[#7A4100] mb-2">Catégorie</label>
+                <select id="category_id" formControlName="category_id"
+                        class="w-full px-5 py-3 border border-[#FFD0A9] rounded-xl focus:ring-2 focus:ring-[#FF9000] focus:outline-none text-gray-700 bg-white appearance-none"
+                        style="background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 4 5%22><path fill=%22%23FF9000%22 d=%22M2 0L0 2h4zm0 5L0 3h4z%22/></svg>'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 0.65rem;">
+                  <option value="" disabled>Sélectionner une catégorie</option>
+                  <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                </select>
+                <div *ngIf="isSubmited && createAnnoucmentForm.get('category_id')?.errors?.['required']"
+                     class="mt-2 text-sm text-red-600">
+                  <span class="font-medium">Erreur :</span> La catégorie est requise
+                </div>
+              </div>
+
+              <!-- Prix (affiché uniquement pour 'sale') -->
+              <div *ngIf="createAnnoucmentForm.get('operation_type')?.value === 'sale'">
+                <label for="price" class="block text-sm font-semibold text-[#7A4100] mb-2">Prix (CDF)</label>
+                <input id="price" type="number" formControlName="price" placeholder="Ex: 10000"
+                       class="w-full px-5 py-3 border border-[#FFD0A9] rounded-xl focus:ring-2 focus:ring-[#FF9000] focus:outline-none text-gray-700 bg-white" />
+              </div>
+            </div>
+
+            <!-- État -->
+            <div>
+              <label for="state" class="block text-sm font-semibold text-[#7A4100] mb-2">État</label>
               <select id="state" formControlName="state"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none">
+                      class="w-full px-5 py-3 border border-[#FFD0A9] rounded-xl focus:ring-2 focus:ring-[#FF9000] focus:outline-none text-gray-700 bg-white appearance-none"
+                      style="background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 4 5%22><path fill=%22%23FF9000%22 d=%22M2 0L0 2h4zm0 5L0 3h4z%22/></svg>'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 0.65rem;">
                 <option value="" disabled>-- Sélectionner l'état de votre article --</option>
                 <option value="new">Neuf</option>
                 <option value="like new">En bon état</option>
@@ -95,77 +180,112 @@
                 <option value="gamaged">Abîmé</option>
               </select>
               <div *ngIf="isSubmited && createAnnoucmentForm.get('state')?.errors?.['required']"
-                class="text-red-500 text-sm">L'état est requis</div>
+                   class="mt-2 text-sm text-red-600">
+                <span class="font-medium">Erreur :</span> L'état est requis
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-       <!-- Section 3: Photos -->
-      <div class="space-y-4">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</div>
-          <h2 class="text-xl font-semibold text-gray-900">Photos</h2>
+        <!-- Section 3: Photos -->
+        <div class="bg-[#F5F5F5] p-6 rounded-xl border border-[#FFD0A9]">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-[#FF9000] text-white font-bold text-2xl">
+              3
+            </div>
+            <h2 class="text-[#7A4100] text-2xl font-bold">Photos</h2>
+          </div>
+
+          <div class="flex items-center justify-center w-full mt-4 relative isolate">
+            <label for="photos" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-[#FFD0A9] border-dashed rounded-xl cursor-pointer bg-white hover:bg-[#FFF5EE] transition-colors">
+              <!-- Zone preview des images -->
+              <div *ngIf="previewImages.length" class="absolute top-0 left-0 w-full h-full p-2 overflow-auto flex flex-wrap gap-2 bg-white bg-opacity-90 z-10 rounded-xl">
+                <div *ngFor="let url of previewImages; let i = index" class="relative">
+                  <img [src]="url" class="w-20 h-20 object-cover rounded-lg border border-[#FFD0A9] shadow-sm" alt="Preview" />
+                  <button type="button" (click)="removeImage(i)"
+                          class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
+                          title="Supprimer">
+                    ×
+                  </button>
+                </div>
+              </div>
+
+              <!-- Icône et instructions -->
+              <div class="flex flex-col items-center justify-center pt-5 pb-6" *ngIf="!previewImages.length">
+                <svg class="w-10 h-10 mb-4 text-[#FF9000]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                </svg>
+                <p class="mb-2 text-sm text-[#FF9000]">
+                  <span class="font-semibold">Cliquez pour importer</span> ou glissez-déposez
+                </p>
+                <p class="text-xs text-[#FF9000]/80">
+                  PNG, JPG ou GIF (MAX. 800x400px)
+                </p>
+              </div>
+
+              <input id="photos" type="file" multiple (change)="onFileChange($event)" class="hidden" />
+            </label>
+          </div>
+
+          <div *ngIf="isSubmited && previewImages.length === 0" class="mt-2 text-sm text-red-600">
+            <span class="font-medium">Erreur :</span> La photo est obligatoire
+          </div>
         </div>
 
-        <div class="border-2 border-dashed p-6 flex flex-col justify-center items-center">
-          <input id="photos" type="file" multiple (change)="onFileChange($event)" class="w-full" />
-          <div class="flex flex-wrap gap-4 mt-4" *ngIf="previewImages.length">
-            <div *ngFor="let url of previewImages; let i = index" class="relative">
-              <img [src]="url" class="w-24 h-24 object-cover rounded-lg border shadow-sm" alt="Preview" />
-              <button type="button" (click)="removeImage(i)"
-                class="absolute top-0 right-0 text-white bg-red-500 rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-700">
-                ❌
-              </button>
+        <!-- Section 4: Lieu d'échange avec carte -->
+        <div class="bg-[#F5F5F5] p-6 rounded-xl border border-[#FFD0A9]">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-[#FF9000] text-white font-bold text-2xl">
+              4
+            </div>
+            <h2 class="text-[#7A4100] text-2xl font-bold">Lieu d'échange</h2>
+          </div>
+
+          <div class="space-y-6">
+            <div>
+              <label for="exchangeAddress" class="block text-sm font-semibold text-[#7A4100] mb-2">Adresse d'échange</label>
+              <input id="exchangeAddress" formControlName="exchange_location_address" (input)="onAddressInput()" placeholder="Entrez l'adresse de rencontre"
+                     class="w-full px-5 py-3 border border-[#FFD0A9] rounded-xl focus:ring-2 focus:ring-[#FF9000] focus:outline-none text-gray-700 bg-white"
+                     [class.border-red-500]="(isSubmited || createAnnoucmentForm.get('exchange_location_address')?.touched) && createAnnoucmentForm.get('exchange_location_address')?.invalid" />
+              <ul *ngIf="addressSuggestions.length" class="bg-white border mt-2 rounded shadow-sm max-h-40 overflow-y-auto text-sm">
+                <li *ngFor="let suggestion of addressSuggestions" (click)="selectAddress(suggestion)" class="p-2 hover:bg-gray-100 cursor-pointer">
+                  {{ suggestion.display_name }}
+                </li>
+              </ul>
+              <div *ngIf="isSubmited && createAnnoucmentForm.get('exchange_location_address')?.errors?.['required']"
+                   class="mt-2 text-sm text-red-600">
+                <span class="font-medium">Erreur :</span> Veuillez renseigner le lieu
+              </div>
+            </div>
+
+            <input formControlName="exchange_location_lat" type="text" hidden />
+            <input formControlName="exchange_location_lng" type="text" hidden />
+
+            <!-- Carte intégrée avec style amélioré -->
+            <div class="mt-4 relative isolate">
+              <label class="block text-sm font-semibold text-[#7A4100] mb-2">Localisation sur la carte</label>
+              <div class="relative z-0 rounded-xl overflow-hidden border-2 border-[#FFD0A9] shadow-sm">
+                <div id="map" class="w-full h-96"></div>
+              </div>
+              <p class="mt-2 text-xs text-gray-500">Veuillez sélectionner une adresse ou cliquer sur la carte pour préciser le lieu d'échange</p>
+              <p class="mt-2 text-xs text-gray-500">la carte ne s'affiche pas ? <b><a class="cursor-pointer text-[#FF9000]" (click)="reloadMap()">recharger</a></b></p>
             </div>
           </div>
-          <div *ngIf="isSubmited && previewImages.length === 0" class="text-red-500 text-sm">
-            La photo est obligatoire
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 4: Lieu d'échange -->
-      <div class="space-y-4">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</div>
-          <h2 class="text-xl font-semibold text-gray-900">Lieu d'échange</h2>
         </div>
 
-        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm space-y-4">
-          <div>
-            <label for="exchangeAddress" class="block text-sm font-medium mb-1">Adresse d'échange</label>
-            <input id="exchangeAddress" formControlName="exchange_location_address" (input)="onAddressInput()" placeholder="Adresse"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:outline-none" />
-            <ul *ngIf="addressSuggestions.length" class="bg-white border mt-2 rounded shadow-sm max-h-40 overflow-y-auto text-sm">
-              <li *ngFor="let suggestion of addressSuggestions" (click)="selectAddress(suggestion)" class="p-2 hover:bg-gray-100 cursor-pointer">
-                {{ suggestion.display_name }}
-              </li>
-            </ul>
-            <div *ngIf="isSubmited && createAnnoucmentForm.get('exchange_location_address')?.errors?.['required']"
-              class="text-red-500 text-sm">Veuillez renseigner le lieu</div>
-          </div>
-
-          <input formControlName="exchange_location_lat" type="text" hidden />
-          <input formControlName="exchange_location_lng" type="text" hidden />
+        <!-- Boutons d'action -->
+        <div class="pt-4 flex flex-col sm:flex-row gap-4">
+          <button type="submit"
+                  class="w-full bg-gradient-to-r from-[#FF9000] to-[#FF7A00] hover:from-[#FF7A00] hover:to-[#FF6600] text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.02]">
+            Publier l'annonce
+          </button>
+          <a [routerLink]="['']"
+             class="w-full px-6 py-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-gray-500 text-center font-semibold">
+            Annuler
+          </a>
         </div>
-
-        <div id="map" class="w-full h-[400px] mt-2 rounded-md overflow-hidden"></div>
-      </div>
-
-           <!-- Boutons d'action -->
-
-      <div class="pt-4 flex flex-col sm:flex-row gap-3">
-        <button type="submit"
-          class="w-full sm:w-auto px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-orange-500">
-          Publier l'annonce
-        </button>
-        <a [routerLink]="['']"
-          class="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-gray-500">
-          Annuler
-        </a>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
 
