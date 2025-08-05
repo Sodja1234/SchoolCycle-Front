@@ -49,8 +49,8 @@
 
       <!-- Map -->
       <div class="relative w-full sm:w-auto overflow-visible">
-        <div *ngIf="map" id="map" class="h-[400px] w-full mt-5 relative z-10"></div>
-        <div *ngIf="!map" class="h-full flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+        <div *ngIf="isMapReady" id="map" class="h-[400px] w-full mt-5 relative z-10"></div>
+        <div *ngIf="!isMapReady" class="h-full flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-200">
           <svg class="w-24 h-24 text-gray-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="15" y="25" width="70" height="50" rx="2" fill="white" stroke="currentColor" stroke-width="1.5"/>
             <path d="M30 35 L50 45 L70 35" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -66,7 +66,12 @@
           </svg>
           <div class="mt-4 text-center">
             <p class="text-gray-500 font-medium">Localisation indisponible</p>
-            <p class="text-sm text-gray-400 mt-1">Nous n'avons pas pu charger la carte</p>
+            <p class="text-sm text-gray-400 mt-1">
+              {{ announcement.exchange_location_address || 'Adresse non spécifiée' }}
+            </p>
+            <button (click)="tryGeocodeAgain()" class="mt-2 text-orange-500 text-sm underline cursor-pointer">
+              Réessayer
+            </button>
           </div>
         </div>
       </div>
