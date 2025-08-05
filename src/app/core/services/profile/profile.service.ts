@@ -2,8 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Profile, PutPassword } from '../../models/profile/profile';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { UserLocalService } from '../userlocal/userlocal.service';
+import { Category } from '../../models/announcement/category';
 
 @Injectable({
   providedIn: 'root'
@@ -46,4 +47,23 @@ export class ProfileService {
     return this.http.post<Profile>(this.baseUrl + 'users/update?_method=PUT', formdata, { headers });
   }
 
+
+getPreferences(): Observable<Category[]> {
+  const headers =this.userLocalService.getAuthHeaders();
+  return this.http.get<{ data: Category[] }>(this.baseUrl +'preferences').pipe(
+    map(res => res.data)
+  );
+}
+
+getCategories(): Observable<Category[]> {
+  const headers =this.userLocalService.getAuthHeaders();
+  return this.http.get<{ data: Category[] }>(this.baseUrl +'categories').pipe(
+    map(res => res.data)
+  );
+}
+savePreferences(categoryIds: number[]): Observable<any> {
+  const headers =this.userLocalService.getAuthHeaders();
+  return this.http.post(this.baseUrl +'preferences', { category_ids: categoryIds }, {headers});
+}
+  
 }

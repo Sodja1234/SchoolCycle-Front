@@ -53,12 +53,10 @@
     <div>
       <h3 class="font-semibold text-black mb-4">Liens rapides</h3>
       <ul class="space-y-2">
-        <li><a href="#" class="hover:underline">Parcourir les annonces</a></li>
-        <li><a href="#" class="hover:underline">Publier une annonce</a></li>
-        <li><a href="#" class="hover:underline">À propos</a></li>
-        <li><a href="#" class="hover:underline">Contact</a></li>
-        <li><a href="#" class="hover:underline">FAQ</a></li>
-        <li><a href="#" class="hover:underline">Comment ça marche</a></li>
+        <li><a [routerLink]="['']" routerLinkActive="router-link-active" class="hover:underline">Parcourir les annonces</a></li>
+        <li><a [routerLink]="['/create-announcement']" routerLinkActive="router-link-active" class="hover:underline">Publier une annonce</a></li>
+        <li><a [routerLink]="['/about']" routerLinkActive="router-link-active"  class="hover:underline">À propos</a></li>
+        <li><a [routerLink]="['/contact']" routerLinkActive="router-link-active" class="hover:underline">Contact</a></li>
       </ul>
     </div>
 
@@ -66,10 +64,7 @@
     <div>
       <h3 class="font-semibold text-black mb-4">Informations légales</h3>
       <ul class="space-y-2">
-        <li><a href="#" class="text-gray-500 hover:underline">Conditions d'utilisation</a></li>
-        <li><a href="#" class="text-gray-500 hover:underline">Politique de confidentialité</a></li>
-        <li><a href="#" class="text-gray-500 hover:underline">Politique de cookies</a></li>
-        <li><a href="#" class="text-gray-500 hover:underline">Mentions légales</a></li>
+        <li><a [routerLink]="['/cookies']" routerLinkActive="router-link-active" class="text-gray-500 hover:underline">Politique de cookies</a></li>
       </ul>
     </div>
 
@@ -100,11 +95,7 @@
               max-w-[100%] sm:max-w-[90%] lg:max-w-[75%]">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
       <span>© 2025 SchoolCycle. Tous droits réservés.</span>
-      <div class="flex space-x-4 mt-2 md:mt-0">
-        <a href="#" class="hover:underline">Aide</a>
-        <a href="#" class="hover:underline">Support</a>
-        <a href="#" class="hover:underline">Signaler un problème</a>
-      </div>
+      
     </div>
   </div>
 </footer>
