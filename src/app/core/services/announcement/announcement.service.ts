@@ -70,7 +70,7 @@ export class AnnouncementService {
     }
 
     // Construction de l'URL en fonction de la présence d'un ID
-    let url = this.url + 'announcements/public';
+    let url = this.url + 'announcements';
     if (id) {
       url += `/${id}`; // Ajoute l'ID utilisateur si présent
     }
@@ -86,8 +86,8 @@ export class AnnouncementService {
   //methode pour recuperer une annonce en particulier
   getAnnoucement(id: number): Observable<Announcement> {
     //on fait une requete http vers l'api  avec l'id de l'annonce passéé en parametre
-    return this.http.get<Announcement>(this.url + 'announcement/public/single/' + id);
-    return this.http.get<Announcement>(this.url + 'announcement/public/single/' + id);
+    return this.http.get<Announcement>(this.url + 'announcements/single/' + id);
+    //return this.http.get<Announcement>(this.url + 'announcement/public/single/' + id);
   }
 
   //On recupere les categories

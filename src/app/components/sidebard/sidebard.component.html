@@ -14,10 +14,14 @@
               <span class="bg-orange-500 text-white rounded px-2 text-sm ml-2">0</span></a>
           </li>
           <li>
-            <a [routerLink]="['/admin/users']" class="block p-2 hover:bg-orange-500">Utilisateurs</a>
+            <a [routerLink]="['/admin/users']" class="block p-2 hover:bg-orange-500">Utilisateurs
+              <span class="bg-orange-500 text-white rounded px-2 text-sm ml-2">0</span>
+            </a>
           </li>
           <li>
-            <a [routerLink]="['/admin/categories']" class="block p-2 hover:bg-orange-500">Catégories</a>
+            <a [routerLink]="['/admin/categories']" class="block p-2 hover:bg-orange-500">Catégories
+              <span class="bg-orange-500 text-white rounded px-2 text-sm ml-2">0</span>
+            </a>
           </li>
           <li>
             <a [routerLink]="['/admin/reports']" href="#" class="block p-2 hover:bg-orange-500">Signalements
@@ -25,17 +29,13 @@
           </li>
           <li class="pt-4 text-gray-400 uppercase text-xs">Système</li>
           <li>
-            <a href="#" class="block p-2 hover:bg-orange-500">Paramètres</a>
+            <a [routerLink]="['/']"  class="block p-2 hover:bg-orange-500">Aller su le site</a>
           </li>
           <li>
-            <a href="#" class="block p-2 hover:bg-orange-500">Statistiques</a>
-          </li>
-          <li>
-            <a href="#" class="block p-2 hover:bg-orange-500">Logs système</a>
+            <a (click)="logOut()" class="block p-2 hover:bg-orange-500">Déconnexion</a>
           </li>
         </ul>
-      </nav>
-      <div class="p-4 border-t border-gray-600 text-sm">
+              <div class="p-4 border-t border-gray-600 text-sm">
         <div class="flex items-center space-x-2">
           <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center font-bold">
             AD
@@ -46,4 +46,5 @@
           </div>
         </div>
       </div>
+      </nav>
     </aside>

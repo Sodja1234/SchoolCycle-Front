@@ -12,7 +12,7 @@
         {{ categorie.description }}
       </p>
       <div class="flex gap-3 text-orange-500 text-lg mt-auto">
-        <button title="Éditer">✏️</button>
+        <button  (click)="edit.emit(categorie.id)" title="Éditer">✏️</button>
         <button title="Supprimer">🗑️</button>
       </div>
     </div>
