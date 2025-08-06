@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AnnouncementService } from '../../core/services/announcement/announcement.service';
 import { Announcement } from '../../core/models/announcement/announcement';
 import { Category } from '../../core/models/announcement/category';
@@ -13,4 +13,5 @@ export class CategorieCardComponent {
   categorieId!: number;
   constructor(private categorieService: AnnouncementService) {}
   @Input() categorie!: Category;
+  @Output() edit = new EventEmitter<number>();  
 }

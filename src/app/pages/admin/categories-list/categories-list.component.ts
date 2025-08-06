@@ -36,6 +36,12 @@ export class CategoriesListComponent {
       description: ['', Validators.required],
       photo: ['', Validators.required],
     });
+
+    this.editCategorieForm = this.fb.group({
+    name: ['', Validators.required],
+    description: ['', Validators.required],
+    photo:['',Validators.required]
+  });
   }
 
   // Récuperation des catégories depuis l'API via le service categorie
@@ -117,4 +123,62 @@ export class CategoriesListComponent {
       },
     });
   }
+
+editModalOpen: boolean = false;
+editCategorieForm!: FormGroup;
+categoryToEditId!: number;
+
+openEditModal(id: number) {
+  this.categoryToEditId = id;
+  this.editModalOpen = true;
+
+  // On récupère les infos de la catégorie pour pré-remplir le formulaire
+  const category = this.categories.find(cat => cat.id === id);
+  if (category) {
+    this.editCategorieForm.patchValue({
+      name: category.name,
+      description: category.description
+    });
+  }
+}
+
+closeEditModal() {
+  this.editModalOpen = false;
+  this.categoryToEditId = null as any;
+}
+
+onEditSubmit() {
+  this.isSubmited = true;
+  if (this.editCategorieForm.invalid) {
+    this.showToast = true;
+    this.toastType = 'error';
+    this.toastMessage = 'Veuillez remplir correctement le formulaire';
+    setTimeout(() => this.showToast = false, 2000);
+    return;
+  }
+
+  const formData = this.editCategorieForm.value;
+
+  this.categorieService.updateCategorie(this.categoryToEditId, formData).subscribe({
+    next: () => {
+      this.isSubmited = false;
+      this.showToast = true;
+      this.toastType = 'success';
+      this.toastMessage = 'Catégorie mise à jour avec succès';
+      setTimeout(() => {
+        this.showToast = false;
+        this.editModalOpen = false;
+        this.getCategories(); // Recharge les données
+      }, 2000);
+    },
+    error: (err) => {
+      this.isSubmited = false;
+      console.error('Erreur lors de la mise à jour', err);
+      this.toastType = 'error';
+      this.toastMessage = 'Erreur lors de la mise à jour';
+      this.showToast = true;
+      setTimeout(() => this.showToast = false, 2000);
+    }
+  });
+}
 }
