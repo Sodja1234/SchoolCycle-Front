@@ -241,36 +241,71 @@
 </div>
 
 <p class="text-3xl text-center font-bold mt-10">Catégories Populaire</p>
-<div  class="w-full md:w-[75%] mx-auto mt-10 flex flex-wrap justify-center gap-10">
-  @for (category of categories; track category.id) {
-    <div class="p-5 flex flex-col  items-center" >
-      <div class="bg-gray-200 w-25 h-25 flex justify-center items-center rounded-full mb-2">
-        <a href="">
-          <img class="w-16 h-16 object-cover flex justify-center items-center" [src]="'http://localhost:8000/storage/' + category.photo" alt="">
-        </a>
+<div class="w-full md:w-[75%] mx-auto mt-10">
+  @if (categories && categories.length > 0) {
+    <div class="flex justify-center">
+      <!-- Version desktop (6 colonnes) -->
+      <div class="hidden md:grid md:grid-cols-6 gap-4 w-full">
+        @for (category of categories; track category.id) {
+          <div class="p-3 flex flex-col items-center group">
+            <div class="bg-gray-100 w-20 h-20 flex justify-center items-center rounded-full mb-2 transition-all duration-300 group-hover:bg-gray-200">
+              <a [routerLink]="['/announcement-gallery']" [queryParams]="{ categories: category.name }">
+                <img class="w-12 h-12 object-cover"
+                     [src]="'http://localhost:8000/storage/' + category.photo"
+                     [alt]="category.name"
+                     loading="lazy">
+              </a>
+            </div>
+            <div class="flex flex-col justify-center">
+              <a [routerLink]="['/announcement-gallery']" [queryParams]="{ categories: category.name }"
+                 class="text-xs sm:text-sm text-gray-700 hover:text-[#ff9000] transition-colors text-center">
+                {{ category.name }}
+              </a>
+            </div>
+          </div>
+        }
       </div>
-      <div class="flex flex-col justify-center">
-        <a class="text-sm text-gray-700 " href="">
-          {{ category.name }}
-        </a>
+
+      <!-- Version mobile/tablette (3 colonnes) -->
+      <div class="grid grid-cols-3 gap-4 w-full md:hidden">
+        @for (category of categories; track category.id) {
+          <div class="p-2 flex flex-col items-center group">
+            <div class="bg-gray-100 w-16 h-16 flex justify-center items-center rounded-full mb-1 transition-all duration-300 group-hover:bg-gray-200">
+              <a [routerLink]="['/announcement-gallery']" [queryParams]="{ categories: category.name }">
+                <img class="w-10 h-10 object-cover"
+                     [src]="'http://localhost:8000/storage/' + category.photo"
+                     [alt]="category.name"
+                     loading="lazy">
+              </a>
+            </div>
+            <div class="flex flex-col justify-center">
+              <a [routerLink]="['/announcement-gallery']" [queryParams]="{ categories: category.name }"
+                 class="text-xs text-gray-700 hover:text-[#ff9000] transition-colors text-center">
+                {{ category.name }}
+              </a>
+            </div>
+          </div>
+        }
       </div>
+    </div>
+  }
+  @else {
+    <div class="bg-white rounded-xl shadow-sm p-6 sm:p-12 text-center w-full">
+      <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 sm:mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 sm:h-12 sm:w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+      </div>
+      <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-2">Aucune catégorie disponible</h3>
+      <p class="text-gray-500 text-sm sm:text-base">
+        Les catégories n'ont pas encore été configurées. Veuillez réessayer ultérieurement.
+      </p>
     </div>
   }
 </div>
 
 <!-- Section annonces -->
 <app-announcement-list></app-announcement-list>
-
-<!-- Section CTA -->
-<div class="mb-16">
-  <div class="flex flex-col sm:flex-row justify-center gap-4">
-    <a [routerLink]="['/announcement-gallery']"
-      class="bg-orange-500 mx-auto border border-white text-white font-semibold px-4 py-2 sm:px-8 sm:py-3 rounded hover:bg-gray-200 hover:text-black transition duration-300 text-xs sm:text-base cursor-pointer"
-    >
-      Voir plus
-    </a>
-  </div>
-</div>
-
 
 <app-footer></app-footer>

@@ -43,10 +43,10 @@ export class HomeComponent {
 
     // Récupère les catégories depuis l'API
   getCategories() {
-    this.categorieService.getCategories().subscribe({
+    this.categorieService.getMostUsedCategories().subscribe({
       next: (res) => {
         this.categories = res.data; // Stocke les catégories dans la propriété du composant
-        console.log('Catégories:', this.categories); // Debug
+        console.log('Most used categories :', this.categories); // Debug
       },
     });
   }
