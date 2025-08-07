@@ -89,6 +89,16 @@
           <label class="flex items-center space-x-2"><input type="checkbox" formControlName="used"> <span>Usagé</span></label>
         </div>
 
+        <!-- 🗂️ Catégories dynamiques -->
+        <div formGroupName="category" class="form-group">
+          <h3 class="font-semibold text-gray-700 mb-3">Catégories</h3>
+          <ng-container *ngFor="let cat of categories">
+            <label>
+              <input type="checkbox" [formControlName]="cat.name"> {{ cat.name }}
+            </label><br>
+          </ng-container>
+        </div>
+
         <!-- 💰 Prix -->
         <div class="col-span-full pt-4">
           <h3 class="font-semibold text-gray-700 mb-3">Prix ($)</h3>
@@ -140,12 +150,12 @@
     </div>
   }
   @else {
-    <!-- Modifié ici pour centrer sur mobile -->
-    <div class="flex flex-col items-center sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 w-full">
+    <!-- Grille responsive modifiée -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 w-full">
       @for(announcement of announcements; track announcement.id) {
         <app-announcement-card
           [announcement]="announcement"
-          class="w-full max-w-xs sm:max-w-none">
+          class="w-full">
         </app-announcement-card>
       }
     </div>
