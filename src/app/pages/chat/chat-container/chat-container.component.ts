@@ -7,20 +7,19 @@ import { ChatService } from '../../../core/services/chat/chat.service';
 import { EchoService } from '../../../core/services/websocket/echo.service';
 import { Chat } from '../../../core/models/chat/chat';
 import { NgIf } from '@angular/common';
-import { Subscription } from 'rxjs';
 import { ChatInfoComponent } from '../chat-info/chat-info.component';
-import { RouterModule } from '@angular/router';
+import {Router} from '@angular/router';
 
 
 @Component({
   selector: 'app-chat-container',
-  imports: [ChatListComponent, ChatHeaderComponent, ChatMessageComponent, ChatInputComponent, ChatInfoComponent, NgIf, RouterModule],
+  imports: [ChatListComponent, ChatHeaderComponent, ChatMessageComponent, ChatInputComponent, ChatInfoComponent, NgIf],
   templateUrl: './chat-container.component.html',
   styleUrl: './chat-container.component.css'
 })
 export class ChatContainerComponent implements OnInit, OnDestroy {
 
-  
+
   userId? : number | null;
   selectedchat?: Chat;
   showInfoPanel = false;
@@ -35,7 +34,8 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
 
   constructor(
     private chatService : ChatService,
-    private echoService: EchoService
+    private echoService: EchoService,
+    private  router : Router
   ){}
 
   ngOnInit(): void{
@@ -104,8 +104,8 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
    * Rafraîchit la liste des chats
    */
   private refreshChatList(): void {
-    
-    
+
+
   }
 
   // Pour le chat courant, expose la liste des messages en attentes
@@ -179,5 +179,9 @@ export class ChatContainerComponent implements OnInit, OnDestroy {
   // Méthode pour fermer le panneau info
   closeInfoPanel() {
     this.showInfoPanel = false;
+  }
+
+  goToHome(){
+    window.location.href = '/';
   }
 }

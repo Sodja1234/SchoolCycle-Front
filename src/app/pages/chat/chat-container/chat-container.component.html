@@ -1,19 +1,19 @@
 <!-- Container principal -->
 <div class="flex h-screen bg-gray-50 dark:bg-gray-900 chat-container">
-  
+
   <!-- Sidebar - Liste des conversations -->
   <div class="hidden lg:flex lg:w-80 xl:w-96 flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 chat-transition">
       <!-- Bouton Retour minimaliste -->
   <div class="px-4 py-3">
-    <a routerLink="/"
-      class="text-sm font-medium text-orange-600 hover:text-orange-500 dark:text-orange-400 dark:hover:text-orange-300 transition-colors inline-flex items-center">
+    <a (click)="goToHome()"
+      class="text-sm font-medium text-orange-600 hover:text-orange-500 dark:text-orange-400 dark:hover:text-orange-300 transition-colors inline-flex items-center cursor-pointer">
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
       Accueil
     </a>
   </div>
-    
+
     <!-- En-tête de la sidebar -->
     <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
       <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Messages</h2>
@@ -44,11 +44,11 @@
 
   <!-- Zone principale de chat -->
   <div class="flex-1 flex flex-col bg-white dark:bg-gray-800 chat-transition">
-    
+
     <!-- En-tête du chat -->
-    <app-chat-header 
-      [userId]="userId!" 
-      [chat]="selectedchat" 
+    <app-chat-header
+      [userId]="userId!"
+      [chat]="selectedchat"
       (chatClosed)="onChatClosed()"
       (openInfo)="openInfoPanel()"
       class="border-b border-gray-200 dark:border-gray-700">
@@ -56,20 +56,20 @@
 
     <!-- Zone des messages -->
     <div class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 chat-scrollbar">
-      <app-chat-message 
-        [pendingMessages]="pendingMessages" 
-        (retry)="retryPendingMessages($event)" 
+      <app-chat-message
+        [pendingMessages]="pendingMessages"
+        (retry)="retryPendingMessages($event)"
         [chat]="selectedchat">
       </app-chat-message>
     </div>
 
     <!-- Zone d'input -->
     <div class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-      <app-chat-input 
-        class="w-full" 
-        [conversation]="selectedchat?.id" 
+      <app-chat-input
+        class="w-full"
+        [conversation]="selectedchat?.id"
         [isChatClosed]="selectedchat?.is_closed || false"
-        (messageSent)="refreshMessage()" 
+        (messageSent)="refreshMessage()"
         (pendingMessagesChange)="onPendingMessagesChange($event)">
       </app-chat-input>
     </div>
@@ -89,7 +89,7 @@
   </div>
 
   <!-- Panneau latéral d'info chat -->
-  <app-chat-info 
+  <app-chat-info
     *ngIf="showInfoPanel && selectedchat"
     [chatId]="selectedchat.id"
     (close)="closeInfoPanel()">
