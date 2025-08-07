@@ -9,7 +9,7 @@ import { UrlStorageService } from '../../../core/services/url/url-storage.servic
 @Component({
   selector: 'app-announcement-list',
   standalone: true,
-  imports: [AnnouncementCardComponent],
+  imports: [AnnouncementCardComponent, RouterLink],
   templateUrl: './announcement-list.component.html',
   styleUrls: ['./announcement-list.component.css']
 })

@@ -39,6 +39,10 @@ export class AnnouncementService {
       params = params.set('state', filters.state.join(','));
     }
 
+    if (filters?.categories?.length > 0) {
+      params = params.set('categories', filters.categories.join(','));
+    }
+
     // Filtrage par prix minimum
     if (filters.min_price != null) {
       params = params.set('min_price', filters.min_price);
@@ -76,7 +80,6 @@ export class AnnouncementService {
     }
 
     // Envoi de la requête HTTP GET avec les paramètres construits
-    return this.http.get<PaginatedAnnouncements>(url, { params });
     return this.http.get<PaginatedAnnouncements>(url, { params });
   }
 
