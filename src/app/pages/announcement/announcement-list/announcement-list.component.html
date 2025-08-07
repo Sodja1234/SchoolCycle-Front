@@ -27,6 +27,17 @@
       @for(announce of announcements; track announce.id){
         <app-announcement-card [announcement]="announce" class="w-full max-w-xs sm:max-w-none"></app-announcement-card>
       }
+
+    </div>
+    <!-- Section CTA -->
+    <div class="mb-16 mt-16">
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a [routerLink]="['/announcement-gallery']"
+           class="bg-orange-500 mx-auto border border-white text-white font-semibold px-4 py-2 sm:px-8 sm:py-3 rounded hover:bg-gray-200 hover:text-black transition duration-300 text-xs sm:text-base cursor-pointer"
+        >
+          Voir plus
+        </a>
+      </div>
     </div>
   }
 </div>
