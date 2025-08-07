@@ -3,6 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { UserLocalService } from '../userlocal/userlocal.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {Category} from '../../models/announcement/category';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,11 @@ export class CategoriesService {
   //On recupere les categories
   getCategories(): Observable<{ data: any[] }> {
     return this.http.get<{ data: any[] }>(`${this.url}categories`);
+  }
+
+  //recuperer les categories les plus utilisées
+  getMostUsedCategories():Observable<{ data : Category[] }>{
+    return this.http.get<{data : Category[]}>(this.url + 'categories/most_used')
   }
 
   createCategorie(data: FormData) {
