@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnDestroy, ChangeDetectorRef} from '@angular/core';
+import { Component, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Announcement } from '../../../core/models/announcement/announcement';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AnnouncementService } from '../../../core/services/announcement/announcement.service';
@@ -61,19 +61,19 @@ export class AnnouncementSingleComponent implements OnDestroy {
 
   // Map
   map: L.Map | null = null;
-  isMapReady:boolean = false
+  isMapReady: boolean = false;
 
   // Timeouts
   private messageTimeout: any;
   private toastTimeout: any;
   private routeSub!: Subscription;
 
-
   constructor(
     private announcementService: AnnouncementService,
     private route: ActivatedRoute,
     private router: Router,
-    private favoriteState: FavoriteStateService,private chatService: ChatService,
+    private favoriteState: FavoriteStateService,
+    private chatService: ChatService,
     private userLocalService: UserLocalService,
     private cd: ChangeDetectorRef
   ) {}
@@ -83,7 +83,22 @@ export class AnnouncementSingleComponent implements OnDestroy {
     this.currentUserId = this.user?.id || -1;
 
     this.routeSub = this.route.params.subscribe(params => {
-      this.articleId = +params['id'];
+      const idParam = params['id'];
+
+      // Vérification que l'ID est bien numérique
+      if (isNaN(idParam)) {
+        this.redirectToNotFound();
+        return;
+      }
+
+      this.articleId = +idParam;
+
+      // Vérification que l'ID est positif
+      if (this.articleId <= 0) {
+        this.redirectToNotFound();
+        return;
+      }
+
       this.loadAnnouncementData();
     });
   }
@@ -95,7 +110,6 @@ export class AnnouncementSingleComponent implements OnDestroy {
     clearTimeout(this.toastTimeout);
   }
 
-  //scroll automatique vers le haut
   ngAfterViewInit() {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
@@ -105,6 +119,16 @@ export class AnnouncementSingleComponent implements OnDestroy {
     this.getSimilarAnnouncement();
     this.checkIfAlreadyReported();
     this.isFavorite$ = this.favoriteState.isFavorite(this.articleId);
+  }
+
+  private redirectToNotFound(): void {
+    this.router.navigate(['/announcement-not-found'], {
+      state: {
+        articleId: this.articleId,
+        attemptedUrl: this.router.url
+      },
+      replaceUrl: true
+    });
   }
 
   // Simple Toast Methods
@@ -133,6 +157,11 @@ export class AnnouncementSingleComponent implements OnDestroy {
   getSingleAnnouncement() {
     this.announcementService.getAnnoucement(this.articleId).subscribe({
       next: (res) => {
+        if (!res || !res.id) {
+          this.redirectToNotFound();
+          return;
+        }
+
         this.announcement = res;
         this.currentImage = this.announcement.photos?.[0]?.url || '';
 
@@ -141,13 +170,11 @@ export class AnnouncementSingleComponent implements OnDestroy {
         }
       },
       error: (err) => {
-        const errorMessage = err?.error?.Erreur || err?.error?.message || '';
-
-        // Cas : Annonce n'existe pas ou pas trouvé
-        if (err.status === 404) {
-          this.router.navigate(['/announcement-not-found']);
-        }else {
-          this.showToast("Erreur lors du chargement de l'annonce", 'error');
+        if (err.status === 404 || err.status === 400) {
+          this.redirectToNotFound();
+        } else {
+          const errorMessage = err?.error?.Erreur || err?.error?.message || 'Erreur inconnue';
+          this.showToast(errorMessage, 'error');
           console.error("Erreur chargement annonce :", err);
         }
       }
@@ -182,7 +209,7 @@ export class AnnouncementSingleComponent implements OnDestroy {
     const payload = {
       user_id: this.currentUserId,
       announcement_id: this.articleId,
-      motif: finalMotif, // Utilisez finalMotif ici
+      motif: finalMotif,
       detail: this.detail,
     };
 
@@ -212,8 +239,6 @@ export class AnnouncementSingleComponent implements OnDestroy {
       return;
     }
 
-    console.log('Adresse à géocoder:', address); // Log l'adresse reçue
-
     const cleanedAddress = address
       .replace(/\s+/g, '+')
       .replace(/,/g, '%2C')
@@ -221,27 +246,14 @@ export class AnnouncementSingleComponent implements OnDestroy {
 
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${cleanedAddress}&addressdetails=1&limit=1&countrycodes=cd`;
 
-    console.log('URL de requête Nominatim:', url); // Log l'URL complète
-
     fetch(url)
       .then(res => {
-        console.log('Statut de la réponse:', res.status); // Log le statut HTTP
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then(data => {
-        console.log('Réponse complète Nominatim:', data); // Log la réponse complète
-
         if (data?.length > 0) {
           const result = data[0];
-          console.log('Résultat trouvé:', {
-            adresse: result.display_name,
-            latitude: result.lat,
-            longitude: result.lon,
-            type: result.type,
-            importance: result.importance
-          });
-
           const lat = parseFloat(result.lat);
           const lon = parseFloat(result.lon);
           this.initMap(lat, lon);
@@ -260,13 +272,11 @@ export class AnnouncementSingleComponent implements OnDestroy {
 
   initMap(lat: number, lon: number): void {
     try {
-      // Supprimer la carte existante si elle existe
       if (this.map) {
         this.map.remove();
         this.map = null;
       }
 
-      // Attendre que le DOM soit mis à jour
       setTimeout(() => {
         this.map = L.map('map').setView([lat, lon], 13);
 
@@ -280,7 +290,6 @@ export class AnnouncementSingleComponent implements OnDestroy {
 
         this.isMapReady = true;
 
-        // Forcer le redimensionnement après un léger délai
         setTimeout(() => {
           this.map?.invalidateSize();
         }, 300);
@@ -296,6 +305,7 @@ export class AnnouncementSingleComponent implements OnDestroy {
       this.geocodeAddress(this.announcement.exchange_location_address);
     }
   }
+
   // Favorite Methods
   toggleFavorite() {
     this.announcementService.toggleFavorite(this.announcement.id).subscribe({
@@ -355,24 +365,23 @@ export class AnnouncementSingleComponent implements OnDestroy {
     this.chatPopups.openPopUpOrRedirect();
   }
 
-  async goToChatIfExists(){
-    try{
+  async goToChatIfExists() {
+    try {
       const chat = await firstValueFrom(
         this.chatService.chatsForAnnouncement(this.announcement.id)
       );
-      //Si un chat existe, on redirige vers la page de chat
       this.router.navigate(['/chat']);
-    } catch(err: any){
+    } catch(err: any) {
       if (err.status === 404) {
         this.showToast("Vous n'avez pas encore de messages pour cette annonce", 'error');
-    }else if (err.status === 403){
-      this.showToast("Vous n'avez pas encore de messages pour cette annonce", 'error')
-    }else{
-      this.showToast("Une erreur est survenue lors de la récupération du chat", 'error');
-      console.error('Erreur récupération chat:', err);
+      } else if (err.status === 403) {
+        this.showToast("Vous n'avez pas encore de messages pour cette annonce", 'error')
+      } else {
+        this.showToast("Une erreur est survenue lors de la récupération du chat", 'error');
+        console.error('Erreur récupération chat:', err);
+      }
     }
   }
-}
 
   // Delete Methods
   openDeleteModal() { this.isDeleteModalOpen = true; }
@@ -387,6 +396,7 @@ export class AnnouncementSingleComponent implements OnDestroy {
       }
     });
   }
+
   // Modal Methods
   toggleModal() { this.isModalOpen = !this.isModalOpen; }
   closeModal() { this.isModalOpen = false; }
@@ -398,7 +408,8 @@ export class AnnouncementSingleComponent implements OnDestroy {
     });
     this.closeReportModal();
   }
-  reloadMap(){
+
+  reloadMap() {
     this.ngOnInit();
   }
 }
