@@ -21,14 +21,15 @@
 <!-- Formulaire -->
 <form
   [formGroup]="profileForm"
-  (ngSubmit)="onSubmit()"
+  (ngSubmit)="handleUpdate()"
   class="max-w-4xl mx-auto p-6 space-y-6"
+  novalidate
 >
   <!-- Avatar avec icône upload -->
   <div class="text-center">
     <div
       class="relative inline-block w-20 h-20 bg-gray-200 rounded-full"
-      [style.backgroundImage]="'url(' + avatarUrl + ')'"
+      [ngStyle]="{ 'background-image': avatarUrl ? 'url(' + avatarUrl + ')' : 'none' }"
       style="background-size: cover; background-position: center;"
     >
       <label
@@ -69,30 +70,24 @@
   <!-- Nom complet et téléphone -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
-      <label
-        for="name"
-        class="block text-sm font-medium text-gray-700"
-        >Nom complet</label
-      >
+      <label for="name" class="block text-sm font-medium text-gray-700">Nom complet</label>
       <input
         id="name"
         type="text"
         formControlName="name"
         class="mt-1 block w-full border rounded p-2"
+        autocomplete="name"
       />
     </div>
 
     <div>
-      <label
-        for="telephone"
-        class="block text-sm font-medium text-gray-700"
-        >Téléphone (optionnel)</label
-      >
+      <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone (optionnel)</label>
       <input
         id="telephone"
-        type="text"
+        type="tel"
         formControlName="telephone"
         class="mt-1 block w-full border rounded p-2"
+        autocomplete="tel"
       />
     </div>
   </div>
@@ -107,42 +102,34 @@
       class="mt-1 block w-full border rounded p-2"
     ></textarea>
     <p class="text-sm text-gray-500 mt-1">
-      Votre bio sera visible sur votre profil public. Partagez vos intérêts,
-      ce que vous recherchez, etc.
+      Votre bio sera visible sur votre profil public. Partagez vos intérêts, ce que vous recherchez, etc.
     </p>
   </div>
 
   <!-- Profession -->
   <div>
-    <label
-      for="profession"
-      class="block text-sm font-medium text-gray-700"
-      >Profession</label
-    >
+    <label for="profession" class="block text-sm font-medium text-gray-700">Profession</label>
     <input
       id="profession"
       type="text"
       formControlName="profession"
       class="mt-1 block w-full border rounded p-2"
+      autocomplete="organization-title"
     />
   </div>
 
   <!-- Adresse -->
   <div>
-    <label
-      for="adresse"
-      class="block text-sm font-medium text-gray-700"
-      >Adresse</label
-    >
+    <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse</label>
     <input
       id="adresse"
       type="text"
       formControlName="adresse"
       class="mt-1 block w-full border rounded p-2"
+      autocomplete="street-address"
     />
     <p class="text-sm text-gray-500 mt-1">
-      Votre adresse ne sera jamais partagée publiquement. Elle est utilisée
-      uniquement pour vous suggérer des annonces à proximité.
+      Votre adresse ne sera jamais partagée publiquement. Elle est utilisée uniquement pour vous suggérer des annonces à proximité.
     </p>
   </div>
 
@@ -151,7 +138,7 @@
     <button
       type="button"
       class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
-      (click)="profileForm.reset()"
+      (click)="getProfileTutor()"
     >
       Annuler
     </button>
