@@ -9,10 +9,14 @@ import { UserLocalService } from '../../../core/services/userlocal/userlocal.ser
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './security.component.html',
-  styleUrls: ['./security.component.css'] // Pluriel ici
+  styleUrls: ['./security.component.css']
 })
 export class SecurityComponent {
   passwordForm!: FormGroup;
+
+  // Pour afficher le toast
+  toastMessage = '';
+  toastType: 'success' | 'error' | '' = '';
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +40,7 @@ export class SecurityComponent {
     const { old_password, new_password, password_confirmation } = this.passwordForm.value;
 
     if (new_password !== password_confirmation) {
-      alert('Le nouveau mot de passe ne correspond pas');
+      this.showToast('Le nouveau mot de passe ne correspond pas', 'error');
       return;
     }
 
@@ -44,17 +48,27 @@ export class SecurityComponent {
 
     this.profileService.updateUserPassword({ old_password, new_password, password_confirmation }).subscribe({
       next: () => {
-        alert('Mot de passe mis à jour avec succès');
+        this.showToast('Mot de passe mis à jour avec succès', 'success');
         this.passwordForm.reset();
       },
       error: (err) => {
         console.error('Erreur de mise à jour:', err);
-        alert('Échec de la mise à jour du mot de passe');
+        this.showToast('Échec de la mise à jour du mot de passe', 'error');
       }
     });
   }
 
   onCancel(): void {
     this.passwordForm.reset();
+  }
+
+  showToast(message: string, type: 'success' | 'error') {
+    this.toastMessage = message;
+    this.toastType = type;
+
+    setTimeout(() => {
+      this.toastMessage = '';
+      this.toastType = '';
+    }, 3000); // durée affichage toast 3sec
   }
 }
